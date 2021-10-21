@@ -1,4 +1,4 @@
-package com.example.ajari
+package id.noersy.ajari
 
 import io.flutter.embedding.android.FlutterActivity
 
