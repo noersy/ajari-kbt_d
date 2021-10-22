@@ -160,4 +160,44 @@ class DataKelasProvider extends ChangeNotifier {
 
     return collectionReference.orderBy("dateTime", descending: false).snapshots();
   }
+
+  Stream<QuerySnapshot> getGrade({
+    required uid,
+    required codeKelas,
+    required nomorJilid,
+  }){
+    CollectionReference collectionReference = FirebaseReference
+        .kelas.doc(codeKelas)
+        .collection('santri')
+        .doc(uid)
+        .collection("jilid" + nomorJilid);
+
+    print(collectionReference);
+
+    return collectionReference.snapshots();
+  }
+
+  static Future<void> setGrade({
+    required uid,
+    required grade,
+    required codeKelas,
+    required nomorJilid,
+    required nomorHalaman
+}) async {
+    DocumentReference documentReference = FirebaseReference
+        .kelas.doc(codeKelas)
+        .collection('santri')
+        .doc(uid)
+        .collection("jilid" + nomorJilid)
+        .doc('halaman' + nomorHalaman);
+
+    Map<String, dynamic> data = {
+      'grade' : grade,
+    };
+
+    await documentReference
+        .update(data)
+        .whenComplete(() => print("grade added to the database"))
+        .catchError((e) => print(e));
+  }
 }

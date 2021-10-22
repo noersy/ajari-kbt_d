@@ -37,6 +37,7 @@ class MessageDialog extends StatelessWidget {
 
   TextEditingController _editingController = new TextEditingController();
   late DateTime _dateTime;
+  bool _first = true;
 
   contentBox(context) {
     return Container(
@@ -147,13 +148,15 @@ class MessageDialog extends StatelessWidget {
                           return Expanded(
                             child: ListView(
                               physics: BouncingScrollPhysics(),
-                              children: snapshot.data!.docChanges.map((e) {
-                                String _role = e.doc.get('role');
-                                DateTime date = e.doc.get('dateTime').toDate();
+                              children: snapshot.data!.docs.map((e) {
+                                String _role = e.get('role');
+                                DateTime date = e.get('dateTime').toDate();
                                 DateTime dateTime = DateTime(date.year, date.month, date.day);
                                 DateTime _now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-                                if(e.newIndex == 0)
+                                if(_first){
                                   _dateTime = DateTime(date.year, date.month, date.day);
+                                  _first = false;
+                                }
                                 if(_dateTime != dateTime){
                                   return Column(
                                     children: [
@@ -194,7 +197,7 @@ class MessageDialog extends StatelessWidget {
                                                 padding: _role == role
                                                     ? const EdgeInsets.only(right: 40, left: 4)
                                                     : const EdgeInsets.only(left: 40, right: 4),
-                                                child: Text(e.doc.get('message')),
+                                                child: Text(e.get('message')),
                                               ),
                                               Container(
                                                 alignment: _role == role
@@ -204,7 +207,7 @@ class MessageDialog extends StatelessWidget {
                                                 width: 50,
                                                 child: Text(
                                                   DateFormat('kk:mm').format(
-                                                      e.doc.get('dateTime').toDate()),
+                                                      e.get('dateTime').toDate()),
                                                   style: TypographyStyle.mini,
                                                 ),
                                               ),
@@ -218,7 +221,7 @@ class MessageDialog extends StatelessWidget {
                                 _dateTime = DateTime(date.year, date.month, date.day);
                                 return Column(
                                   children: [
-                                    e.newIndex == 0
+                                    _first
                                     ? Padding(
                                       padding: const EdgeInsets.all(2),
                                       child: Center(
@@ -256,7 +259,7 @@ class MessageDialog extends StatelessWidget {
                                               padding: _role == role
                                                   ? const EdgeInsets.only(right: 40, left: 4)
                                                   : const EdgeInsets.only(left: 40, right: 4),
-                                              child: Text(e.doc.get('message')),
+                                              child: Text(e.get('message')),
                                             ),
                                             Container(
                                               alignment: _role == role
@@ -266,7 +269,7 @@ class MessageDialog extends StatelessWidget {
                                               width: 50,
                                               child: Text(
                                                 DateFormat('kk:mm').format(
-                                                    e.doc.get('dateTime').toDate()),
+                                                    e.get('dateTime').toDate()),
                                                 style: TypographyStyle.mini,
                                               ),
                                             ),

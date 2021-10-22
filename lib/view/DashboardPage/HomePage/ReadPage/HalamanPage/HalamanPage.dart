@@ -12,7 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 class HalamanPage extends StatefulWidget {
   final String pathBacaan;
   final String pathAudio;
-  final String nomorHalaman, nomorJilid, uid, codeKelas, role;
+  final String nomorHalaman, nomorJilid, uid, codeKelas, role, grade;
 
   const HalamanPage({
     required this.pathBacaan,
@@ -21,6 +21,7 @@ class HalamanPage extends StatefulWidget {
     required this.nomorJilid,
     required this.uid,
     required this.role,
+    required this.grade,
     required this.codeKelas,
   });
 
@@ -190,7 +191,9 @@ class _PageOneState extends State<HalamanPage> {
                 ),
               ),
             ),
-            actionSantriContainer(),
+            widget.role == 'Santri'
+                ? actionSantriContainer()
+                : actionUstazContainer(),
             // actionPage(),
           ],
         ),
@@ -236,8 +239,11 @@ class _PageOneState extends State<HalamanPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return NilaiDialog(
-                          homePageCtx: context,
-                          sheetDialogCtx: context,
+                          uid: widget.uid,
+                          grade: widget.grade,
+                          codeKelas: widget.codeKelas,
+                          nomorJilid: widget.nomorJilid,
+                          nomorHalaman: widget.nomorHalaman,
                         );
                       },
                     );

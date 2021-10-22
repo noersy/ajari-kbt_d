@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class HalamanContainer extends StatelessWidget {
   final BuildContext ctx;
   final inTo;
-  final String nomorHalaman, nomorJilid, uid, codeKelas, role;
+  final String nomorHalaman, nomorJilid, uid, codeKelas, role, grade;
 
   HalamanContainer({
     required this.nomorJilid,
@@ -16,6 +16,7 @@ class HalamanContainer extends StatelessWidget {
     required this.uid,
     required this.codeKelas,
     required this.role,
+    required this.grade,
     this.inTo,
   });
 
@@ -70,7 +71,7 @@ class HalamanContainer extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text("-"),
+                  child: Text(grade),
                 ),
                 Padding(
                   padding:
