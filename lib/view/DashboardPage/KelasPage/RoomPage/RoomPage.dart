@@ -1,9 +1,10 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/ChartPage/ChatPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'component/ChatPage.dart';
 
 class RoomPage extends StatefulWidget {
   @override

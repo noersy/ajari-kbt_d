@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ChatBox createState() => _ChatBox();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatBox extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
