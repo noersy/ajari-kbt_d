@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget ViewSantri({kelas_code, role}) {
+  Widget ViewSantri({required kelas_code, required role}) {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: [
@@ -503,21 +503,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget ViewUstaz({required kelas_code, role}) {
-    return ListView(
-      physics: BouncingScrollPhysics(),
-      children: [
-        FutureBuilder(
-          future: Provider.of<DataKelasProvider>(context)
-              .getKelas(codeKelas: kelas_code),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error initializing Firebase');
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return SizedBox(
-                height: 200,
-                child: Column(
+  Widget ViewUstaz({required kelas_code, required role}) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: Provider.of<DataKelasProvider>(context)
+            .getKelas(codeKelas: kelas_code),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error initializing Firebase'));
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return Column(
+              children: [
+                Column(
                   children: [
                     Container(
                       height: 130,
@@ -627,140 +623,149 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-              );
-            }
-            return Scaffold(
-              body: indicatorLoad(),
-            );
-          },
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => StudensPage(
-                          codeKelas: kelas_code,
-                          uid: widget.user.uid,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 65,
-                    width: 150,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: const EdgeInsets.all(SpacingDimens.spacing8),
-                          decoration: BoxDecoration(
-                              color: PaletteColor.primary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(100)),
-                          child: Icon(
-                            Icons.book,
-                            color: PaletteColor.primary,
-                          ),
-                        ),
-                        Container(
-                          width: 70,
-                          padding: const EdgeInsets.only(
-                              bottom: SpacingDimens.spacing12,
-                              left: SpacingDimens.spacing12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "قيم",
-                                style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
-                                        color: PaletteColor.primary,
-                                        fontSize: 20)),
-                              ),
-                              Text("Nilai",
-                                  style: TypographyStyle.subtitle2
-                                      .merge(TextStyle(fontSize: 12))),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: SpacingDimens.spacing12,
-              ),
-              Card(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => StoryPage()));
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 65,
-                    width: 150,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: const EdgeInsets.all(SpacingDimens.spacing8),
-                          decoration: BoxDecoration(
-                              color: PaletteColor.primary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(100)),
-                          child: Icon(
-                            Icons.collections_bookmark_sharp,
-                            color: PaletteColor.primary,
-                          ),
-                        ),
-                        Container(
-                          width: 60,
-                          padding: const EdgeInsets.only(
-                              bottom: SpacingDimens.spacing12,
-                              left: SpacingDimens.spacing12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "قصة",
-                                style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
-                                        color: PaletteColor.primary,
-                                        fontSize: 20)),
-                              ),
-                              Text(
-                                "Cerita",
-                                style: TypographyStyle.subtitle2.merge(
-                                  TextStyle(fontSize: 12),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => StudensPage(
+                                  codeKelas: kelas_code,
+                                  uid: widget.user.uid,
                                 ),
                               ),
-                            ],
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 65,
+                            width: 150,
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  margin: const EdgeInsets.all(
+                                      SpacingDimens.spacing8),
+                                  decoration: BoxDecoration(
+                                      color:
+                                          PaletteColor.primary.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(100)),
+                                  child: Icon(
+                                    Icons.book,
+                                    color: PaletteColor.primary,
+                                  ),
+                                ),
+                                Container(
+                                  width: 70,
+                                  padding: const EdgeInsets.only(
+                                      bottom: SpacingDimens.spacing12,
+                                      left: SpacingDimens.spacing12),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "قيم",
+                                        style: TypographyStyle.subtitle1.merge(
+                                            TextStyle(
+                                                color: PaletteColor.primary,
+                                                fontSize: 20)),
+                                      ),
+                                      Text("Nilai",
+                                          style: TypographyStyle.subtitle2
+                                              .merge(TextStyle(fontSize: 12))),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        width: SpacingDimens.spacing12,
+                      ),
+                      Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => StoryPage()));
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 65,
+                            width: 150,
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  margin: const EdgeInsets.all(
+                                      SpacingDimens.spacing8),
+                                  decoration: BoxDecoration(
+                                      color:
+                                          PaletteColor.primary.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(100)),
+                                  child: Icon(
+                                    Icons.collections_bookmark_sharp,
+                                    color: PaletteColor.primary,
+                                  ),
+                                ),
+                                Container(
+                                  width: 60,
+                                  padding: const EdgeInsets.only(
+                                      bottom: SpacingDimens.spacing12,
+                                      left: SpacingDimens.spacing12),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "قصة",
+                                        style: TypographyStyle.subtitle1.merge(
+                                            TextStyle(
+                                                color: PaletteColor.primary,
+                                                fontSize: 20)),
+                                      ),
+                                      Text(
+                                        "Cerita",
+                                        style: TypographyStyle.subtitle2.merge(
+                                          TextStyle(fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+              ],
+            );
+          }
+          return Scaffold(
+            body: indicatorLoad(),
+          );
+        });
   }
 }
 
-Widget CardStry({image, title, color, onTap}) {
+Widget CardStry({
+  required image,
+  required title,
+  required color,
+  required onTap,
+}) {
   return Card(
     color: color,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
