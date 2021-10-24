@@ -32,7 +32,14 @@ class _ClassPageState extends State<ClassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarNotification(ctx: context, title: "Class"),
+      appBar: AppBar(
+        backgroundColor: PaletteColor.primarybg,
+        elevation: 0,
+        title: Text(
+          "Class",
+          style: TypographyStyle.subtitle1,
+        ),
+      ),
       body: Column(
         children: [
           Container(

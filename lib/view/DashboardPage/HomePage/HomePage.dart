@@ -1,7 +1,4 @@
 import 'package:ajari/component/AppBar/AppBarNotification.dart';
-import 'package:ajari/component/Indicator/IndicatorLoad.dart';
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
 import 'package:ajari/model/Kelas.dart';
 import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
@@ -13,11 +10,9 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiM
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiNuhPage.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/StoryPage.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/StudensPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'package:ajari/config/globals.dart' as globals;
@@ -725,7 +720,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );;
+    );
   }
 }
 
