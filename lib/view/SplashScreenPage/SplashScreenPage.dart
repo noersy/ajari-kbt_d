@@ -1,13 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
+import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/firebase/DataProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/LoginPage.dart';
 import 'package:ajari/view/LoginPage/RegisterPage/RegisterPage.dart';
 import 'package:ajari/view/LoginPage/component/AuthLogin.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreenPage extends StatefulWidget {
@@ -22,24 +24,25 @@ class _SplashScreenState extends State<SplashScreenPage> {
   }
 
   navigationPage() async {
-    User? user = await AuthLogin.signInWithGoogle(context: context);
+    globals.user = await AuthLogin.signInWithGoogle(context: context);
+    globals.profile =
+        await DataProfileProvider.getProfile(userUid: globals.user!.uid);
+    globals.kelas =
+        await DataKelasProvider.getKelas(codeKelas: globals.profile!.codeKelas);
 
-    if (user != null) {
-      String role = await DataProfileProvider.chekRole(userUid: user.uid);
-      print(role);
-      if (role == "Tidak ada")
+    if (globals.profile != null) {
+      print(jsonEncode(globals.profile));
+
+      if (globals.profile!.role == "Tidak ada")
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: user),
+            builder: (context) => RegisterPage(user: globals.user!),
           ),
         );
       else
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => DashboardPage(
-              user: user,
-              role: role,
-            ),
+            builder: (context) => DashboardPage(),
           ),
         );
     } else

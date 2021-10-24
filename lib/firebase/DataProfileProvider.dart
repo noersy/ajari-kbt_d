@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:ajari/config/FirebaseReference.dart';
+import 'package:ajari/model/Profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -42,14 +44,14 @@ class DataProfileProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
-  Future<DocumentSnapshot> getProfile({required userUid}) async {
-    DocumentReference notesItemCollection = FirebaseReference.user
+  static Future<Profile> getProfile({required userUid}) async {
+    DocumentReference notesItemCollection = FirebaseReference
+        .user
         .doc(userUid) ;
 
     DocumentSnapshot data = await notesItemCollection.get();
 
-    print(data.data());
-    return data;
+    return profileFromJson(jsonEncode(data.data()));
   }
 
   static Future<String> chekRole({required userUid}) async {

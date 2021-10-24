@@ -108,10 +108,7 @@ class _LoginPageState extends State<LoginPage> {
     print(user!.displayName);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => DashboardPage(
-          user: user,
-          role: "snapshot.data!.get('role')",
-        ),
+        builder: (context) => DashboardPage(),
       ),
     );
   }
@@ -132,17 +129,7 @@ class _LoginPageState extends State<LoginPage> {
     if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => FutureBuilder(
-            future: Provider.of<DataProfileProvider>(context)
-                .getProfile(userUid: user.uid),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              return DashboardPage(
-                user: user,
-                role: snapshot.data!.get('role'),
-              );
-            },
-          ),
+          builder: (context) => DashboardPage(),
         ),
       );
     } else {

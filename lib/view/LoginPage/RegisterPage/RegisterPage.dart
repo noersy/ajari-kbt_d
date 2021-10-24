@@ -110,8 +110,6 @@ class _RegisterPage extends State<RegisterPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => DashboardPage(
-          user: widget.user,
-          role: _character == SingingCharacter.Santri ? "Santri" : "Pengajar",
         ),
       ),
     );

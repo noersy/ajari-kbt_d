@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:ajari/config/FirebaseReference.dart';
+import 'package:ajari/model/Kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -128,12 +131,12 @@ class DataKelasProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
-  Future<DocumentSnapshot> getKelas({required codeKelas}) async {
+  static Future<Kelas> getKelas({required codeKelas}) async {
     DocumentReference documentReferencer =
         FirebaseReference.kelas.doc(codeKelas);
 
     DocumentSnapshot data = await documentReferencer.get();
-    return data;
+    return kelasFromJson(jsonEncode(data.data()));
   }
 
   Stream<QuerySnapshot> getSantri({required codeKelas}) {

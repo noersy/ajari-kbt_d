@@ -1,8 +1,11 @@
+import 'dart:convert';
+
+import 'package:ajari/component/Indicator/IndicatorLoad.dart';
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/DataProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/ClassPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +14,8 @@ import 'HomePage/HomePage.dart';
 import 'UserBottomSheetDialog/UserBottomSheetDialog.dart';
 
 class DashboardPage extends StatefulWidget {
-  final User user;
-  final String role;
 
-  DashboardPage({required this.user, required this.role});
+  const DashboardPage();
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -26,8 +27,8 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _children = [
-      HomePage(user: widget.user,),
-      ClassPage(user: widget.user,),
+      HomePage(),
+      ClassPage(),
     ];
 
     return Scaffold(
@@ -68,8 +69,6 @@ class _DashboardPageState extends State<DashboardPage> {
           context: context,
           builder: (BuildContext context) => UserBottomSheetDialog(
             ctx: context,
-            user: widget.user,
-            role: widget.role,
           ),
         );
     }
