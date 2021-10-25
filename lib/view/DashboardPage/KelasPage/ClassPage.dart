@@ -1,12 +1,8 @@
-import 'package:ajari/component/AppBar/AppBarBack.dart';
-import 'package:ajari/component/AppBar/AppBarNotification.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
-import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,10 +17,26 @@ class ClassPage extends StatefulWidget {
 }
 
 class _ClassPageState extends State<ClassPage> {
+  late PageController _pageController;
+  List<String> _listDay = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Sat'];
+  List<String> _listDate = [];
+  DateTime _dateTime = DateTime.now();
+  int _index = 0;
+  int _indexCurret = 0;
   late Kelas _kelas;
 
   @override
   void initState() {
+    var weekDay = _dateTime.weekday;
+    for (int i = 0; i < 7; i++) {
+      int _date = _dateTime.subtract(Duration(days: weekDay - i)).day;
+      _listDate.add(_date.toString());
+      if (_dateTime.day == _date) {
+        _index = i;
+        _indexCurret = i;
+        _pageController = new PageController(initialPage: i);
+      }
+    }
     _kelas = globals.kelas!;
     super.initState();
   }
@@ -158,7 +170,7 @@ class _ClassPageState extends State<ClassPage> {
                               TextStyle(
                                   fontSize: 12,
                                   color:
-                                  PaletteColor.primarybg2.withOpacity(0.8),
+                                      PaletteColor.primarybg2.withOpacity(0.8),
                                   fontStyle: FontStyle.italic),
                             ),
                           ),
@@ -180,151 +192,197 @@ class _ClassPageState extends State<ClassPage> {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(
-              top: SpacingDimens.spacing28,
-              left: SpacingDimens.spacing16,
-              right: SpacingDimens.spacing16,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                dateCard(hari: "Sun", tgl: "12", color: PaletteColor.primary),
-                dateCard(hari: "Mon", tgl: "13", color: PaletteColor.grey80),
-                dateCard(hari: "Tue", tgl: "14", color: PaletteColor.grey80),
-                dateCard(hari: "Wed", tgl: "15", color: PaletteColor.grey80),
-                dateCard(hari: "Thu", tgl: "16", color: PaletteColor.grey80),
-                dateCard(hari: "Sat", tgl: "17", color: PaletteColor.grey80),
-              ],
+          SizedBox(
+            height: 60,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemExtent: 55,
+              itemCount: 6,
+              padding: const EdgeInsets.only(
+                top: SpacingDimens.spacing12,
+                left: SpacingDimens.spacing16,
+                right: SpacingDimens.spacing16,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return dateCard(
+                  hari: _listDay[index],
+                  tgl: "${_listDate[index]}",
+                  color: _index != index
+                      ? _indexCurret != index
+                          ? PaletteColor.grey80
+                          : PaletteColor.primary.withOpacity(0.6)
+                      : PaletteColor.primary,
+                  onTap: () {
+                    print(index);
+                    setState(() {
+                      _index = index;
+                      _pageController.animateToPage(
+                        index,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    });
+                  },
+                );
+              },
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(
-              top: SpacingDimens.spacing28,
-              left: SpacingDimens.spacing16,
-            ),
-            child: Row(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      alignment: Alignment.centerRight,
-                      height: 45,
-                      width: 170,
-                      decoration: BoxDecoration(
-                        color: PaletteColor.primary,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      margin: const EdgeInsets.only(
-                        top: 22,
-                        left: 70,
-                      ),
-                      child: TextButton(
-                        style: ButtonStyle(
-                          shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
-                          padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.all(0)),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => RoomPage()));
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: SpacingDimens.spacing28,
+                left: SpacingDimens.spacing16,
+              ),
+              child: PageView(
+                controller: _pageController,
+                children: [
+                  ListView(
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: SpacingDimens.spacing16 + 2),
+                        child: Stack(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: SpacingDimens.spacing12,
-                              ),
-                              child: Icon(
-                                Icons.people,
-                                color: PaletteColor.primarybg,
-                              ),
-                            ),
-                            Text(
-                              "Join",
-                              style: TypographyStyle.button1.merge(
-                                TextStyle(color: PaletteColor.primarybg),
-                              ),
-                            ),
                             Container(
+                              alignment: Alignment.centerRight,
                               height: 45,
-                              width: 45,
-                              alignment: Alignment.center,
+                              width: 170,
                               decoration: BoxDecoration(
-                                  color:
-                                  PaletteColor.primarybg.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(15)),
-                              child: Text("0+", style: TypographyStyle.button1),
+                                color: PaletteColor.primary,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              margin: const EdgeInsets.only(
+                                top: 22,
+                                left: 70,
+                              ),
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.all(0)),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => RoomPage()));
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: SpacingDimens.spacing12,
+                                      ),
+                                      child: Icon(
+                                        Icons.people,
+                                        color: PaletteColor.primarybg,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Join",
+                                      style: TypographyStyle.button1.merge(
+                                        TextStyle(color: PaletteColor.primarybg),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 45,
+                                      width: 45,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: PaletteColor.primarybg
+                                              .withOpacity(0.8),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Text("0+",
+                                          style: TypographyStyle.button1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 25,
+                                  width: 3.5,
+                                  margin: const EdgeInsets.only(
+                                      left: SpacingDimens.spacing16 + 1.7,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: PaletteColor.grey60,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: SpacingDimens.spacing4,
+                                    bottom: SpacingDimens.spacing4,
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "08:40",
+                                        style: TypographyStyle.button2.merge(
+                                          TextStyle(color: PaletteColor.primary),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 2,
+                                      ),
+                                      Text(
+                                        "WIB",
+                                        style: TypographyStyle.mini.merge(
+                                          TextStyle(color: PaletteColor.primary),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  height: 6,
+                                  width: 6,
+                                  margin: const EdgeInsets.only(
+                                    left: SpacingDimens.spacing16,
+                                    bottom: SpacingDimens.spacing8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: PaletteColor.primary,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                Container(
+                                  height: 30,
+                                  width: 3.5,
+                                  margin: const EdgeInsets.only(left: SpacingDimens.spacing16 + 1.5),
+                                  decoration: BoxDecoration(
+                                    color: PaletteColor.grey60,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          height: 25,
-                          width: 3.5,
-                          decoration: BoxDecoration(
-                            color: PaletteColor.grey60,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            top: SpacingDimens.spacing4,
-                            bottom: SpacingDimens.spacing4,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                "08:40",
-                                style: TypographyStyle.button2.merge(
-                                  TextStyle(color: PaletteColor.primary),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                "WIB",
-                                style: TypographyStyle.mini.merge(
-                                  TextStyle(color: PaletteColor.primary),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 6,
-                          width: 6,
-                          margin: const EdgeInsets.only(
-                              bottom: SpacingDimens.spacing8),
-                          decoration: BoxDecoration(
-                            color: PaletteColor.primary,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 3.5,
-                          decoration: BoxDecoration(
-                            color: PaletteColor.grey60,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                  Center(child: Text("2")),
+                  Center(child: Text("3")),
+                  Center(child: Text("4")),
+                  Center(child: Text("5")),
+                  Center(child: Text("6")),
+                  Center(child: Text("7"))
+                ],
+              ),
             ),
           ),
         ],
