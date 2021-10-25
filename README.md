@@ -14,6 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 - [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
 # Preview
+
+- [Link figma project](https://www.figma.com/file/n9NH3GgFIGjTRz0wmFmyzc/AJARI?node-id=0%3A1)
+
 <p align="center">
     <a href="" target="_blank">
       <img src="https://i.ibb.co/dJ5MxFP/Login-Page.png" alt="Login-Page" border="0" width="200">
