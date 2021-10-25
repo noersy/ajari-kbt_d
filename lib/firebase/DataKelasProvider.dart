@@ -80,12 +80,12 @@ class DataKelasProvider extends ChangeNotifier {
     if (kelasExist) {
       await documentReferencerProfileinKelas
           .set(data)
-          .whenComplete(() => print("berhasil join kelas"))
+          .whenComplete(() => print("berhasil add user to kelas"))
           .catchError((e) => print(e));
 
       await documentReferencerKelas
           .update(data3)
-          .whenComplete(() => print("berhasil join kelas"))
+          .whenComplete(() => print("increase santri amount "))
           .catchError((e) => print(e));
 
       await documentReferencerUser
@@ -93,7 +93,8 @@ class DataKelasProvider extends ChangeNotifier {
           .whenComplete(
               () => print("data code class update to the profile user"))
           .catchError((e) => print(e));
-      return 'Berhasil';
+
+      return codeKelas;
     }
 
     return 'Gagal';
@@ -147,7 +148,7 @@ class DataKelasProvider extends ChangeNotifier {
 
     if (data.data() != null) {
       kelas = kelasFromJson(jsonEncode(data.data()));
-      print('Success get profile');
+      print('Success get kelas');
     } else {
       kelas = new Kelas(
         pengajarId: "-",
@@ -156,7 +157,7 @@ class DataKelasProvider extends ChangeNotifier {
         kelasId: "-",
         pengajar: "-",
       );
-      print('Failed get profile');
+      print('Failed get kelas');
     }
 
     return kelas;
