@@ -28,16 +28,21 @@ class _ClassPageState extends State<ClassPage> {
   @override
   void initState() {
     var weekDay = _dateTime.weekday;
+
     for (int i = 0; i <= 7; i++) {
       int _date = _dateTime.subtract(Duration(days: weekDay - i)).day;
       _listDate.add(_date.toString());
+
       if (_dateTime.day == _date) {
         _index = i;
         _indexCurret = i;
         _pageController = new PageController(initialPage: i);
       }
     }
-    _kelas = globals.kelas!;
+
+    if(globals.kelas != null)
+      _kelas = globals.kelas!;
+
     super.initState();
   }
 

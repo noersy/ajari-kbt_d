@@ -26,10 +26,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _children = [
-      HomePage(),
-      ClassPage(),
-    ];
 
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
@@ -56,7 +52,10 @@ class _DashboardPageState extends State<DashboardPage> {
         child: PageView(
           physics: NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children: _children,
+          children: [
+            HomePage(),
+            ClassPage(),
+          ],
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
@@ -25,14 +24,10 @@ class _SplashScreenState extends State<SplashScreenPage> {
 
   navigationPage() async {
     globals.user = await AuthLogin.signInWithGoogle(context: context);
-    globals.profile =
-        await DataProfileProvider.getProfile(userUid: globals.user!.uid);
-    globals.kelas =
-        await DataKelasProvider.getKelas(codeKelas: globals.profile!.codeKelas);
+    globals.profile = await DataProfileProvider.getProfile(userUid: globals.user!.uid);
+    globals.kelas = await DataKelasProvider.getKelas(codeKelas: globals.profile!.codeKelas);
 
     if (globals.profile != null) {
-      print(jsonEncode(globals.profile));
-
       if (globals.profile!.role == "Tidak ada")
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(

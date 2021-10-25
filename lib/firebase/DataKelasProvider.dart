@@ -52,7 +52,6 @@ class DataKelasProvider extends ChangeNotifier {
         .collection('santri')
         .doc(user.uid);
 
-
     Map<String, dynamic> data2 = <String, dynamic>{
       "code_kelas": codeKelas,
     };
@@ -107,11 +106,11 @@ class DataKelasProvider extends ChangeNotifier {
     required nomorHalaman,
     required message,
     required role,
-}) async {
+  }) async {
     String _meesageID = FirebaseReference.getRandomString(22);
 
-    DocumentReference documentReference = FirebaseReference
-        .kelas.doc(codeKelas)
+    DocumentReference documentReference = FirebaseReference.kelas
+        .doc(codeKelas)
         .collection('santri')
         .doc(uid)
         .collection("jilid" + nomorJilid)
@@ -131,12 +130,36 @@ class DataKelasProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
-  static Future<Kelas> getKelas({required codeKelas}) async {
-    DocumentReference documentReferencer =
-        FirebaseReference.kelas.doc(codeKelas);
+  static Future<Kelas> getKelas({required String? codeKelas}) async {
 
+    if (codeKelas!.isEmpty)
+      return new Kelas(
+        pengajarId: "-",
+        nama: "-",
+        jumlahSantri: 0,
+        kelasId: "-",
+        pengajar: "-",
+      );
+
+    DocumentReference documentReferencer = FirebaseReference.kelas.doc(codeKelas);
     DocumentSnapshot data = await documentReferencer.get();
-    return kelasFromJson(jsonEncode(data.data()));
+    Kelas kelas;
+
+    if (data.data() != null) {
+      kelas = kelasFromJson(jsonEncode(data.data()));
+      print('Success get profile');
+    } else {
+      kelas = new Kelas(
+        pengajarId: "-",
+        nama: "-",
+        jumlahSantri: 0,
+        kelasId: "-",
+        pengajar: "-",
+      );
+      print('Failed get profile');
+    }
+
+    return kelas;
   }
 
   Stream<QuerySnapshot> getSantri({required codeKelas}) {
@@ -145,14 +168,13 @@ class DataKelasProvider extends ChangeNotifier {
     return documentReferencer.snapshots();
   }
 
-  Stream<QuerySnapshot> getMassage({
-    required uid,
-    required codeKelas,
-    required nomorJilid,
-    required nomorHalaman
-  }){
-    CollectionReference collectionReference = FirebaseReference
-        .kelas.doc(codeKelas)
+  Stream<QuerySnapshot> getMassage(
+      {required uid,
+      required codeKelas,
+      required nomorJilid,
+      required nomorHalaman}) {
+    CollectionReference collectionReference = FirebaseReference.kelas
+        .doc(codeKelas)
         .collection('santri')
         .doc(uid)
         .collection("jilid" + nomorJilid)
@@ -161,16 +183,18 @@ class DataKelasProvider extends ChangeNotifier {
 
     print(collectionReference);
 
-    return collectionReference.orderBy("dateTime", descending: false).snapshots();
+    return collectionReference
+        .orderBy("dateTime", descending: false)
+        .snapshots();
   }
 
   Stream<QuerySnapshot> getGrade({
     required uid,
     required codeKelas,
     required nomorJilid,
-  }){
-    CollectionReference collectionReference = FirebaseReference
-        .kelas.doc(codeKelas)
+  }) {
+    CollectionReference collectionReference = FirebaseReference.kelas
+        .doc(codeKelas)
         .collection('santri')
         .doc(uid)
         .collection("jilid" + nomorJilid);
@@ -180,22 +204,21 @@ class DataKelasProvider extends ChangeNotifier {
     return collectionReference.snapshots();
   }
 
-  static Future<void> setGrade({
-    required uid,
-    required grade,
-    required codeKelas,
-    required nomorJilid,
-    required nomorHalaman
-}) async {
-    DocumentReference documentReference = FirebaseReference
-        .kelas.doc(codeKelas)
+  static Future<void> setGrade(
+      {required uid,
+      required grade,
+      required codeKelas,
+      required nomorJilid,
+      required nomorHalaman}) async {
+    DocumentReference documentReference = FirebaseReference.kelas
+        .doc(codeKelas)
         .collection('santri')
         .doc(uid)
         .collection("jilid" + nomorJilid)
         .doc('halaman' + nomorHalaman);
 
     Map<String, dynamic> data = {
-      'grade' : grade,
+      'grade': grade,
     };
 
     await documentReference

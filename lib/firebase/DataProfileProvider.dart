@@ -13,8 +13,7 @@ class DataProfileProvider extends ChangeNotifier {
     required String userid,
     required String role,
   }) async {
-    DocumentReference documentReferencer = FirebaseReference.user
-        .doc(userid) ;
+    DocumentReference documentReferencer = FirebaseReference.user.doc(userid);
 
     Map<String, dynamic> data = <String, dynamic>{
       "role": role,
@@ -31,8 +30,7 @@ class DataProfileProvider extends ChangeNotifier {
     required String userid,
     required String role,
   }) async {
-    DocumentReference documentReferencer = FirebaseReference.user
-        .doc(userid) ;
+    DocumentReference documentReferencer = FirebaseReference.user.doc(userid);
 
     Map<String, dynamic> data = <String, dynamic>{
       "role": role,
@@ -45,18 +43,24 @@ class DataProfileProvider extends ChangeNotifier {
   }
 
   static Future<Profile> getProfile({required userUid}) async {
-    DocumentReference notesItemCollection = FirebaseReference
-        .user
-        .doc(userUid) ;
+    DocumentReference notesItemCollection = FirebaseReference.user.doc(userUid);
 
     DocumentSnapshot data = await notesItemCollection.get();
+    Profile profile;
 
-    return profileFromJson(jsonEncode(data.data()));
+    if (data.data() != null) {
+      profile = profileFromJson(jsonEncode(data.data()));
+      print('Success get profile');
+    } else {
+      profile = Profile(role: "-", codeKelas: "-");
+      print('Failed get profile');
+    }
+
+    return profile;
   }
 
   static Future<String> chekRole({required userUid}) async {
-    DocumentReference notesItemCollection = FirebaseReference.user
-        .doc(userUid);
+    DocumentReference notesItemCollection = FirebaseReference.user.doc(userUid);
 
     DocumentSnapshot data = await notesItemCollection.get();
 
@@ -67,5 +71,4 @@ class DataProfileProvider extends ChangeNotifier {
       return data.get("role");
     }
   }
-
 }
