@@ -54,6 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       body: SizedBox.expand(
         child: PageView(
+          physics: NeverScrollableScrollPhysics(),
           controller: _pageController,
           children: _children,
         ),
