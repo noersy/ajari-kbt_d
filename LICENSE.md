@@ -13,5 +13,5 @@
 <p>
   Universitas Muhammadiyah Malang <br/>
   Alamat : Jl. Raya Tlogomas No.246 Malang, Jawa Timur <br/>
-  Berlaku sampai 50 tahun sejak hki diumumkan <br/>
+  Berlaku sampai 50 tahun sejak hki pertama kali diumumkan <br/>
 </p>
