@@ -1,4 +1,5 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -8,16 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StudensPage extends StatefulWidget {
-  final String codeKelas;
-  final String uid;
-
-  const StudensPage({required this.codeKelas, required this.uid});
-
   @override
   _StudensPageState createState() => _StudensPageState();
 }
 
 class _StudensPageState extends State<StudensPage> {
+  final String _codeKelas = globals.kelas!.kelasId;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +24,7 @@ class _StudensPageState extends State<StudensPage> {
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
           stream: Provider.of<DataKelasProvider>(context)
-              .getSantri(codeKelas: widget.codeKelas),
+              .getSantri(codeKelas: _codeKelas),
           builder: (context, snapshot) {
             if (!snapshot.hasData)
               return Center(child: Text("There is no expense"));
@@ -42,7 +40,7 @@ class _StudensPageState extends State<StudensPage> {
                             builder: (context) => JilidPage(
                               role: 'santri',
                               uid: e.doc.get('uid'),
-                              codeKelas: widget.codeKelas,
+                              codeKelas: _codeKelas,
                             ),
                           ),
                         );

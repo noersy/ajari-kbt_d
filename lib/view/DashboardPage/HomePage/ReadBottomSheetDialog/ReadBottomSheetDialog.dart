@@ -7,13 +7,9 @@ import 'package:flutter/material.dart';
 
 class ReadBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;
-  final String uid, codeKelas, role;
 
   ReadBottomSheetDialog({
     required this.ctx,
-    required this.uid,
-    required this.codeKelas,
-    required this.role,
   });
 
   @override
@@ -66,11 +62,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ReadPage(nomor: "${index + 1}",
-                                      uid: uid,
-                                      role: role,
-                                      codeKelas: codeKelas,
-                                    ),
+                                    ReadPage(nomor: "${index + 1}"),
                               ),
                             );
                           },

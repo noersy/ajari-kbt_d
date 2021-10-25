@@ -1,3 +1,4 @@
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
 import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
@@ -11,16 +12,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ViewUstaz extends StatelessWidget {
   final PageController pageViewController;
-  final Profile profile;
-  final User user;
-  final Kelas kelas;
 
-  const ViewUstaz({
+  ViewUstaz({
     required this.pageViewController,
-    required this.profile,
-    required this.user,
-    required this.kelas,
   });
+
+  final Kelas _kelas = globals.kelas!;
+  final String _role = globals.profile!.role;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +88,7 @@ class ViewUstaz extends StatelessWidget {
                             top: SpacingDimens.spacing8,
                           ),
                           child: Text(
-                            "${kelas.jumlahSantri}",
+                            "${_kelas.jumlahSantri}",
                             style: TypographyStyle.title.merge(
                                 TextStyle(color: PaletteColor.primarybg)),
                           ),
@@ -105,7 +103,7 @@ class ViewUstaz extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: SpacingDimens.spacing8),
                             child: Text(
-                              " ${kelas.nama}",
+                              " ${_kelas.nama}",
                               style: TypographyStyle.subtitle2.merge(TextStyle(
                                   color: PaletteColor.primarybg,
                                   fontWeight: FontWeight.w100)),
@@ -171,7 +169,7 @@ class ViewUstaz extends StatelessWidget {
                             top: SpacingDimens.spacing8,
                           ),
                           child: Text(
-                            "${kelas.jumlahSantri}",
+                            "${_kelas.jumlahSantri}",
                             style: TypographyStyle.title.merge(
                                 TextStyle(color: PaletteColor.primarybg)),
                           ),
@@ -186,7 +184,7 @@ class ViewUstaz extends StatelessWidget {
                             padding: const EdgeInsets.only(
                                 left: SpacingDimens.spacing8),
                             child: Text(
-                              " ${kelas.nama}",
+                              " ${_kelas.nama}",
                               style: TypographyStyle.subtitle2.merge(TextStyle(
                                   color: PaletteColor.primarybg,
                                   fontWeight: FontWeight.w100)),
@@ -233,8 +231,6 @@ class ViewUstaz extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => StudensPage(
-                          codeKelas: profile.codeKelas,
-                          uid: user.uid,
                         ),
                       ),
                     );

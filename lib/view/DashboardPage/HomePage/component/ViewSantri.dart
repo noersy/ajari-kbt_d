@@ -1,4 +1,3 @@
-import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -7,7 +6,6 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiI
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiMusaPage.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiNuhPage.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/StoryPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -15,13 +13,9 @@ import 'component.dart';
 
 class ViewSantri extends StatelessWidget {
   final PageController pageViewController;
-  final User user;
-  final Profile profile;
 
   const ViewSantri({
     required this.pageViewController,
-    required this.user,
-    required this.profile,
   });
 
   @override
@@ -270,9 +264,6 @@ class ViewSantri extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) => ReadBottomSheetDialog(
                         ctx: context,
-                        uid: user.uid,
-                        codeKelas: profile.codeKelas,
-                        role: profile.role,
                       ),
                     );
                   },
