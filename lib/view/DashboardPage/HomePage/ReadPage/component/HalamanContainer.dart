@@ -2,7 +2,9 @@ import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/MessageDialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class HalamanContainer extends StatelessWidget {
   final BuildContext ctx;
@@ -75,7 +77,7 @@ class HalamanContainer extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                  const EdgeInsets.only(right: SpacingDimens.spacing12),
+                      const EdgeInsets.only(right: SpacingDimens.spacing12),
                   child: Text("|"),
                 ),
                 Container(
@@ -87,9 +89,12 @@ class HalamanContainer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(100),
                   ),
                   child: TextButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(0)),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(0),
+                      primary: PaletteColor.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                     onPressed: () {
                       showDialog(

@@ -15,7 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 
 # Preview
 
-- [Link figma project](https://www.figma.com/file/n9NH3GgFIGjTRz0wmFmyzc/AJARI?node-id=0%3A1)
+- [Link figma project](https://www.figma.com/file/n9NH3GgFIGjTRz0wmFmyzc/AJARI)
 
 <p align="center">
     <a href="" target="_blank">

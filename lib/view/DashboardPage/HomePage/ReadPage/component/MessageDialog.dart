@@ -12,14 +12,15 @@ class MessageDialog extends StatelessWidget {
   final BuildContext homePageCtx, sheetDialogCtx;
   final String nomorJilid, nomorHalaman, uid, codeKelas, role;
 
-  MessageDialog(
-      {required this.homePageCtx,
-      required this.sheetDialogCtx,
-      required this.nomorJilid,
-      required this.nomorHalaman,
-      required this.uid,
-      required this.codeKelas,
-      required this.role});
+  MessageDialog({
+    required this.homePageCtx,
+    required this.sheetDialogCtx,
+    required this.nomorJilid,
+    required this.nomorHalaman,
+    required this.uid,
+    required this.codeKelas,
+    required this.role,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -144,28 +145,31 @@ class MessageDialog extends StatelessWidget {
                             return Center(child: Text("Tidak ada pesan."));
                           if (snapshot.data!.docChanges.length == 0)
                             return Center(child: Text("Tidak ada pesan."));
-                          // return Text("data : " + snapshot.data!.docChanges.single.doc.get('message'));
                           return Expanded(
                             child: ListView(
                               physics: BouncingScrollPhysics(),
                               children: snapshot.data!.docs.map((e) {
                                 String _role = e.get('role');
                                 DateTime date = e.get('dateTime').toDate();
-                                DateTime dateTime = DateTime(date.year, date.month, date.day);
-                                DateTime _now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-                                if(_first){
-                                  _dateTime = DateTime(date.year, date.month, date.day);
+                                DateTime dateTime =
+                                    DateTime(date.year, date.month, date.day);
+                                DateTime _now = DateTime(DateTime.now().year,
+                                    DateTime.now().month, DateTime.now().day);
+                                if (_first) {
+                                  _dateTime =
+                                      DateTime(date.year, date.month, date.day);
                                   _first = false;
                                 }
-                                if(_dateTime != dateTime){
+                                if (_dateTime != dateTime) {
                                   return Column(
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.all(2),
                                         child: Center(
                                             child: Text(
-                                              DateFormat('yyyy-MM-dd').format(dateTime),
-                                              style: TypographyStyle.mini,
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(dateTime),
+                                          style: TypographyStyle.mini,
                                         )),
                                       ),
                                       Container(
@@ -183,10 +187,11 @@ class MessageDialog extends StatelessWidget {
                                           decoration: BoxDecoration(
                                               color: _role == role
                                                   ? PaletteColor.primary
-                                                  .withOpacity(0.5)
+                                                      .withOpacity(0.5)
                                                   : PaletteColor.grey60
-                                                  .withOpacity(0.5),
-                                              borderRadius: BorderRadius.circular(5)),
+                                                      .withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                           child: Stack(
                                             alignment: _role == role
                                                 ? Alignment.bottomRight
@@ -195,8 +200,10 @@ class MessageDialog extends StatelessWidget {
                                               Container(
                                                 height: 20,
                                                 padding: _role == role
-                                                    ? const EdgeInsets.only(right: 40, left: 4)
-                                                    : const EdgeInsets.only(left: 40, right: 4),
+                                                    ? const EdgeInsets.only(
+                                                        right: 40, left: 4)
+                                                    : const EdgeInsets.only(
+                                                        left: 40, right: 4),
                                                 child: Text(e.get('message')),
                                               ),
                                               Container(
@@ -206,8 +213,9 @@ class MessageDialog extends StatelessWidget {
                                                 height: 20,
                                                 width: 50,
                                                 child: Text(
-                                                  DateFormat('kk:mm').format(
-                                                      e.get('dateTime').toDate()),
+                                                  DateFormat('kk:mm').format(e
+                                                      .get('dateTime')
+                                                      .toDate()),
                                                   style: TypographyStyle.mini,
                                                 ),
                                               ),
@@ -218,18 +226,21 @@ class MessageDialog extends StatelessWidget {
                                     ],
                                   );
                                 }
-                                _dateTime = DateTime(date.year, date.month, date.day);
+                                _dateTime =
+                                    DateTime(date.year, date.month, date.day);
                                 return Column(
                                   children: [
                                     _first
-                                    ? Padding(
-                                      padding: const EdgeInsets.all(2),
-                                      child: Center(
-                                          child: Text(DateFormat('yyyy-MM-dd').format(dateTime),
-                                            style: TypographyStyle.mini,
-                                          )),
-                                    )
-                                    : SizedBox.shrink(),
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(2),
+                                            child: Center(
+                                                child: Text(
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(dateTime),
+                                              style: TypographyStyle.mini,
+                                            )),
+                                          )
+                                        : SizedBox.shrink(),
                                     Container(
                                       margin: const EdgeInsets.only(
                                         left: SpacingDimens.spacing16,
@@ -248,7 +259,8 @@ class MessageDialog extends StatelessWidget {
                                                     .withOpacity(0.5)
                                                 : PaletteColor.grey60
                                                     .withOpacity(0.5),
-                                            borderRadius: BorderRadius.circular(5)),
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
                                         child: Stack(
                                           alignment: _role == role
                                               ? Alignment.bottomRight
@@ -257,8 +269,10 @@ class MessageDialog extends StatelessWidget {
                                             Container(
                                               height: 20,
                                               padding: _role == role
-                                                  ? const EdgeInsets.only(right: 40, left: 4)
-                                                  : const EdgeInsets.only(left: 40, right: 4),
+                                                  ? const EdgeInsets.only(
+                                                      right: 40, left: 4)
+                                                  : const EdgeInsets.only(
+                                                      left: 40, right: 4),
                                               child: Text(e.get('message')),
                                             ),
                                             Container(

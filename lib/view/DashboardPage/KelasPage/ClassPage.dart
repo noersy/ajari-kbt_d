@@ -18,7 +18,7 @@ class ClassPage extends StatefulWidget {
 
 class _ClassPageState extends State<ClassPage> {
   late PageController _pageController;
-  List<String> _listDay = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Sat'];
+  List<String> _listDay = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   List<String> _listDate = [];
   DateTime _dateTime = DateTime.now();
   int _index = 0;
@@ -28,7 +28,7 @@ class _ClassPageState extends State<ClassPage> {
   @override
   void initState() {
     var weekDay = _dateTime.weekday;
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i <= 7; i++) {
       int _date = _dateTime.subtract(Duration(days: weekDay - i)).day;
       _listDate.add(_date.toString());
       if (_dateTime.day == _date) {
@@ -197,8 +197,8 @@ class _ClassPageState extends State<ClassPage> {
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemExtent: 55,
-              itemCount: 6,
+              itemExtent: 50,
+              itemCount: 7,
               padding: const EdgeInsets.only(
                 top: SpacingDimens.spacing12,
                 left: SpacingDimens.spacing16,
@@ -241,7 +241,8 @@ class _ClassPageState extends State<ClassPage> {
                     physics: BouncingScrollPhysics(),
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: SpacingDimens.spacing16 + 2),
+                        padding: const EdgeInsets.only(
+                            left: SpacingDimens.spacing16 + 2),
                         child: Stack(
                           children: [
                             Container(
@@ -257,16 +258,11 @@ class _ClassPageState extends State<ClassPage> {
                                 left: 70,
                               ),
                               child: TextButton(
-                                style: ButtonStyle(
-                                  shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
+                                style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
-                                  ),
-                                  padding: MaterialStateProperty.all<EdgeInsets>(
-                                      EdgeInsets.all(0)),
-                                ),
+                                    padding: const EdgeInsets.all(0)),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => RoomPage()));
@@ -287,7 +283,8 @@ class _ClassPageState extends State<ClassPage> {
                                     Text(
                                       "Join",
                                       style: TypographyStyle.button1.merge(
-                                        TextStyle(color: PaletteColor.primarybg),
+                                        TextStyle(
+                                            color: PaletteColor.primarybg),
                                       ),
                                     ),
                                     Container(
@@ -314,7 +311,7 @@ class _ClassPageState extends State<ClassPage> {
                                   height: 25,
                                   width: 3.5,
                                   margin: const EdgeInsets.only(
-                                      left: SpacingDimens.spacing16 + 1.7,
+                                    left: SpacingDimens.spacing16 + 1.7,
                                   ),
                                   decoration: BoxDecoration(
                                     color: PaletteColor.grey60,
@@ -332,7 +329,8 @@ class _ClassPageState extends State<ClassPage> {
                                       Text(
                                         "08:40",
                                         style: TypographyStyle.button2.merge(
-                                          TextStyle(color: PaletteColor.primary),
+                                          TextStyle(
+                                              color: PaletteColor.primary),
                                         ),
                                       ),
                                       SizedBox(
@@ -341,7 +339,8 @@ class _ClassPageState extends State<ClassPage> {
                                       Text(
                                         "WIB",
                                         style: TypographyStyle.mini.merge(
-                                          TextStyle(color: PaletteColor.primary),
+                                          TextStyle(
+                                              color: PaletteColor.primary),
                                         ),
                                       ),
                                     ],
@@ -362,7 +361,8 @@ class _ClassPageState extends State<ClassPage> {
                                 Container(
                                   height: 30,
                                   width: 3.5,
-                                  margin: const EdgeInsets.only(left: SpacingDimens.spacing16 + 1.5),
+                                  margin: const EdgeInsets.only(
+                                      left: SpacingDimens.spacing16 + 1.5),
                                   decoration: BoxDecoration(
                                     color: PaletteColor.grey60,
                                     borderRadius: BorderRadius.circular(10),
