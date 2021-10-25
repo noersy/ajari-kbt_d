@@ -1,6 +1,6 @@
 ## Ajari
 
-A mobile aplication for learning iqro.
+A mobile application for learning iqro.
 
 # Getting Started
 
