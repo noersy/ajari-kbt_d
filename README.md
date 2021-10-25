@@ -1,10 +1,10 @@
-# ajari
+## Ajari
 
-A new Flutter project.
+A mobile aplication for learning iqro.
 
-## Getting Started
+# Getting Started
 
-This project is a starting point for a Flutter application.
+This project bulid in Flutter.
 
 A few resources to get you started if this is your first Flutter project:
 
