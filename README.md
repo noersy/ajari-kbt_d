@@ -1,6 +1,8 @@
 # Ajari
 
-####Ajari is a mobile-based application created to facilitate the Al-Quran Learning Place (TPQ) in helping teachers teach students and students to learn to read Iqro based on an independent learning process guided by the teacher. In Ajari, there are readings and audio available to help students study independently with minimal 'assistance', which the teacher will be able to assess with a recording feature for santri reading. The 'assistance' in question is in the form of comments that can be submitted via the chat feature and or the meet room feature that the teacher can use to teach directly. Ajari also has a feature to read the story of the prophet which will teach students the moral messages contained in the story along with a quiz feature that can evaluate the extent of the moral and knowledge messages that have been learned by the students.
+<p>
+    Ajari is a mobile-based application created to facilitate the Al-Quran Learning Place (TPQ) in helping teachers teach students and students to learn to read Iqro based on an independent learning process guided by the teacher. In Ajari, there are readings and audio available to help students study independently with minimal 'assistance', which the teacher will be able to assess with a recording feature for santri reading. The 'assistance' in question is in the form of comments that can be submitted via the chat feature and or the meet room feature that the teacher can use to teach directly. Ajari also has a feature to read the story of the prophet which will teach students the moral messages contained in the story along with a quiz feature that can evaluate the extent of the moral and knowledge messages that have been learned by the students.
+</p>
 
 ## Getting Started
 
