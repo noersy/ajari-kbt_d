@@ -45,14 +45,19 @@ class _ReadPageState extends State<ReadPage> {
             ),
             builder: (context, snapshot) {
               if (!snapshot.hasData)
-                return Center(child: Text("Belum ada record."));
-              if (snapshot.data!.docChanges.length == 0)
-                return Center(child: Text("Belum ada record."));
+                return Center(child: Text("No data."));
 
               List<QueryDocumentSnapshot<Object?>> dat = snapshot.data!.docs;
               List<Map<String, String>> _dataDump = [];
               int _length = 10 - dat.length;
               int i = dat.length - 1;
+
+              if (snapshot.data!.docChanges.length == 0) {
+                print(snapshot.data!.docs);
+                i = 1;
+                _length = 10;
+              }
+
               while (_length >= -1) {
                 _dataDump.add({'halaman': '$i'});
                 _length--;
