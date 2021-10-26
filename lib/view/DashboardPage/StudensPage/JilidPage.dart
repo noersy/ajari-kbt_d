@@ -36,10 +36,7 @@ class _StudensPageState extends State<JilidPage> {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => ReadPage(
-                        role: widget.role,
                         nomor: "${index + 1}",
-                        uid: widget.uid,
-                        codeKelas: widget.codeKelas,
                       ),
                     ),
                   );
