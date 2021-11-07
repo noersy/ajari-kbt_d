@@ -1,16 +1,17 @@
 import 'package:ajari/component/Dialog/DialogFailed.dart';
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
+import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/firebase/DataProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/component/ButtonLoginGoogle.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
+import 'RegisterPage/RegisterPage.dart';
 import 'component/AuthLogin.dart';
 import 'component/ButtonLogin.dart';
 import 'component/MainForms.dart';
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: Alignment.topRight,
                         padding: EdgeInsets.only(top: SpacingDimens.spacing16),
                         child: GestureDetector(
-                          onTap: onPressedFunction,
+                          onTap: () {},
                           child: Text(
                             "Forgot password?",
                             style: TypographyStyle.caption2.merge(
@@ -73,12 +74,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       ButtonLogin(
-                        onPressedFunction: onPressedFunction,
-                        title: "Continue",
+                        onPressedFunction: this.onPressedFunction,
+                        title: "Login",
                       ),
                       ButtonLoginGoogle(
-                        onPressedFunction: this.onPressedFunction,
+                        onPressedFunction: this.loginWIthGoogle,
                       ),
+                      SizedBox(height: SpacingDimens.spacing8),
+                      Divider(),
+                      SizedBox(height: SpacingDimens.spacing8),
+                      Text("Not have account yet? Register now!"),
+                      SizedBox(height: SpacingDimens.spacing8),
                     ],
                   ),
                 ),
@@ -118,15 +124,28 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    User? user = await AuthLogin.signInWithGoogle(context: context);
+    await AuthLogin.signInWithGoogle(context: context);
+    await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+    await DataKelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
+
+    if (globals.Get.prf().role == "-")
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => RegisterPage(user: globals.Get.usr()),
+        ),
+      );
+    else
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => DashboardPage(),
+        ),
+      );
 
     setState(() {
       isLoading = false;
     });
 
-    print(user!.displayName);
-
-    if (user != null) {
+    if (globals.isUserNotNull) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => DashboardPage(),

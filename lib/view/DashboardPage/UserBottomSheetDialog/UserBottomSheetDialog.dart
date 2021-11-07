@@ -1,17 +1,21 @@
+import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/model/Profile.dart';
 import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/ProfilePage/ProfilePage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'component/ConfirmationLogoutDialog.dart';
-import 'package:ajari/config/globals.dart' as globals;
 
 class UserBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;
-
   UserBottomSheetDialog({required this.ctx});
+
+  final Profile  _profile = globals.Get.prf();
+  final User  _user = globals.Get.usr();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: PaletteColor.grey40,
                         backgroundImage: NetworkImage(
-                            '${globals.user!.photoURL!}'),
+                            '${_user.photoURL!}'),
                       ),
                     ),
                     Container(
@@ -59,7 +63,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                         children: [
                           Container(
                             child: Text(
-                              "${globals.user!.displayName}",
+                              "${_user.displayName}",
                               style: TypographyStyle.subtitle2,
                             ),
                           ),
@@ -74,7 +78,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              globals.profile!.role,
+                              _profile.role,
                               style: TypographyStyle.subtitle2.merge(
                                 TextStyle(
                                   color: PaletteColor.primarybg,
@@ -100,7 +104,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.of(ctx).push(
                     routeTransition(
-                      ProfilePage(user: globals.user!, role: globals.profile!.role,),
+                      ProfilePage(user: _user, role: _profile.role,),
                     ),
                   );
                 },

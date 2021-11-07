@@ -1,10 +1,10 @@
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/LoginPage/component/AuthLogin.dart';
 import 'package:ajari/view/SplashScreenPage/SplashScreenPage.dart';
 import 'package:flutter/material.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmationLogoutDialog extends StatelessWidget {
   final BuildContext homePageCtx, sheetDialogCtx;
@@ -120,10 +120,10 @@ class ConfirmationLogoutDialog extends StatelessWidget {
   }
 
   void logOut(context) async {
-    // SharedPreferences preferences = await SharedPreferences.getInstance();
-    // await preferences.clear();
 
     await AuthLogin.signOut(context: context);
+
+    globals.Set.clearAll();
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

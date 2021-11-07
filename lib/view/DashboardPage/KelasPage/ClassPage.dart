@@ -1,8 +1,10 @@
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
+import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/CreateKelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/JoinKelas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,14 @@ class _ClassPageState extends State<ClassPage> {
   DateTime _dateTime = DateTime.now();
   int _index = 0;
   int _indexCurret = 0;
-  late Kelas _kelas;
+  Profile _profile = globals.Get.prf();
+  Kelas _kelas = Kelas(
+    pengajarId: "-",
+    nama: "-",
+    jumlahSantri: 0,
+    kelasId: "-",
+    pengajar: "-",
+  );
 
   void freshState({required Kelas value}) {
     setState(() {
@@ -47,7 +56,7 @@ class _ClassPageState extends State<ClassPage> {
       }
     }
 
-    if (globals.kelas != null) _kelas = globals.kelas!;
+    if (globals.isKelasNotNull) _kelas = globals.Get.kls();
 
     super.initState();
   }
@@ -64,9 +73,9 @@ class _ClassPageState extends State<ClassPage> {
         ),
       ),
       body: _kelas.kelasId == "-"
-          ? JoinKelas(
-              freshState: freshState,
-            )
+          ? _profile.role != "Pengajar"
+              ? JoinKelas(freshState: freshState)
+              : CreateKelas(ctx: context, user: globals.Get.usr(), freshState: freshState,)
           : Column(
               children: [
                 Container(

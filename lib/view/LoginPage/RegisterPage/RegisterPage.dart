@@ -1,4 +1,5 @@
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/DataProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -99,18 +100,17 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   void onPressedFunction() async {
-
     await DataProfileProvider.createProfile(
       userid: widget.user.uid,
       role: _character == SingingCharacter.Santri ? "Santri" : "Pengajar",
     );
+    await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
 
     print(widget.user.displayName);
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => DashboardPage(
-        ),
+        builder: (context) => DashboardPage(),
       ),
     );
   }

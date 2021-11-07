@@ -22,11 +22,9 @@ class ReadPage extends StatefulWidget {
 }
 
 class _ReadPageState extends State<ReadPage> {
-  final User _user = globals.user!;
-  final String _codeKelas =
-      globals.profile!.codeKelas.isNotEmpty ? globals.profile!.codeKelas : "-";
-  final String _role =
-      globals.profile!.role.isNotEmpty ? globals.profile!.role : "-";
+  final User _user = globals.Get.usr();
+  final String _codeKelas = globals.Get.prf().codeKelas.isNotEmpty ? globals.Get.prf().codeKelas : "-";
+  final String _role = globals.isProfileNotNull ? globals.Get.prf().role : "-";
 
   @override
   Widget build(BuildContext context) {

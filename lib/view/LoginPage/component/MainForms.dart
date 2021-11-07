@@ -45,9 +45,6 @@ class _MainFormsState extends State<MainForms> {
             controller: widget.nimFilter,
             cursorColor: PaletteColor.primary,
             keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(
                 left: SpacingDimens.spacing16,

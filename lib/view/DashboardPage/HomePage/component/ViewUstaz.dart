@@ -1,24 +1,38 @@
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
-import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/StoryPage.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/StudensPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class ViewUstaz extends StatelessWidget {
+class ViewUstaz extends StatefulWidget {
   final PageController pageViewController;
 
   ViewUstaz({
     required this.pageViewController,
   });
 
-  final Kelas _kelas = globals.kelas!;
-  final String _role = globals.profile!.role;
+  @override
+  State<ViewUstaz> createState() => _ViewUstazState();
+}
+
+class _ViewUstazState extends State<ViewUstaz> {
+  Kelas _kelas = Kelas(
+    pengajarId: "pengajarId",
+    nama: "-",
+    jumlahSantri: 0,
+    kelasId: "kelasId",
+    pengajar: "pengajar",
+  );
+
+  @override
+  void initState() {
+    if (globals.isKelasNotNull) _kelas = globals.Get.kls();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +44,7 @@ class ViewUstaz extends StatelessWidget {
               height: 150,
               child: PageView(
                 physics: BouncingScrollPhysics(),
-                controller: pageViewController,
+                controller: widget.pageViewController,
                 children: [
                   Container(
                     height: 130,
@@ -198,11 +212,11 @@ class ViewUstaz extends StatelessWidget {
               ),
             ),
             SmoothPageIndicator(
-              controller: pageViewController,
+              controller: widget.pageViewController,
               count: 2,
               axisDirection: Axis.horizontal,
               onDotClicked: (i) {
-                pageViewController.animateToPage(
+                widget.pageViewController.animateToPage(
                   i,
                   duration: Duration(milliseconds: 500),
                   curve: Curves.ease,
@@ -230,8 +244,7 @@ class ViewUstaz extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => StudensPage(
-                        ),
+                        builder: (context) => StudensPage(),
                       ),
                     );
                   },

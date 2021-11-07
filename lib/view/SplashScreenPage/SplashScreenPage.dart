@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ajari/component/Dialog/DialogFailed.dart';
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/DataKelasProvider.dart';
@@ -23,15 +24,15 @@ class _SplashScreenState extends State<SplashScreenPage> {
   }
 
   navigationPage() async {
-    globals.user = await AuthLogin.signInWithGoogle(context: context);
-    globals.profile = await DataProfileProvider.getProfile(userUid: globals.user!.uid);
-    globals.kelas = await DataKelasProvider.getKelas(codeKelas: globals.profile!.codeKelas);
+    try {
+      var user = await AuthLogin.signInWithGoogle(context: context);
+      var prf = await DataProfileProvider.getProfile(userUid: user?.uid ?? "");
+      await DataKelasProvider.getKelas(codeKelas: prf?.codeKelas ?? " ");
 
-    if (globals.profile != null) {
-      if (globals.profile!.role == "Tidak ada")
+      if (prf == null)
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: globals.user!),
+            builder: (context) => RegisterPage(user: globals.Get.usr()),
           ),
         );
       else
@@ -40,12 +41,24 @@ class _SplashScreenState extends State<SplashScreenPage> {
             builder: (context) => DashboardPage(),
           ),
         );
-    } else
+    } catch (e, r) {
+      print("$e \n$r");
+      if (globals.isUserNotNull) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return DialogFailed(
+              content: "Whups something wrong",
+            );
+          },
+        );
+      }
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => LoginPage(),
         ),
       );
+    }
   }
 
   @override

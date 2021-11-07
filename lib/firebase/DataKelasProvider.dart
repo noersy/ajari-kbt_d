@@ -5,9 +5,10 @@ import 'package:ajari/model/Kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ajari/config/globals.dart' as globals;
 
 class DataKelasProvider extends ChangeNotifier {
-  static Future<void> createKelas({
+  static Future<String> createKelas({
     required namaKelas,
     required User user,
   }) async {
@@ -36,6 +37,7 @@ class DataKelasProvider extends ChangeNotifier {
         .set(data)
         .whenComplete(() => print("data kelas added to the database"))
         .catchError((e) => print(e));
+    return  _code;
   }
 
   static Future<String> joinKelas({
@@ -131,33 +133,24 @@ class DataKelasProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
-  static Future<Kelas> getKelas({required String? codeKelas}) async {
+  static Future<Kelas?> getKelas({required String? codeKelas}) async {
 
-    if (codeKelas!.isEmpty)
-      return new Kelas(
-        pengajarId: "-",
-        nama: "-",
-        jumlahSantri: 0,
-        kelasId: "-",
-        pengajar: "-",
-      );
+    if (codeKelas!.isEmpty){
+      print('Failed get kelas');
+      return null;
+    }
 
     DocumentReference documentReferencer = FirebaseReference.kelas.doc(codeKelas);
     DocumentSnapshot data = await documentReferencer.get();
-    Kelas kelas;
+    Kelas? kelas;
 
     if (data.data() != null) {
       kelas = kelasFromJson(jsonEncode(data.data()));
+      globals.Set.kls(kelas);
       print('Success get kelas');
     } else {
-      kelas = new Kelas(
-        pengajarId: "-",
-        nama: "-",
-        jumlahSantri: 0,
-        kelasId: "-",
-        pengajar: "-",
-      );
       print('Failed get kelas');
+      kelas = null;
     }
 
     return kelas;

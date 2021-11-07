@@ -8,22 +8,10 @@ import 'package:flutter/material.dart';
 
 import 'component/ViewSantri.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
+class HomePage extends StatelessWidget {
   final _pageViewController = PageController();
-  late String _username = globals.user!.displayName!;
-  late Profile _profile;
-
-  @override
-  void initState() {
-    _profile = globals.profile!;
-
-    super.initState();
-  }
+  final String _username = globals.Get.usr().displayName!;
+  final Profile _profile = globals.Get.prf();
 
   @override
   Widget build(BuildContext context) {

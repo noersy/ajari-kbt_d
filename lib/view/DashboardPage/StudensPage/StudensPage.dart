@@ -14,7 +14,7 @@ class StudensPage extends StatefulWidget {
 }
 
 class _StudensPageState extends State<StudensPage> {
-  final String _codeKelas = globals.kelas!.kelasId;
+  final String _codeKelas = globals.Get.kls().kelasId;
 
   @override
   Widget build(BuildContext context) {

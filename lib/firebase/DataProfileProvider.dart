@@ -5,6 +5,7 @@ import 'package:ajari/config/FirebaseReference.dart';
 import 'package:ajari/model/Profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ajari/config/globals.dart' as globals;
 
 class DataProfileProvider extends ChangeNotifier {
   // static String? userUid;
@@ -42,17 +43,23 @@ class DataProfileProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
-  static Future<Profile> getProfile({required userUid}) async {
-    DocumentReference notesItemCollection = FirebaseReference.user.doc(userUid);
+  static Future<Profile?> getProfile({required userUid}) async {
 
+    if(userUid == ""){
+      print('Failed get profile');
+      return null;
+    }
+
+    DocumentReference notesItemCollection = FirebaseReference.user.doc(userUid);
     DocumentSnapshot data = await notesItemCollection.get();
-    Profile profile;
+    Profile? profile;
 
     if (data.data() != null) {
       profile = profileFromJson(jsonEncode(data.data()));
+      globals.Set.prf(profile);
       print('Success get profile');
     } else {
-      profile = Profile(role: "-", codeKelas: "-");
+      profile = null;
       print('Failed get profile');
     }
 

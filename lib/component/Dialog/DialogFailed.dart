@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class DialogFailed extends StatelessWidget {
   final String content;
-  final Function onPressedFunction;
+  final onPressedFunction;
 
-  DialogFailed({required this.content, required this.onPressedFunction});
+  DialogFailed({required this.content, this.onPressedFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -75,26 +75,26 @@ class DialogFailed extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(
-                SpacingDimens.spacing24,
-              ),
-              child: FlatButton(
-                minWidth: double.infinity,
-                color: PaletteColor.primary,
-                onPressed: () {
-                  onPressedFunction();
-                },
-                child: Text(
-                  'OK',
-                  style: TypographyStyle.button2.merge(
-                    TextStyle(
-                      color: PaletteColor.primarybg,
+            onPressedFunction != null
+                ? Padding(
+                    padding: EdgeInsets.all(
+                      SpacingDimens.spacing24,
                     ),
-                  ),
-                ),
-              ),
-            ),
+                    child: FlatButton(
+                      minWidth: double.infinity,
+                      color: PaletteColor.primary,
+                      onPressed: onPressedFunction,
+                      child: Text(
+                        'OK',
+                        style: TypographyStyle.button2.merge(
+                          TextStyle(
+                            color: PaletteColor.primarybg,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

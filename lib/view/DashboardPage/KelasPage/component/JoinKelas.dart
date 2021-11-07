@@ -26,13 +26,12 @@ class _JoinKelasState extends State<JoinKelas> {
 
     await DataKelasProvider.joinKelas(
       codeKelas: santriInput.text,
-      user: globals.user!,
+      user: globals.Get.usr(),
     ).then((value) {
       _codeKelas = value;
     });
 
     await DataKelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
-      globals.kelas = value;
       widget.freshState(value: value);
       _loading = false;
     });

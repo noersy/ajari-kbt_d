@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:ajari/config/globals.dart' as globals;
 
 class AuthLogin {
   static Future<FirebaseApp> initializeFirebase({context}) async {
@@ -37,6 +38,7 @@ class AuthLogin {
         await auth.signInWithCredential(credential);
 
         user = userCredential.user;
+        globals.Set.usr(user!);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -53,7 +55,9 @@ class AuthLogin {
             ),
           );
         }
-      } catch (e) {
+      } catch (e, r) {
+        print(e);
+        print(r);
         ScaffoldMessenger.of(context).showSnackBar(
           AuthLogin.customSnackBar(
             content: 'Error occurred using Google Sign In. Try again.',
