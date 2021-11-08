@@ -1,9 +1,11 @@
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
 import 'package:ajari/model/Profile.dart';
+import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/StudenListPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/CreateKelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/JoinKelas.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,6 +66,7 @@ class _ClassPageState extends State<ClassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: PaletteColor.primarybg2,
       appBar: AppBar(
         backgroundColor: PaletteColor.primarybg,
         elevation: 0,
@@ -75,33 +78,38 @@ class _ClassPageState extends State<ClassPage> {
       body: _kelas.kelasId == "-"
           ? _profile.role != "Pengajar"
               ? JoinKelas(freshState: freshState)
-              : CreateKelas(ctx: context, user: globals.Get.usr(), freshState: freshState,)
+              : CreateKelas(
+                  ctx: context,
+                  user: globals.Get.usr(),
+                  freshState: freshState,
+                )
           : Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.all(
-                    SpacingDimens.spacing12,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFF6EEA91), Color(0xFF008165)],
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 1),
-                      ),
-                    ],
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(SpacingDimens.spacing12),
                   child: Column(
                     children: [
                       Stack(
                         children: [
+                          Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [Color(0xFF6EEA91), Color(0xFF008165)],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  spreadRadius: 1,
+                                  blurRadius: 2,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                          ),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Padding(
@@ -166,7 +174,7 @@ class _ClassPageState extends State<ClassPage> {
                                       color: PaletteColor.primarybg2,
                                     ),
                                     Text(
-                                      " ${_kelas.jumlahSantri} Santri",
+                                      " ${_kelas.jumlahSantri}",
                                       style: TypographyStyle.button1.merge(
                                         TextStyle(
                                           fontSize: 13,
@@ -209,6 +217,60 @@ class _ClassPageState extends State<ClassPage> {
                             alignment: Alignment.topRight,
                             child: Image.asset(
                               'assets/images/lentrn.png',
+                            ),
+                          ),
+                          Container(
+                            height: 155,
+                            alignment: Alignment.bottomLeft,
+                            child: Row(
+                              children: [
+                                SizedBox(width: SpacingDimens.spacing4),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                      primary: PaletteColor.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      )),
+                                  onPressed: () => Navigator.of(context)
+                                      .push(routeTransition(StudenListPage())),
+                                  child: Text(
+                                    "Santri List",
+                                    style: TypographyStyle.button2.copyWith(
+                                      color: PaletteColor.primarybg2,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(
+                                    SpacingDimens.spacing4,
+                                  ),
+                                  child: SizedBox(
+                                    width: 1,
+                                    height: SpacingDimens.spacing16,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        color: PaletteColor.primarybg2,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    primary: PaletteColor.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () {},
+                                  child: Text(
+                                    "Absen",
+                                    style: TypographyStyle.button2.copyWith(
+                                      color: PaletteColor.primarybg2,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ],
@@ -259,7 +321,13 @@ class _ClassPageState extends State<ClassPage> {
                       left: SpacingDimens.spacing16,
                     ),
                     child: PageView(
+                      physics: BouncingScrollPhysics(),
                       controller: _pageController,
+                      onPageChanged: (value) {
+                        setState(() {
+                          _index = value;
+                        });
+                      },
                       children: [
                         ListView(
                           physics: BouncingScrollPhysics(),
@@ -283,6 +351,7 @@ class _ClassPageState extends State<ClassPage> {
                                     ),
                                     child: TextButton(
                                       style: TextButton.styleFrom(
+                                          primary: PaletteColor.primary,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(15),
