@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 class NilaiDialog extends StatefulWidget {
   final String uid, grade, codeKelas, nomorJilid, nomorHalaman;
 
-  const NilaiDialog(
-      {required this.uid,
-      required this.grade,
-      required this.codeKelas,
-      required this.nomorJilid,
-      required this.nomorHalaman});
+  const NilaiDialog({
+    required this.uid,
+    required this.grade,
+    required this.codeKelas,
+    required this.nomorJilid,
+    required this.nomorHalaman,
+  });
 
   @override
   _NilaiDialogState createState() => _NilaiDialogState();
@@ -169,8 +170,13 @@ class _NilaiDialogState extends State<NilaiDialog> {
                 padding: const EdgeInsets.all(SpacingDimens.spacing8),
                 shape: CircleBorder(),
               ),
-              onPressed: () {Navigator.of(context).pop();},
-              child: Icon(Icons.close, color: PaletteColor.grey60,),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.close,
+                color: PaletteColor.grey60,
+              ),
             ),
           )
         ],

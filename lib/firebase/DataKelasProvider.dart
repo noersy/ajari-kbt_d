@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:ajari/config/FirebaseReference.dart';
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ajari/config/globals.dart' as globals;
 
 class DataKelasProvider extends ChangeNotifier {
   static Future<String> createKelas({
@@ -14,9 +14,9 @@ class DataKelasProvider extends ChangeNotifier {
   }) async {
     String _code = FirebaseReference.getRandomString(5);
     DocumentReference documentReferencerKelas =
-        FirebaseReference.kelas.doc(_code);
+    FirebaseReference.kelas.doc(_code);
     DocumentReference documentReferencerUser =
-        FirebaseReference.user.doc(user.uid);
+    FirebaseReference.user.doc(user.uid);
 
     Map<String, dynamic> data = <String, dynamic>{
       "nama": namaKelas,
@@ -37,7 +37,7 @@ class DataKelasProvider extends ChangeNotifier {
         .set(data)
         .whenComplete(() => print("data kelas added to the database"))
         .catchError((e) => print(e));
-    return  _code;
+    return _code;
   }
 
   static Future<String> joinKelas({
@@ -45,9 +45,9 @@ class DataKelasProvider extends ChangeNotifier {
     required User user,
   }) async {
     DocumentReference documentReferencerUser =
-        FirebaseReference.user.doc(user.uid);
+    FirebaseReference.user.doc(user.uid);
     DocumentReference documentReferencerKelas =
-        FirebaseReference.kelas.doc(codeKelas);
+    FirebaseReference.kelas.doc(codeKelas);
 
     DocumentReference documentReferencerProfileinKelas = FirebaseReference.kelas
         .doc(codeKelas)
@@ -72,12 +72,13 @@ class DataKelasProvider extends ChangeNotifier {
     };
 
     bool kelasExist = false;
-    await FirebaseReference.kelas.doc(codeKelas).get().then((value) => {
-          if (value.exists)
-            {
-              kelasExist = true,
-            }
-        });
+    await FirebaseReference.kelas.doc(codeKelas).get().then((value) =>
+    {
+      if (value.exists)
+        {
+          kelasExist = true,
+        }
+    });
 
     if (kelasExist) {
       await documentReferencerProfileinKelas
@@ -134,13 +135,13 @@ class DataKelasProvider extends ChangeNotifier {
   }
 
   static Future<Kelas?> getKelas({required String? codeKelas}) async {
-
-    if (codeKelas!.isEmpty){
+    if (codeKelas!.isEmpty) {
       print('Failed get kelas');
       return null;
     }
 
-    DocumentReference documentReferencer = FirebaseReference.kelas.doc(codeKelas);
+    DocumentReference documentReferencer =
+    FirebaseReference.kelas.doc(codeKelas);
     DocumentSnapshot data = await documentReferencer.get();
     Kelas? kelas;
 
@@ -158,15 +159,14 @@ class DataKelasProvider extends ChangeNotifier {
 
   Stream<QuerySnapshot> getSantri({required codeKelas}) {
     CollectionReference documentReferencer =
-        FirebaseReference.kelas.doc(codeKelas).collection('santri');
+    FirebaseReference.kelas.doc(codeKelas).collection('santri');
     return documentReferencer.snapshots();
   }
 
-  Stream<QuerySnapshot> getMassage(
-      {required uid,
-      required codeKelas,
-      required nomorJilid,
-      required nomorHalaman}) {
+  Stream<QuerySnapshot> getMassage({required uid,
+    required codeKelas,
+    required nomorJilid,
+    required nomorHalaman}) {
     CollectionReference collectionReference = FirebaseReference.kelas
         .doc(codeKelas)
         .collection('santri')
@@ -174,8 +174,6 @@ class DataKelasProvider extends ChangeNotifier {
         .collection("jilid" + nomorJilid)
         .doc('halaman' + nomorHalaman)
         .collection('message');
-
-    print(collectionReference);
 
     return collectionReference
         .orderBy("dateTime", descending: false)
@@ -193,17 +191,16 @@ class DataKelasProvider extends ChangeNotifier {
         .doc(uid)
         .collection("jilid" + nomorJilid);
 
-    print(collectionReference);
-
     return collectionReference.snapshots();
   }
 
-  static Future<void> setGrade(
-      {required uid,
-      required grade,
-      required codeKelas,
-      required nomorJilid,
-      required nomorHalaman}) async {
+  static Future<void> setGrade({
+    required uid,
+    required grade,
+    required codeKelas,
+    required nomorJilid,
+    required nomorHalaman,
+  }) async {
     DocumentReference documentReference = FirebaseReference.kelas
         .doc(codeKelas)
         .collection('santri')
@@ -211,12 +208,15 @@ class DataKelasProvider extends ChangeNotifier {
         .collection("jilid" + nomorJilid)
         .doc('halaman' + nomorHalaman);
 
+    print(documentReference);
+
     Map<String, dynamic> data = {
       'grade': grade,
+      'halaman' : nomorHalaman
     };
 
     await documentReference
-        .update(data)
+        .set(data)
         .whenComplete(() => print("grade added to the database"))
         .catchError((e) => print(e));
   }

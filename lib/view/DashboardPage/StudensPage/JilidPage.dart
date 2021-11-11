@@ -37,6 +37,7 @@ class _StudensPageState extends State<JilidPage> {
                     MaterialPageRoute(
                       builder: (context) => ReadPage(
                         nomor: "${index + 1}",
+                        uid: widget.uid,
                       ),
                     ),
                   );

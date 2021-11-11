@@ -1,3 +1,4 @@
+import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -61,8 +62,10 @@ class ReadBottomSheetDialog extends StatelessWidget {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    ReadPage(nomor: "${index + 1}"),
+                                builder: (context) => ReadPage(
+                                  nomor: "${index + 1}",
+                                  uid: globals.Get.usr().uid,
+                                ),
                               ),
                             );
                           },
@@ -119,11 +122,11 @@ class ReadBottomSheetDialog extends StatelessWidget {
             ),
             child: Center(
                 child: Text(
-                  jilid,
-                  style: TypographyStyle.title.merge(
-                    TextStyle(color: PaletteColor.primary),
-                  ),
-                )),
+              jilid,
+              style: TypographyStyle.title.merge(
+                TextStyle(color: PaletteColor.primary),
+              ),
+            )),
           ),
           title: Text(
             text,

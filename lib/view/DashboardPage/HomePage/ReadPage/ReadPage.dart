@@ -10,11 +10,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
+
+//@param nomor : String adalah nomor halaman per jilid iqro
+//@param uid : String, id user milik santri
+
 class ReadPage extends StatefulWidget {
-  final String nomor;
+  final String nomor, uid;
 
   ReadPage({
     required this.nomor,
+    required this.uid
   });
 
   @override
@@ -22,7 +28,6 @@ class ReadPage extends StatefulWidget {
 }
 
 class _ReadPageState extends State<ReadPage> {
-  final User _user = globals.Get.usr();
   final String _codeKelas = globals.Get.prf().codeKelas.isNotEmpty ? globals.Get.prf().codeKelas : "-";
   final String _role = globals.isProfileNotNull ? globals.Get.prf().role : "-";
 
@@ -37,7 +42,7 @@ class _ReadPageState extends State<ReadPage> {
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
             stream: Provider.of<DataKelasProvider>(context).getGrade(
-              uid: _user.uid,
+              uid: widget.uid,
               codeKelas: _codeKelas,
               nomorJilid: widget.nomor,
             ),
@@ -45,13 +50,14 @@ class _ReadPageState extends State<ReadPage> {
               if (!snapshot.hasData)
                 return Center(child: Text("No data."));
 
-              List<QueryDocumentSnapshot<Object?>> dat = snapshot.data!.docs;
+              var dat = snapshot.data?.docs ?? [];
               List<Map<String, String>> _dataDump = [];
               int _length = 10 - dat.length;
               int i = dat.length - 1;
 
-              if (snapshot.data!.docChanges.length == 0) {
-                print(snapshot.data!.docs);
+              // print((snapshot.data?.docs.first.data()));
+
+              if (snapshot.data?.docs.length == 0) {
                 i = 1;
                 _length = 10;
               }
@@ -70,35 +76,36 @@ class _ReadPageState extends State<ReadPage> {
 
                   if (dat.length > index) data = dat[index].data() as Map;
 
+
                   if (data['halaman'] == null) data = _dataDump[index];
 
                   return HalamanContainer(
                     ctx: context,
-                    uid: _user.uid,
+                    uid: widget.uid,
                     role: _role,
                     grade: data['grade'] != null ? "${data['grade']}" : '-',
                     codeKelas: _codeKelas,
-                    nomorHalaman: "${data['halaman']}",
+                    nomorHalaman: "${index+1}",
                     nomorJilid: widget.nomor,
                     inTo: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => HalamanPage(
-                            uid: _user.uid,
+                            uid: widget.uid,
                             role: _role,
                             grade: data['grade'] != null
                                 ? "${data['grade']}"
                                 : 'E',
                             codeKelas: _codeKelas,
                             nomorJilid: widget.nomor,
-                            nomorHalaman: "${data['halaman']}",
+                            nomorHalaman: "${index+1}",
                             pathBacaan: PathIqro.mainImagePath +
                                 "/jilid${widget.nomor}" +
-                                "/halaman${data['halaman']}" +
+                                "/halaman${index+1}" +
                                 ".png",
                             pathAudio: PathIqro.mainAudioPath +
                                 "/jilid${widget.nomor}" +
-                                "/halaman${data['halaman']}" +
+                                "/halaman${index+1}" +
                                 ".png",
                           ),
                         ),

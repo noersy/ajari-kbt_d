@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ajari/component/AppBar/AppBarBack.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -5,9 +7,13 @@ import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/MessageDialog.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/componen/NilaiDialog.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 
 class HalamanPage extends StatefulWidget {
   final String pathBacaan;
@@ -31,32 +37,101 @@ class HalamanPage extends StatefulWidget {
 
 class _PageOneState extends State<HalamanPage> {
   final assetsAudioPlayer = AssetsAudioPlayer();
-
-  bool isComplete = false;
-  bool isStart = false;
+  final Record _recorder = Record();
 
   String twoDigits(int n) => n.toString().padLeft(2, "0");
-  late String duration;
+  String appDocPath = '';
 
+  bool permissionsGranted = false;
+  bool isComplete = false;
+  bool isNotStart = true;
   bool _play = true;
+  String? path = " ";
 
-  void setRecord() async {}
+  void setRecord() async {
+    try {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      appDocPath = appDocDir.path;
+
+      Map<Permission, PermissionStatus> permissions = await [
+        Permission.storage,
+        Permission.microphone,
+      ].request();
+
+      permissionsGranted = permissions[Permission.storage]!.isGranted &&
+          permissions[Permission.microphone]!.isGranted;
+    } catch (e) {
+      // print("$e");
+    }
+  }
+
+  Future<void> uploadExample(filePath) async {
+    try {
+      File file = File(filePath);
+
+      await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .putFile(file);
+    } on FirebaseException catch (e) {
+      print(e);
+    } catch (e){
+      print(e);
+    }
+  }
+
+  void startRecord() async {
+    try {
+      if (permissionsGranted && isNotStart) {
+        print("start record");
+        setState(() {
+          isNotStart = false;
+        });
+
+        Directory appFolder = Directory(appDocPath);
+        bool appFolderExists = await appFolder.exists();
+        if (!appFolderExists) {
+          final created = await appFolder.create(recursive: true);
+          print(created.path);
+        }
+
+        final filepath = appDocPath +
+            '/' +
+            DateTime.now().millisecondsSinceEpoch.toString() +
+            '.m4a';
+        print(filepath);
+        await _recorder.start(path: filepath);
+      } else {
+        path = await _recorder.stop();
+
+        await uploadExample(path).whenComplete(() => {
+              print("stop record : $path"),
+            });
+
+        setState(() {
+          isNotStart = true;
+        });
+      }
+    } catch (e) {
+      // print("$e");
+    }
+  }
 
   @override
   initState() {
     setRecord();
-
     assetsAudioPlayer.open(
       Audio("assets/audio/jilid1/halaman1.mp3"),
       showNotification: true,
       autoStart: false,
     );
+
     super.initState();
   }
 
   @override
   dispose() {
     assetsAudioPlayer.dispose();
+    _recorder.dispose();
     super.dispose();
   }
 
@@ -80,6 +155,8 @@ class _PageOneState extends State<HalamanPage> {
               stream: assetsAudioPlayer.currentPosition,
               builder:
                   (BuildContext context, AsyncSnapshot<Duration> snapshot) {
+                final _data = snapshot.data ?? Duration(seconds: 0);
+
                 return Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: PaletteColor.grey60),
@@ -110,7 +187,7 @@ class _PageOneState extends State<HalamanPage> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "${twoDigits(snapshot.data!.inMinutes.remainder(60))}:${twoDigits(snapshot.data!.inSeconds.remainder(60))}",
+                          "${twoDigits(_data.inMinutes.remainder(60))}:${twoDigits(_data.inSeconds.remainder(60))}",
                           style: TypographyStyle.caption2,
                         ),
                       ),
@@ -127,7 +204,7 @@ class _PageOneState extends State<HalamanPage> {
                               ),
                             ),
                             Positioned(
-                              left: snapshot.data!.inSeconds.toDouble(),
+                              left: _data.inSeconds.toDouble(),
                               child: Container(
                                 width: 16,
                                 height: 16,
@@ -248,11 +325,11 @@ class _PageOneState extends State<HalamanPage> {
                       },
                     );
                   },
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25))),
-                    padding: MaterialStateProperty.all(
-                        EdgeInsets.all(SpacingDimens.spacing16)),
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: EdgeInsets.all(SpacingDimens.spacing16),
                   ),
                   child: Text(
                     "Nilai",
@@ -321,11 +398,7 @@ class _PageOneState extends State<HalamanPage> {
                     ]),
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
                 child: InkWell(
-                  onTap: () {
-                    setState(
-                      () {},
-                    );
-                  },
+                  onTap: () {},
                   child: Icon(true ? Icons.play_arrow : Icons.pause),
                 ),
               ),
@@ -389,10 +462,9 @@ class _PageOneState extends State<HalamanPage> {
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
                 child: InkWell(
                   onTap: () {
-                    if (isStart) {
-                    } else {}
+                    startRecord();
                   },
-                  child: Icon(isStart ? Icons.stop : Icons.mic),
+                  child: Icon(!isNotStart ? Icons.stop : Icons.mic),
                 ),
               ),
               Container(
