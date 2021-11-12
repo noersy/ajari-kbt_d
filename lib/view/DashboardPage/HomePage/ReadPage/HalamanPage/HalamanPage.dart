@@ -618,18 +618,40 @@ class _PageOneState extends State<HalamanPage> {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(SpacingDimens.spacing16),
-              child: InkWell(
-                onTap: () {
-                  _showdialog(false);
-                },
-                child: Icon(Icons.insert_comment_outlined),
-              ),
+            padding: const EdgeInsets.all(SpacingDimens.spacing16),
+            child: InkWell(
+              onTap: (){
+                setState(() {
+                  _playRecord = false;
+                  _play = false;
+                });
+                _recorder.stop();
+                assetsAudioPlayerRecord.stop();
+                _showdialog(false);
+              },
+              child: Icon(Icons.insert_comment_outlined),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showdialog(isPlayed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MessageDialog(
+          uid: widget.uid,
+          role: widget.role,
+          codeKelas: widget.codeKelas,
+          homePageCtx: context,
+          sheetDialogCtx: context,
+          nomorJilid: widget.nomorJilid,
+          nomorHalaman: widget.nomorHalaman,
+          isPlayed: isPlayed,
+        );
+      }
     );
   }
 
@@ -738,21 +760,7 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-  void _showdialog(isPlayed) {
-    showDialog(
-      context: context,
-      builder: (context) => MessageDialog(
-        uid: widget.uid,
-        role: widget.role,
-        codeKelas: widget.codeKelas,
-        homePageCtx: context,
-        sheetDialogCtx: context,
-        nomorJilid: widget.nomorJilid,
-        nomorHalaman: widget.nomorHalaman,
-        isPlayed: isPlayed,
-      ),
-    );
-  }
+
 
   Future<bool> _checkPermission() async {
     Map<Permission, PermissionStatus> permissions = await [
