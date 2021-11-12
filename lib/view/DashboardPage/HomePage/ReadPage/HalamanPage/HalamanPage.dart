@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:ajari/component/AppBar/AppBarBack.dart';
+import 'package:ajari/component/Dialog/DialogConfirmation.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -37,22 +39,21 @@ class HalamanPage extends StatefulWidget {
 
 class _PageOneState extends State<HalamanPage> {
   final assetsAudioPlayer = AssetsAudioPlayer();
+  final assetsAudioPlayerRecord = AssetsAudioPlayer();
   final Record _recorder = Record();
 
   String twoDigits(int n) => n.toString().padLeft(2, "0");
-  String appDocPath = '';
 
   bool permissionsGranted = false;
   bool isComplete = false;
   bool isNotStart = true;
   bool _play = true;
-  String? path = " ";
+  bool _playRecord = true;
+  String? _path;
+  Uri? _uri;
 
   void setRecord() async {
     try {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      appDocPath = appDocDir.path;
-
       Map<Permission, PermissionStatus> permissions = await [
         Permission.storage,
         Permission.microphone,
@@ -65,7 +66,15 @@ class _PageOneState extends State<HalamanPage> {
     }
   }
 
-  Future<void> uploadExample(filePath) async {
+  Future<String> getFilePath() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    String filePath = '$appDocPath/'; // 3
+
+    return filePath;
+  }
+
+  void _sendRecored(filePath) async {
     try {
       File file = File(filePath);
 
@@ -74,9 +83,38 @@ class _PageOneState extends State<HalamanPage> {
           .putFile(file);
     } on FirebaseException catch (e) {
       print(e);
-    } catch (e){
+    } catch (e) {
       print(e);
     }
+  }
+
+  void sendFile() async {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return DialogConfirmation(
+          title: "title",
+          content: "content",
+          onPressedFunction: () {
+            _sendRecored(_path);
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
+  Future<Uri?> saveFile({filepath}) async {
+    try {
+      File file = File(filepath);
+      Uint8List bytes = await file.readAsBytes();
+      file.writeAsBytes(bytes);
+      print(file.uri);
+      return file.uri;
+    } catch (e, r) {
+      print("$e $r");
+    }
+    return null;
   }
 
   void startRecord() async {
@@ -87,6 +125,8 @@ class _PageOneState extends State<HalamanPage> {
           isNotStart = false;
         });
 
+        String appDocPath = await getFilePath();
+
         Directory appFolder = Directory(appDocPath);
         bool appFolderExists = await appFolder.exists();
         if (!appFolderExists) {
@@ -94,18 +134,18 @@ class _PageOneState extends State<HalamanPage> {
           print(created.path);
         }
 
-        final filepath = appDocPath +
-            '/' +
-            DateTime.now().millisecondsSinceEpoch.toString() +
-            '.m4a';
-        print(filepath);
+        final String filepath = appDocPath + 'record.m4a';
+
+        _uri = await saveFile(filepath: filepath);
+
         await _recorder.start(path: filepath);
       } else {
-        path = await _recorder.stop();
+        _path = await _recorder.stop();
 
-        await uploadExample(path).whenComplete(() => {
-              print("stop record : $path"),
-            });
+        assetsAudioPlayerRecord.open(
+          Audio.file(_path!),
+          autoStart: false,
+        );
 
         setState(() {
           isNotStart = true;
@@ -131,6 +171,7 @@ class _PageOneState extends State<HalamanPage> {
   @override
   dispose() {
     assetsAudioPlayer.dispose();
+    assetsAudioPlayerRecord.dispose();
     _recorder.dispose();
     super.dispose();
   }
@@ -148,131 +189,135 @@ class _PageOneState extends State<HalamanPage> {
           left: SpacingDimens.spacing16,
           right: SpacingDimens.spacing16,
         ),
-        child: ListView(
-          // physics: BouncingScrollPhysics(),
-          children: [
-            StreamBuilder(
-              stream: assetsAudioPlayer.currentPosition,
-              builder:
-                  (BuildContext context, AsyncSnapshot<Duration> snapshot) {
-                final _data = snapshot.data ?? Duration(seconds: 0);
-
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: PaletteColor.grey60),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (_play) {
-                              assetsAudioPlayer.play();
-                              _play = false;
-                            } else {
-                              assetsAudioPlayer.pause();
-                              _play = true;
-                            }
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(
-                              left: SpacingDimens.spacing4),
-                          child: _play
-                              ? Icon(Icons.play_circle_fill)
-                              : Icon(Icons.pause_circle_outline_outlined),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          "${twoDigits(_data.inMinutes.remainder(60))}:${twoDigits(_data.inSeconds.remainder(60))}",
-                          style: TypographyStyle.caption2,
-                        ),
-                      ),
-                      Expanded(
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(7),
-                              child: Container(
-                                height: 2,
-                                decoration: BoxDecoration(
-                                  color: PaletteColor.grey80,
-                                ),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: PaletteColor.grey60),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: StreamBuilder(
+                    stream: assetsAudioPlayer.currentPosition,
+                    builder: (context, AsyncSnapshot<Duration> snapshot) {
+                      final _data = snapshot.data ?? Duration(seconds: 0);
+                      return Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (_play) {
+                                  assetsAudioPlayer.play();
+                                  _play = false;
+                                } else {
+                                  assetsAudioPlayer.pause();
+                                  _play = true;
+                                }
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  left: SpacingDimens.spacing4),
+                              child: Icon(
+                                _play
+                                    ? Icons.play_circle_fill
+                                    : Icons.pause_circle_outline_outlined,
                               ),
                             ),
-                            Positioned(
-                              left: _data.inSeconds.toDouble(),
-                              child: Container(
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                    color: PaletteColor.primary,
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Icon(
-                                  Icons.pause_outlined,
-                                  size: 14,
-                                  color: PaletteColor.primarybg,
-                                ),
-                              ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "${twoDigits(
+                                  _data.inMinutes.remainder(60))}:${twoDigits(
+                                  _data.inSeconds.remainder(60))}",
+                              style: TypographyStyle.caption2,
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: SpacingDimens.spacing8,
-                      ),
-                    ],
+                          ),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(7),
+                                  child: Container(
+                                    height: 2,
+                                    decoration: BoxDecoration(
+                                      color: PaletteColor.grey80,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  left: _data.inSeconds.toDouble(),
+                                  child: Container(
+                                    width: 16,
+                                    height: 16,
+                                    decoration: BoxDecoration(
+                                        color: PaletteColor.primary,
+                                        borderRadius:
+                                        BorderRadius.circular(10)),
+                                    child: Icon(
+                                      Icons.pause_outlined,
+                                      size: 14,
+                                      color: PaletteColor.primarybg,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: SpacingDimens.spacing8,
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+              SizedBox(height: SpacingDimens.spacing12),
+              Container(
+                padding: const EdgeInsets.only(
+                  left: SpacingDimens.spacing16,
+                  right: SpacingDimens.spacing8,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: PaletteColor.grey),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(SpacingDimens.spacing4),
+                  padding: const EdgeInsets.all(SpacingDimens.spacing4),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/images/iqro/bismilah.png',
+                    height: 60,
                   ),
-                );
-              },
-            ),
-            SizedBox(height: SpacingDimens.spacing12),
-            Container(
-              padding: const EdgeInsets.only(
-                left: SpacingDimens.spacing16,
-                right: SpacingDimens.spacing8,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(color: PaletteColor.grey),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Container(
-                margin: const EdgeInsets.all(SpacingDimens.spacing4),
-                padding: const EdgeInsets.all(SpacingDimens.spacing4),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/images/iqro/bismilah.png',
-                  height: 60,
                 ),
               ),
-            ),
-            SizedBox(height: SpacingDimens.spacing8),
-            Container(
-              padding: const EdgeInsets.only(
-                top: SpacingDimens.spacing16,
-                left: SpacingDimens.spacing16,
-                right: SpacingDimens.spacing8,
-              ),
-              decoration: BoxDecoration(
-                border: Border.all(color: PaletteColor.grey),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Container(
-                margin: const EdgeInsets.all(SpacingDimens.spacing4),
-                alignment: Alignment.center,
-                child: Image.asset(
-                  widget.pathBacaan,
+              SizedBox(height: SpacingDimens.spacing8),
+              Container(
+                padding: const EdgeInsets.only(
+                  top: SpacingDimens.spacing16,
+                  left: SpacingDimens.spacing16,
+                  right: SpacingDimens.spacing8,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: PaletteColor.grey),
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Container(
+                  margin: const EdgeInsets.all(SpacingDimens.spacing4),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    widget.pathBacaan,
+                  ),
                 ),
               ),
-            ),
-            widget.role == 'Santri'
-                ? actionSantriContainer()
-                : actionUstazContainer(),
-            // actionPage(),
-          ],
+              widget.role == 'Santri'
+                  ? actionSantriContainer()
+                  : actionUstazContainer(),
+              // actionPage(),
+            ],
+          ),
         ),
       ),
     );
@@ -423,25 +468,38 @@ class _PageOneState extends State<HalamanPage> {
         children: [
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  top: SpacingDimens.spacing8,
-                  bottom: SpacingDimens.spacing16,
-                  right: SpacingDimens.spacing8,
+              TextButton(
+                onPressed: () {
+                  sendFile();
+                },
+                style: TextButton.styleFrom(
+                    primary: PaletteColor.primary,
+                    padding: const EdgeInsets.all(0)),
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    top: SpacingDimens.spacing8,
+                    bottom: SpacingDimens.spacing16,
+                    right: SpacingDimens.spacing8,
+                  ),
+                  decoration: BoxDecoration(
+                      color: PaletteColor.primarybg,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          spreadRadius: 1,
+                          blurRadius: 2,
+                          offset: Offset(0, 1), // changes position of shadow
+                        ),
+                      ]),
+                  padding: const EdgeInsets.all(SpacingDimens.spacing16),
+                  child: Icon(
+                    Icons.send,
+                    color: _path != null
+                        ? PaletteColor.primary
+                        : PaletteColor.grey80,
+                  ),
                 ),
-                decoration: BoxDecoration(
-                    color: PaletteColor.primarybg,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 1), // changes position of shadow
-                      ),
-                    ]),
-                padding: const EdgeInsets.all(SpacingDimens.spacing16),
-                child: Icon(Icons.send),
               ),
               Container(
                 margin: const EdgeInsets.only(
@@ -486,13 +544,56 @@ class _PageOneState extends State<HalamanPage> {
                   ],
                 ),
                 padding: const EdgeInsets.all(SpacingDimens.spacing4),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: SpacingDimens.spacing12,
-                    right: SpacingDimens.spacing12,
-                  ),
-                  child: Text("00:00"),
-                ),
+                child: StreamBuilder(
+                    stream: assetsAudioPlayerRecord.current,
+                    builder: (context, AsyncSnapshot<Playing?> snapshot) {
+                      Duration _duartion =
+                          snapshot.data?.audio.duration ?? Duration(seconds: 0);
+                      return StreamBuilder(
+                        stream: assetsAudioPlayerRecord.currentPosition,
+                        builder: (context, AsyncSnapshot<Duration> snapshot) {
+                          Duration _data = snapshot.data ?? Duration(seconds: 0);
+                          String _time = "${twoDigits(
+                            _duartion.inMinutes.remainder(60) - _data.inMinutes,
+                          )}:${twoDigits(
+                            _duartion.inSeconds.remainder(60) - _data.inSeconds,
+                          )}";
+                          return GestureDetector(
+                            onTap: () {
+                              if (_path != null) {
+                                setState(() {
+                                  if (_playRecord) {
+                                    assetsAudioPlayerRecord.play();
+                                    _playRecord = false;
+                                  } else {
+                                    assetsAudioPlayerRecord.stop();
+                                    _playRecord = true;
+                                  }
+                                });
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                left: SpacingDimens.spacing4,
+                                right: SpacingDimens.spacing12,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                      _playRecord ? Icons.play_arrow : Icons.pause),
+                                  SizedBox(
+                                    width: SpacingDimens.spacing4,
+                                  ),
+                                  Text(
+                                    _time,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                      );
+                    }),
               ),
             ],
           ),
@@ -582,7 +683,7 @@ class _PageOneState extends State<HalamanPage> {
                       child: Text(
                         "",
                         style:
-                            TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                        TextStyle(color: PaletteColor.grey60, fontSize: 12),
                       ),
                     ),
                     Padding(
@@ -600,7 +701,7 @@ class _PageOneState extends State<HalamanPage> {
                       child: Text(
                         "2",
                         style:
-                            TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                        TextStyle(color: PaletteColor.grey60, fontSize: 12),
                       ),
                     ),
                   ],
@@ -646,7 +747,7 @@ class _PageOneState extends State<HalamanPage> {
 
   Future<bool> checkPermission() async {
     Map<Permission, PermissionStatus> statuses =
-        await [Permission.storage, Permission.microphone].request();
+    await [Permission.storage, Permission.microphone].request();
 
     print(statuses[Permission.location]);
 
