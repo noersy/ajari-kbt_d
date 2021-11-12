@@ -96,21 +96,8 @@ class HalamanContainer extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: ctx,
-                        builder: (BuildContext context) {
-                          return MessageDialog(
-                            uid: uid,
-                            role: role,
-                            codeKelas: codeKelas,
-                            homePageCtx: context,
-                            sheetDialogCtx: context,
-                            nomorJilid: nomorJilid,
-                            nomorHalaman: nomorHalaman,
-                          );
-                        },
-                      );
+                    onPressed: (){
+                      _showDialog(false);
                     },
                     child: Icon(
                       Icons.comment,
@@ -132,7 +119,9 @@ class HalamanContainer extends StatelessWidget {
                       padding: MaterialStateProperty.all<EdgeInsets>(
                           EdgeInsets.all(0)),
                     ),
-                    onPressed: () {},
+                    onPressed: (){
+                      _showDialog(true);
+                    },
                     child: Icon(
                       Icons.play_arrow,
                       size: 18,
@@ -160,6 +149,25 @@ class HalamanContainer extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+
+  void _showDialog(isPlay){
+    showDialog(
+      context: ctx,
+      builder: (BuildContext context) {
+        return MessageDialog(
+          uid: uid,
+          role: role,
+          codeKelas: codeKelas,
+          homePageCtx: context,
+          sheetDialogCtx: context,
+          nomorJilid: nomorJilid,
+          nomorHalaman: nomorHalaman,
+          isPlayed: isPlay,
+        );
+      },
     );
   }
 }

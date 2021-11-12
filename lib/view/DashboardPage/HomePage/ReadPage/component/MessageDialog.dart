@@ -1,16 +1,23 @@
+import 'dart:io';
+
 import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class MessageDialog extends StatelessWidget {
+class MessageDialog extends StatefulWidget {
   final BuildContext homePageCtx, sheetDialogCtx;
   final String nomorJilid, nomorHalaman, uid, codeKelas, role;
+  final bool isPlayed;
 
   MessageDialog({
     required this.homePageCtx,
@@ -20,7 +27,89 @@ class MessageDialog extends StatelessWidget {
     required this.uid,
     required this.codeKelas,
     required this.role,
+    required this.isPlayed,
   });
+
+  @override
+  State<MessageDialog> createState() => _MessageDialogState();
+}
+
+class _MessageDialogState extends State<MessageDialog> {
+  final _assetsAudioPlayerRecord = AssetsAudioPlayer();
+
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+  bool _play = false;
+
+  Future<String> _getFilePath() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    String filePath = '$appDocPath/'; // 3
+
+    Directory appFolder = Directory(appDocPath);
+    bool appFolderExists = await appFolder.exists();
+    if (!appFolderExists) {
+      final created = await appFolder.create(recursive: true);
+      print(created.path);
+    }
+
+    return filePath;
+  }
+
+  Future<bool> _checkPermission() async {
+    Map<Permission, PermissionStatus> permissions = await [
+      Permission.storage,
+      Permission.microphone,
+    ].request();
+
+    return permissions[Permission.storage]!.isGranted &&
+        permissions[Permission.microphone]!.isGranted;
+  }
+
+  void _downloadFileExample() async {
+    try {
+      print(await _checkPermission());
+
+      File downloadToFile =
+          File('${_getFilePath()}audio_${widget.nomorHalaman}.m4a');
+
+      String url = await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .getDownloadURL();
+
+      await _assetsAudioPlayerRecord.open(
+        Audio.network(url),
+        showNotification: true,
+        autoStart: false,
+      );
+
+      if(widget.isPlayed){
+        _assetsAudioPlayerRecord.play();
+        _play = true;
+      }
+
+
+      print("Open : " + downloadToFile.path);
+      return;
+    } on FirebaseException catch (e) {
+      print("$e");
+      return;
+    } catch (e) {
+      print("$e");
+    }
+  }
+
+  @override
+  void initState() {
+    _downloadFileExample();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _assetsAudioPlayerRecord.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +126,9 @@ class MessageDialog extends StatelessWidget {
   }
 
   TextEditingController _editingController = new TextEditingController();
+
   late DateTime _dateTime;
+
   bool _first = true;
 
   contentBox(context) {
@@ -59,7 +150,7 @@ class MessageDialog extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Halaman ' + nomorHalaman,
+                        'Halaman ' + widget.nomorHalaman,
                         style: TypographyStyle.subtitle1.merge(
                           TextStyle(
                             color: PaletteColor.black,
@@ -80,66 +171,114 @@ class MessageDialog extends StatelessWidget {
                             border: Border.all(color: PaletteColor.grey60),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    left: SpacingDimens.spacing4),
-                                child: Icon(Icons.play_circle_fill),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  "00:00",
-                                  style: TypographyStyle.caption2,
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(7),
-                                      child: Container(
-                                        height: 2,
-                                        decoration: BoxDecoration(
-                                          color: PaletteColor.grey80,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 16,
-                                      height: 16,
-                                      decoration: BoxDecoration(
-                                          color: PaletteColor.primary,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.pause_outlined,
-                                          size: 14,
-                                          color: PaletteColor.primarybg,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: SpacingDimens.spacing8,
-                              ),
-                            ],
-                          ),
+                          child: StreamBuilder<Playing?>(
+                              stream: _assetsAudioPlayerRecord.current,
+                              builder: (context, snapshot) {
+                                final _duartion =
+                                    snapshot.data?.audio.duration ??
+                                        Duration(seconds: 0);
+                                return StreamBuilder<Duration>(
+                                    stream: _assetsAudioPlayerRecord
+                                        .currentPosition,
+                                    builder: (context,
+                                        AsyncSnapshot<Duration> snapshot) {
+                                      Duration _data =
+                                          snapshot.data ?? Duration(seconds: 0);
+                                      String _time = "${twoDigits(
+                                        _duartion.inMinutes.remainder(60) -
+                                            _data.inMinutes,
+                                      )}:${twoDigits(
+                                        _duartion.inSeconds.remainder(60) -
+                                            _data.inSeconds,
+                                      )}";
+                                      return Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                if (!_play) {
+                                                  _assetsAudioPlayerRecord
+                                                      .play();
+                                                  _play = true;
+                                                } else {
+                                                  _assetsAudioPlayerRecord
+                                                      .pause();
+                                                  _play = false;
+                                                }
+                                              });
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  left: SpacingDimens.spacing4),
+                                              child: Icon(
+                                                !_play
+                                                    ? Icons.play_circle_fill
+                                                    : Icons
+                                                        .pause_circle_outline_outlined,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              _time,
+                                              style: TypographyStyle.caption2,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Stack(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(7),
+                                                  child: Container(
+                                                    height: 2,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          PaletteColor.grey80,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  left: _data.inSeconds
+                                                      .toDouble(),
+                                                  child: Container(
+                                                    width: 16,
+                                                    height: 16,
+                                                    decoration: BoxDecoration(
+                                                        color: PaletteColor
+                                                            .primary,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10)),
+                                                    child: Icon(
+                                                      Icons.pause_outlined,
+                                                      size: 14,
+                                                      color: PaletteColor
+                                                          .primarybg,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: SpacingDimens.spacing8,
+                                          ),
+                                        ],
+                                      );
+                                    });
+                              }),
                         ),
                       ),
                       SizedBox(height: 22),
                       StreamBuilder<QuerySnapshot>(
                         stream: Provider.of<DataKelasProvider>(context)
                             .getMassage(
-                                uid: uid,
-                                codeKelas: codeKelas,
-                                nomorJilid: nomorJilid,
-                                nomorHalaman: nomorHalaman),
+                                uid: widget.uid,
+                                codeKelas: widget.codeKelas,
+                                nomorJilid: widget.nomorJilid,
+                                nomorHalaman: widget.nomorHalaman),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData)
                             return Center(child: Text("Tidak ada pesan."));
@@ -178,14 +317,14 @@ class MessageDialog extends StatelessWidget {
                                           right: SpacingDimens.spacing16,
                                           bottom: SpacingDimens.spacing8,
                                         ),
-                                        alignment: _role == role
+                                        alignment: _role == widget.role
                                             ? Alignment.centerRight
                                             : Alignment.centerLeft,
                                         child: Container(
                                           padding: const EdgeInsets.all(
                                               SpacingDimens.spacing4),
                                           decoration: BoxDecoration(
-                                              color: _role == role
+                                              color: _role == widget.role
                                                   ? PaletteColor.primary
                                                       .withOpacity(0.5)
                                                   : PaletteColor.grey60
@@ -193,13 +332,13 @@ class MessageDialog extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Stack(
-                                            alignment: _role == role
+                                            alignment: _role == widget.role
                                                 ? Alignment.bottomRight
                                                 : Alignment.bottomLeft,
                                             children: [
                                               Container(
                                                 height: 20,
-                                                padding: _role == role
+                                                padding: _role == widget.role
                                                     ? const EdgeInsets.only(
                                                         right: 40, left: 4)
                                                     : const EdgeInsets.only(
@@ -207,7 +346,7 @@ class MessageDialog extends StatelessWidget {
                                                 child: Text(e.get('message')),
                                               ),
                                               Container(
-                                                alignment: _role == role
+                                                alignment: _role == widget.role
                                                     ? Alignment.bottomRight
                                                     : Alignment.bottomLeft,
                                                 height: 20,
@@ -247,14 +386,14 @@ class MessageDialog extends StatelessWidget {
                                         right: SpacingDimens.spacing16,
                                         bottom: SpacingDimens.spacing8,
                                       ),
-                                      alignment: _role == role
+                                      alignment: _role == widget.role
                                           ? Alignment.centerRight
                                           : Alignment.centerLeft,
                                       child: Container(
                                         padding: const EdgeInsets.all(
                                             SpacingDimens.spacing4),
                                         decoration: BoxDecoration(
-                                            color: _role == role
+                                            color: _role == widget.role
                                                 ? PaletteColor.primary
                                                     .withOpacity(0.5)
                                                 : PaletteColor.grey60
@@ -262,13 +401,13 @@ class MessageDialog extends StatelessWidget {
                                             borderRadius:
                                                 BorderRadius.circular(5)),
                                         child: Stack(
-                                          alignment: _role == role
+                                          alignment: _role == widget.role
                                               ? Alignment.bottomRight
                                               : Alignment.bottomLeft,
                                           children: [
                                             Container(
                                               height: 20,
-                                              padding: _role == role
+                                              padding: _role == widget.role
                                                   ? const EdgeInsets.only(
                                                       right: 40, left: 4)
                                                   : const EdgeInsets.only(
@@ -276,7 +415,7 @@ class MessageDialog extends StatelessWidget {
                                               child: Text(e.get('message')),
                                             ),
                                             Container(
-                                              alignment: _role == role
+                                              alignment: _role == widget.role
                                                   ? Alignment.bottomRight
                                                   : Alignment.bottomLeft,
                                               height: 20,
@@ -344,12 +483,12 @@ class MessageDialog extends StatelessWidget {
                     child: FlatButton(
                       onPressed: () {
                         DataKelasProvider.sendMessage(
-                          uid: uid,
-                          codeKelas: codeKelas,
-                          nomorJilid: nomorJilid,
-                          nomorHalaman: nomorHalaman,
+                          uid: widget.uid,
+                          codeKelas: widget.codeKelas,
+                          nomorJilid: widget.nomorJilid,
+                          nomorHalaman: widget.nomorHalaman,
                           message: _editingController.text,
-                          role: role,
+                          role: widget.role,
                         );
                         _editingController.clear();
                       },

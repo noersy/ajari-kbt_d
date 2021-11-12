@@ -53,22 +53,16 @@ class _PageOneState extends State<HalamanPage> {
 
   void setRecord() async {
     try {
-      Map<Permission, PermissionStatus> permissions = await [
-        Permission.storage,
-        Permission.microphone,
-      ].request();
+      permissionsGranted = await _checkPermission();
 
       final String filepath = await getFilePath() + 'record.m4a';
 
-      String? path = await downloadFileExample(filepath);
+      String? path = await _downloadFileExample(filepath);
 
-      if(path != null){
+      if (path != null) {
         await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
         _path = path;
       }
-
-      permissionsGranted = permissions[Permission.storage]!.isGranted &&
-          permissions[Permission.microphone]!.isGranted;
     } catch (e) {
       // print("$e");
     }
@@ -103,7 +97,7 @@ class _PageOneState extends State<HalamanPage> {
     }
   }
 
-  Future<String?> downloadFileExample(filePath) async {
+  Future<String?> _downloadFileExample(filePath) async {
     File downloadToFile = File('$filePath');
     try {
       await firebase_storage.FirebaseStorage.instance
@@ -422,20 +416,7 @@ class _PageOneState extends State<HalamanPage> {
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
                 child: InkWell(
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return MessageDialog(
-                          uid: widget.uid,
-                          role: widget.role,
-                          codeKelas: widget.codeKelas,
-                          homePageCtx: context,
-                          sheetDialogCtx: context,
-                          nomorJilid: widget.nomorJilid,
-                          nomorHalaman: widget.nomorHalaman,
-                        );
-                      },
-                    );
+                    _showdialog(false);
                   },
                   child: Icon(Icons.insert_comment_outlined),
                 ),
@@ -459,8 +440,12 @@ class _PageOneState extends State<HalamanPage> {
                     ]),
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
                 child: InkWell(
-                  onTap: () {},
-                  child: Icon(true ? Icons.play_arrow : Icons.pause),
+                  onTap: () {
+                    if (_path != null) {
+                      _showdialog(true);
+                    }
+                  },
+                  child: Icon(Icons.play_arrow),
                 ),
               ),
             ],
@@ -633,25 +618,14 @@ class _PageOneState extends State<HalamanPage> {
                 ),
               ],
             ),
-            padding: const EdgeInsets.all(SpacingDimens.spacing16),
-            child: InkWell(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return MessageDialog(
-                      uid: widget.uid,
-                      role: widget.role,
-                      codeKelas: widget.codeKelas,
-                      homePageCtx: context,
-                      sheetDialogCtx: context,
-                      nomorJilid: widget.nomorJilid,
-                      nomorHalaman: widget.nomorHalaman,
-                    );
-                  },
-                );
-              },
-              child: Icon(Icons.insert_comment_outlined),
+            child: Padding(
+              padding: const EdgeInsets.all(SpacingDimens.spacing16),
+              child: InkWell(
+                onTap: () {
+                  _showdialog(false);
+                },
+                child: Icon(Icons.insert_comment_outlined),
+              ),
             ),
           ),
         ],
@@ -764,12 +738,29 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-  Future<bool> checkPermission() async {
-    Map<Permission, PermissionStatus> statuses =
-        await [Permission.storage, Permission.microphone].request();
+  void _showdialog(isPlayed) {
+    showDialog(
+      context: context,
+      builder: (context) => MessageDialog(
+        uid: widget.uid,
+        role: widget.role,
+        codeKelas: widget.codeKelas,
+        homePageCtx: context,
+        sheetDialogCtx: context,
+        nomorJilid: widget.nomorJilid,
+        nomorHalaman: widget.nomorHalaman,
+        isPlayed: isPlayed,
+      ),
+    );
+  }
 
-    print(statuses[Permission.location]);
+  Future<bool> _checkPermission() async {
+    Map<Permission, PermissionStatus> permissions = await [
+      Permission.storage,
+      Permission.microphone,
+    ].request();
 
-    return statuses[Permission.microphone] == PermissionStatus.granted;
+    return permissions[Permission.storage]!.isGranted &&
+        permissions[Permission.microphone]!.isGranted;
   }
 }
