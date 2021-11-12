@@ -50,7 +50,6 @@ class _PageOneState extends State<HalamanPage> {
   bool _play = true;
   bool _playRecord = true;
   String? _path;
-  Uri? _uri;
 
   void setRecord() async {
     try {
@@ -58,6 +57,15 @@ class _PageOneState extends State<HalamanPage> {
         Permission.storage,
         Permission.microphone,
       ].request();
+
+      final String filepath = await getFilePath() + 'record.m4a';
+
+      String? path = await downloadFileExample(filepath);
+
+      if(path != null){
+        await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
+        _path = path;
+      }
 
       permissionsGranted = permissions[Permission.storage]!.isGranted &&
           permissions[Permission.microphone]!.isGranted;
@@ -70,6 +78,13 @@ class _PageOneState extends State<HalamanPage> {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String appDocPath = appDocDir.path;
     String filePath = '$appDocPath/'; // 3
+
+    Directory appFolder = Directory(appDocPath);
+    bool appFolderExists = await appFolder.exists();
+    if (!appFolderExists) {
+      final created = await appFolder.create(recursive: true);
+      print(created.path);
+    }
 
     return filePath;
   }
@@ -85,6 +100,18 @@ class _PageOneState extends State<HalamanPage> {
       print(e);
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<String?> downloadFileExample(filePath) async {
+    File downloadToFile = File('$filePath');
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .writeToFile(downloadToFile);
+      return downloadToFile.path;
+    } on FirebaseException catch (e) {
+      return "Not found";
     }
   }
 
@@ -120,24 +147,14 @@ class _PageOneState extends State<HalamanPage> {
   void startRecord() async {
     try {
       if (permissionsGranted && isNotStart) {
-        print("start record");
+        print("record start");
         setState(() {
           isNotStart = false;
         });
 
-        String appDocPath = await getFilePath();
+        final String filepath = await getFilePath() + 'record.m4a';
 
-        Directory appFolder = Directory(appDocPath);
-        bool appFolderExists = await appFolder.exists();
-        if (!appFolderExists) {
-          final created = await appFolder.create(recursive: true);
-          print(created.path);
-        }
-
-        final String filepath = appDocPath + 'record.m4a';
-
-        _uri = await saveFile(filepath: filepath);
-
+        await saveFile(filepath: filepath);
         await _recorder.start(path: filepath);
       } else {
         _path = await _recorder.stop();
@@ -229,9 +246,7 @@ class _PageOneState extends State<HalamanPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              "${twoDigits(
-                                  _data.inMinutes.remainder(60))}:${twoDigits(
-                                  _data.inSeconds.remainder(60))}",
+                              "${twoDigits(_data.inMinutes.remainder(60))}:${twoDigits(_data.inSeconds.remainder(60))}",
                               style: TypographyStyle.caption2,
                             ),
                           ),
@@ -255,7 +270,7 @@ class _PageOneState extends State<HalamanPage> {
                                     decoration: BoxDecoration(
                                         color: PaletteColor.primary,
                                         borderRadius:
-                                        BorderRadius.circular(10)),
+                                            BorderRadius.circular(10)),
                                     child: Icon(
                                       Icons.pause_outlined,
                                       size: 14,
@@ -313,8 +328,9 @@ class _PageOneState extends State<HalamanPage> {
                 ),
               ),
               widget.role == 'Santri'
-                  ? actionSantriContainer()
-                  : actionUstazContainer(),
+                  ? _actionSantriContainer()
+                  : _actionUstazContainer(),
+              _actionPage(),
               // actionPage(),
             ],
           ),
@@ -323,7 +339,7 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-  Widget actionUstazContainer() {
+  Widget _actionUstazContainer() {
     return Container(
       padding: const EdgeInsets.only(
         left: SpacingDimens.spacing16,
@@ -454,7 +470,7 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-  Widget actionSantriContainer() {
+  Widget _actionSantriContainer() {
     return Container(
       padding: const EdgeInsets.only(
         left: SpacingDimens.spacing16,
@@ -550,49 +566,52 @@ class _PageOneState extends State<HalamanPage> {
                       Duration _duartion =
                           snapshot.data?.audio.duration ?? Duration(seconds: 0);
                       return StreamBuilder(
-                        stream: assetsAudioPlayerRecord.currentPosition,
-                        builder: (context, AsyncSnapshot<Duration> snapshot) {
-                          Duration _data = snapshot.data ?? Duration(seconds: 0);
-                          String _time = "${twoDigits(
-                            _duartion.inMinutes.remainder(60) - _data.inMinutes,
-                          )}:${twoDigits(
-                            _duartion.inSeconds.remainder(60) - _data.inSeconds,
-                          )}";
-                          return GestureDetector(
-                            onTap: () {
-                              if (_path != null) {
-                                setState(() {
-                                  if (_playRecord) {
-                                    assetsAudioPlayerRecord.play();
-                                    _playRecord = false;
-                                  } else {
-                                    assetsAudioPlayerRecord.stop();
-                                    _playRecord = true;
-                                  }
-                                });
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: SpacingDimens.spacing4,
-                                right: SpacingDimens.spacing12,
+                          stream: assetsAudioPlayerRecord.currentPosition,
+                          builder: (context, AsyncSnapshot<Duration> snapshot) {
+                            Duration _data =
+                                snapshot.data ?? Duration(seconds: 0);
+                            String _time = "${twoDigits(
+                              _duartion.inMinutes.remainder(60) -
+                                  _data.inMinutes,
+                            )}:${twoDigits(
+                              _duartion.inSeconds.remainder(60) -
+                                  _data.inSeconds,
+                            )}";
+                            return GestureDetector(
+                              onTap: () {
+                                if (_path != null) {
+                                  setState(() {
+                                    if (_playRecord) {
+                                      assetsAudioPlayerRecord.play();
+                                      _playRecord = false;
+                                    } else {
+                                      assetsAudioPlayerRecord.stop();
+                                      _playRecord = true;
+                                    }
+                                  });
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: SpacingDimens.spacing4,
+                                  right: SpacingDimens.spacing12,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(_playRecord
+                                        ? Icons.play_arrow
+                                        : Icons.pause),
+                                    SizedBox(
+                                      width: SpacingDimens.spacing4,
+                                    ),
+                                    Text(
+                                      _time,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                      _playRecord ? Icons.play_arrow : Icons.pause),
-                                  SizedBox(
-                                    width: SpacingDimens.spacing4,
-                                  ),
-                                  Text(
-                                    _time,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                      );
+                            );
+                          });
                     }),
               ),
             ],
@@ -640,7 +659,7 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-  Widget actionPage() {
+  Widget _actionPage() {
     return Container(
       padding: const EdgeInsets.only(
         left: SpacingDimens.spacing16,
@@ -683,7 +702,7 @@ class _PageOneState extends State<HalamanPage> {
                       child: Text(
                         "",
                         style:
-                        TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                            TextStyle(color: PaletteColor.grey60, fontSize: 12),
                       ),
                     ),
                     Padding(
@@ -701,7 +720,7 @@ class _PageOneState extends State<HalamanPage> {
                       child: Text(
                         "2",
                         style:
-                        TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                            TextStyle(color: PaletteColor.grey60, fontSize: 12),
                       ),
                     ),
                   ],
@@ -747,7 +766,7 @@ class _PageOneState extends State<HalamanPage> {
 
   Future<bool> checkPermission() async {
     Map<Permission, PermissionStatus> statuses =
-    await [Permission.storage, Permission.microphone].request();
+        await [Permission.storage, Permission.microphone].request();
 
     print(statuses[Permission.location]);
 
