@@ -13,6 +13,15 @@ class ReadBottomSheetDialog extends StatelessWidget {
     required this.ctx,
   });
 
+  final List<Jilid> _page = [
+    Jilid("١", "Satu"),
+    Jilid("٢", "Dua"),
+    Jilid("٣", "Tiga"),
+    Jilid("٤", "Empat"),
+    Jilid("٥", "Lima"),
+    Jilid("٦", "Enam"),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(
@@ -56,7 +65,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: 6,
                       itemBuilder: (BuildContext context, int index) {
-                        return JilidContainer(
+                        return _jilidContainer(
                           jilid: _page[index].arab,
                           text: _page[index].text,
                           onTap: () {
@@ -82,16 +91,9 @@ class ReadBottomSheetDialog extends StatelessWidget {
     );
   }
 
-  List<jilid> _page = [
-    jilid("١", "Satu"),
-    jilid("٢", "Dua"),
-    jilid("٣", "Tiga"),
-    jilid("٤", "Empat"),
-    jilid("٥", "Lima"),
-    jilid("٦", "Enam"),
-  ];
 
-  Widget JilidContainer({text, jilid, onTap}) {
+
+  Widget _jilidContainer({text, jilid, onTap}) {
     return Container(
       margin: const EdgeInsets.all(SpacingDimens.spacing4),
       decoration: BoxDecoration(
@@ -165,9 +167,9 @@ class ReadBottomSheetDialog extends StatelessWidget {
   }
 }
 
-class jilid {
+class Jilid {
   final String text;
   final String arab;
 
-  jilid(this.arab, this.text);
+  Jilid(this.arab, this.text);
 }

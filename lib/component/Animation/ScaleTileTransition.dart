@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ScaleTileTransition extends StatefulWidget {
-  Widget child;
-  Curve curve;
+  final Widget child;
+  final curve;
   ScaleTileTransition({required this.child, required this.curve});
 
   @override

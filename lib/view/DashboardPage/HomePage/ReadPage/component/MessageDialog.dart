@@ -290,10 +290,7 @@ class _MessageDialogState extends State<MessageDialog> {
                               children: snapshot.data!.docs.map((e) {
                                 String _role = e.get('role');
                                 DateTime date = e.get('dateTime').toDate();
-                                DateTime dateTime =
-                                    DateTime(date.year, date.month, date.day);
-                                DateTime _now = DateTime(DateTime.now().year,
-                                    DateTime.now().month, DateTime.now().day);
+                                DateTime dateTime = DateTime(date.year, date.month, date.day);
                                 if (_first) {
                                   _dateTime =
                                       DateTime(date.year, date.month, date.day);
@@ -480,8 +477,13 @@ class _MessageDialogState extends State<MessageDialog> {
                   ),
                   SizedBox(
                     width: 50,
-                    child: FlatButton(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(0)
+                      ),
                       onPressed: () {
+                        if(_editingController.text.isEmpty) return;
+
                         DataKelasProvider.sendMessage(
                           uid: widget.uid,
                           codeKelas: widget.codeKelas,

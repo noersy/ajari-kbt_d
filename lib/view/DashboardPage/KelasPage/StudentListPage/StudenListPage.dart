@@ -5,6 +5,7 @@ import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/view/DashboardPage/HomePage/ReadBottomSheetDialog/ReadBottomSheetDialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,7 @@ class StudenListPage extends StatelessWidget {
             return ListView(
               children: snapshot.data!.docChanges
                   .map(
-                    (e) => SantriContainer(
+                    (e) => santriContainer(
                       name: e.doc.get('name'),
                       imageUrl: e.doc.get('photo'),
                       inTo: () => Navigator.of(context).push(
@@ -55,7 +56,7 @@ class StudenListPage extends StatelessWidget {
     );
   }
 
-  Widget SantriContainer({name, inTo, imageUrl, alamat, email}) {
+  Widget santriContainer({name, inTo, imageUrl, alamat, email}) {
     return Container(
       margin: const EdgeInsets.only(
         left: SpacingDimens.spacing16,
@@ -138,13 +139,13 @@ class SantriDetail extends StatelessWidget {
     required this.email,
   }) : super(key: key);
 
-  final List<jilid> _page = [
-    jilid("١", "Satu"),
-    jilid("٢", "Dua"),
-    jilid("٣", "Tiga"),
-    jilid("٤", "Empat"),
-    jilid("٥", "Lima"),
-    jilid("٦", "Enam"),
+  final List<Jilid> _page = [
+    Jilid("١", "Satu"),
+    Jilid("٢", "Dua"),
+    Jilid("٣", "Tiga"),
+    Jilid("٤", "Empat"),
+    Jilid("٥", "Lima"),
+    Jilid("٦", "Enam"),
   ];
 
   @override
@@ -245,7 +246,7 @@ class SantriDetail extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: 6,
                         itemBuilder: (BuildContext context, int index) {
-                          return JilidContainer(
+                          return jilidContainer(
                             jilid: _page[index].arab,
                             text: _page[index].text,
                           );
@@ -305,7 +306,7 @@ Widget containerData({required String title, required String body}) {
   );
 }
 
-Widget JilidContainer({text, jilid}) {
+Widget jilidContainer({text, jilid}) {
   return Container(
     margin: const EdgeInsets.all(SpacingDimens.spacing4),
     decoration: BoxDecoration(
@@ -345,9 +346,3 @@ Widget JilidContainer({text, jilid}) {
   );
 }
 
-class jilid {
-  final String text;
-  final String arab;
-
-  jilid(this.arab, this.text);
-}

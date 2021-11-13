@@ -28,9 +28,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Ajari',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
         home: SplashScreenPage(),
       ),
     );

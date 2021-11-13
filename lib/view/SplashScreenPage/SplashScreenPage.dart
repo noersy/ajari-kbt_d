@@ -26,7 +26,9 @@ class _SplashScreenState extends State<SplashScreenPage> {
   navigationPage() async {
     try {
       var user = await AuthLogin.signInWithGoogle(context: context);
-      var prf = await DataProfileProvider.getProfile(userUid: user?.uid ?? "");
+      if (user == null) throw Exception("Not login");
+
+      var prf = await DataProfileProvider.getProfile(userUid: user.uid);
       await DataKelasProvider.getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null)
@@ -41,8 +43,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
             builder: (context) => DashboardPage(),
           ),
         );
-    } catch (e, r) {
-      print("$e \n$r");
+    } catch (e) {
       if (globals.isUserNotNull) {
         showDialog(
           context: context,
@@ -53,6 +54,9 @@ class _SplashScreenState extends State<SplashScreenPage> {
           },
         );
       }
+
+
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => LoginPage(),

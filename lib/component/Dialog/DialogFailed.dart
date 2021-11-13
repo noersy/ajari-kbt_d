@@ -80,15 +80,23 @@ class DialogFailed extends StatelessWidget {
                     padding: EdgeInsets.all(
                       SpacingDimens.spacing24,
                     ),
-                    child: FlatButton(
-                      minWidth: double.infinity,
-                      color: PaletteColor.primary,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: PaletteColor.primary,
+                        primary: PaletteColor.green,
+                      ),
                       onPressed: onPressedFunction,
-                      child: Text(
-                        'OK',
-                        style: TypographyStyle.button2.merge(
-                          TextStyle(
-                            color: PaletteColor.primarybg,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            'OK',
+                            style: TypographyStyle.button2.merge(
+                              TextStyle(
+                                color: PaletteColor.primarybg,
+                              ),
+                            ),
                           ),
                         ),
                       ),

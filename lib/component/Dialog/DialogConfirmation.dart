@@ -70,12 +70,14 @@ class DialogConfirmation extends StatelessWidget {
                         .of(context)
                         .size
                         .width / 3.2,
-                    child: RaisedButton(
-                      color: PaletteColor.primarybg,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0),
-                        side: BorderSide(color: PaletteColor.primary),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: PaletteColor.primarybg,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                          side: BorderSide(color: PaletteColor.primary),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
@@ -95,11 +97,13 @@ class DialogConfirmation extends StatelessWidget {
                         .of(context)
                         .size
                         .width / 3.2,
-                    child: RaisedButton(
-                      color: PaletteColor.primary,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: PaletteColor.primary,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
                       ),
                       onPressed: () {
                         onPressedFunction();

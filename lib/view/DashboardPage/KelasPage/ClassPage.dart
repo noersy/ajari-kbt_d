@@ -5,6 +5,7 @@ import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/AbsenPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/StudenListPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/CreateKelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/JoinKelas.dart';
@@ -262,7 +263,11 @@ class _ClassPageState extends State<ClassPage> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      routeTransition(AbsenPage())
+                                    );
+                                  },
                                   child: Text(
                                     "Absen",
                                     style: TypographyStyle.button2.copyWith(

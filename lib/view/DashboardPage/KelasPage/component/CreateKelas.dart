@@ -64,14 +64,16 @@ class _CreateKelasState extends State<CreateKelas> {
                 child: Card(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: FlatButton(
-                      color: PaletteColor.primary,
-                      splashColor: PaletteColor.primary80,
-                      height: 48,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3.0),
-                        side: BorderSide(
-                          color: PaletteColor.green,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: PaletteColor.primary,
+                        primary: PaletteColor.green,
+                        padding: const EdgeInsets.all(0),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3.0),
+                          side: BorderSide(
+                            color: PaletteColor.green,
+                          ),
                         ),
                       ),
                       onPressed: () {
@@ -82,11 +84,16 @@ class _CreateKelasState extends State<CreateKelas> {
                           },
                         );
                       },
-                      child: Text(
-                        "Create",
-                        style: TypographyStyle.button1.merge(
-                          TextStyle(
-                            color: PaletteColor.primarybg,
+                      child: SizedBox(
+                        height: 48,
+                        child: Center(
+                          child: Text(
+                            "Create",
+                            style: TypographyStyle.button1.merge(
+                              TextStyle(
+                                color: PaletteColor.primarybg,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -137,26 +144,33 @@ class _CreateKelasState extends State<CreateKelas> {
                 left: SpacingDimens.spacing16,
                 right: SpacingDimens.spacing16,
               ),
-              child: FlatButton(
-                color: PaletteColor.primary,
-                splashColor: PaletteColor.primary80,
-                height: 48,
-                minWidth: MediaQuery.of(widget.ctx).size.width,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3.0),
-                  side: BorderSide(
-                    color: PaletteColor.green,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: PaletteColor.primary,
+                  primary: PaletteColor.primary80,
+                  padding: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.0),
+                    side: BorderSide(
+                      color: PaletteColor.green,
+                    ),
                   ),
                 ),
                 onPressed: () {
                   _createKelas();
                   Navigator.of(context).pop();
                 },
-                child: Text(
-                  "Create",
-                  style: TypographyStyle.button1.merge(
-                    TextStyle(
-                      color: PaletteColor.primarybg,
+                child: SizedBox(
+                  height: 48,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      "Create",
+                      style: TypographyStyle.button1.merge(
+                        TextStyle(
+                          color: PaletteColor.primarybg,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -179,7 +193,7 @@ class _CreateKelasState extends State<CreateKelas> {
     await DataKelasProvider.createKelas(
       namaKelas: _editingController.text,
       user: widget.user,
-    ).then((value){
+    ).then((value) {
       setState(() {
         _codeKelas = value;
       });

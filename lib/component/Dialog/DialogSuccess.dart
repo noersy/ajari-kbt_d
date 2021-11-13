@@ -69,17 +69,22 @@ class DialogSuccess extends StatelessWidget {
               padding: EdgeInsets.all(
                 SpacingDimens.spacing24,
               ),
-              child: FlatButton(
-                minWidth: double.infinity,
-                color: PaletteColor.primary,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.all(0),
+                  primary: PaletteColor.primary,
+                ),
                 onPressed: () {
                   onPressedFunction();
                 },
-                child: Text(
-                  'Done',
-                  style: TypographyStyle.button2.merge(
-                    TextStyle(
-                      color: PaletteColor.primarybg,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Done',
+                    style: TypographyStyle.button2.merge(
+                      TextStyle(
+                        color: PaletteColor.primarybg,
+                      ),
                     ),
                   ),
                 ),

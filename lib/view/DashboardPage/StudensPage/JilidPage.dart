@@ -29,7 +29,7 @@ class _StudensPageState extends State<JilidPage> {
             shrinkWrap: true,
             itemCount: _page.length,
             itemBuilder: (BuildContext context, int index) {
-              return JilidContainer(
+              return _jilidContainer(
                 jilid: _page[index].arab,
                 text: _page[index].text,
                 onTap: () {
@@ -50,16 +50,16 @@ class _StudensPageState extends State<JilidPage> {
     );
   }
 
-  List<jilid> _page = [
-    jilid("١", "Satu"),
-    jilid("٢", "Dua"),
-    jilid("٣", "Tiga"),
-    jilid("٤", "Empat"),
-    jilid("٥", "Lima"),
-    jilid("٦", "Enam"),
+  final List<Jilid> _page = [
+    Jilid("١", "Satu"),
+    Jilid("٢", "Dua"),
+    Jilid("٣", "Tiga"),
+    Jilid("٤", "Empat"),
+    Jilid("٥", "Lima"),
+    Jilid("٦", "Enam"),
   ];
 
-  Widget JilidContainer({text, jilid, onTap}) {
+  Widget _jilidContainer({text, jilid, onTap}) {
     return Container(
       margin: const EdgeInsets.all(SpacingDimens.spacing4),
       decoration: BoxDecoration(

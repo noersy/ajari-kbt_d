@@ -31,7 +31,7 @@ class _StudensPageState extends State<StudensPage> {
             return ListView(
               children: snapshot.data!.docChanges
                   .map(
-                    (e) => SantriContainer(
+                    (e) => _santriContainer(
                       name: "${e.doc.get('name')}",
                       imageUrl: e.doc.get('photo'),
                       inTo: () {
@@ -55,7 +55,7 @@ class _StudensPageState extends State<StudensPage> {
     );
   }
 
-  Widget SantriContainer({name, inTo, imageUrl}) {
+  Widget _santriContainer({name, inTo, imageUrl}) {
     return Container(
       margin: const EdgeInsets.only(
         left: SpacingDimens.spacing16,

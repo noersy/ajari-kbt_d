@@ -124,9 +124,28 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    await AuthLogin.signInWithGoogle(context: context);
-    await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
-    await DataKelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
+    try{
+      await AuthLogin.signInWithGoogle(context: context);
+      await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+      await DataKelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
+
+    }catch (e){
+      showDialog(
+        context: context,
+        builder: (context) {
+          return DialogFailed(
+            content: "Whups something wrong \n$e",
+            onPressedFunction: (){
+              Navigator.of(context).pop();
+            },
+          );
+        },
+      );
+    }
+
+    setState(() {
+      isLoading = false;
+    });
 
     if (globals.Get.prf().role == "-")
       Navigator.of(context).pushReplacement(
@@ -134,16 +153,7 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context) => RegisterPage(user: globals.Get.usr()),
         ),
       );
-    else
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => DashboardPage(),
-        ),
-      );
 
-    setState(() {
-      isLoading = false;
-    });
 
     if (globals.isUserNotNull) {
       Navigator.of(context).pushReplacement(
@@ -151,6 +161,8 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context) => DashboardPage(),
         ),
       );
+
+
     } else {
       showDialog(
         context: context,

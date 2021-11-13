@@ -28,7 +28,7 @@ class _StoryPageState extends State<StoryPage> {
               crossAxisCount: 2,
             ),
             children: [
-              CardStry(
+              cardStry(
                 image: 'assets/images/nabi_ibrahim.png',
                 title: Text(
                   "Kisah Nabi Ibrahim",
@@ -43,7 +43,7 @@ class _StoryPageState extends State<StoryPage> {
                   );
                 }
               ),
-              CardStry(
+              cardStry(
                 image: 'assets/images/nabi_musa.png',
                 title: Text(
                   "Kisah Nabi Musa",
@@ -58,7 +58,7 @@ class _StoryPageState extends State<StoryPage> {
                   );
                 }
               ),
-              CardStry(
+              cardStry(
                 image: 'assets/images/nabi_nuh.png',
                 title: Text(
                   "Kisah Nabi Nuh",
@@ -80,7 +80,7 @@ class _StoryPageState extends State<StoryPage> {
     );
   }
 
-  Widget CardStry({image, title, color, onTap}) {
+  Widget cardStry({image, title, color, onTap}) {
     return Padding(
       padding: const EdgeInsets.all(2),
       child: Card(

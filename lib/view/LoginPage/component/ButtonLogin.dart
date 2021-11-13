@@ -16,22 +16,29 @@ class ButtonLogin extends StatelessWidget {
       margin: EdgeInsets.only(top: SpacingDimens.spacing64),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: FlatButton(
-          color: PaletteColor.primary,
-          splashColor: PaletteColor.primary80,
-          height: 48,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3.0),
-            side: BorderSide(
-              color: PaletteColor.green,
+        child: TextButton(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            backgroundColor: PaletteColor.primary,
+            primary: PaletteColor.primary80,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3.0),
+              side: BorderSide(
+                color: PaletteColor.green,
+              ),
             ),
           ),
           onPressed: this.onPressedFunction,
-          child: Text(
-            title,
-            style: TypographyStyle.button1.merge(
-              TextStyle(
-                color: PaletteColor.primarybg,
+          child: SizedBox(
+            height: 48,
+            child: Center(
+              child: Text(
+                title,
+                style: TypographyStyle.button1.merge(
+                  TextStyle(
+                    color: PaletteColor.primarybg,
+                  ),
+                ),
               ),
             ),
           ),

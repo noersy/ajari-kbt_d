@@ -105,7 +105,7 @@ class _PageOneState extends State<HalamanPage> {
           .writeToFile(downloadToFile);
       return downloadToFile.path;
     } on FirebaseException catch (e) {
-      return "Not found";
+      return "Not found $e";
     }
   }
 

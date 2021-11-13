@@ -1,7 +1,6 @@
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/model/Kelas.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -87,14 +86,15 @@ class _JoinKelasState extends State<JoinKelas> {
                 child: Card(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: FlatButton(
-                      color: PaletteColor.primary,
-                      splashColor: PaletteColor.primary80,
-                      height: 48,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(3.0),
-                        side: BorderSide(
-                          color: PaletteColor.green,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: PaletteColor.primary,
+                        primary: PaletteColor.primary80,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3.0),
+                          side: BorderSide(
+                            color: PaletteColor.green,
+                          ),
                         ),
                       ),
                       onPressed: () {
@@ -104,11 +104,16 @@ class _JoinKelasState extends State<JoinKelas> {
                               TextEditingValue(text: santriInput.text);
                         });
                       },
-                      child: Text(
-                        "Join",
-                        style: TypographyStyle.button1.merge(
-                          TextStyle(
-                            color: PaletteColor.primarybg,
+                      child: SizedBox(
+                        height: 48,
+                        child: Center(
+                          child: Text(
+                            "Join",
+                            style: TypographyStyle.button1.merge(
+                              TextStyle(
+                                color: PaletteColor.primarybg,
+                              ),
+                            ),
                           ),
                         ),
                       ),
