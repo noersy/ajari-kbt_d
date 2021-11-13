@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ajari/config/FirebaseReference.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
+import 'package:ajari/model/Profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -220,4 +221,7 @@ class DataKelasProvider extends ChangeNotifier {
         .whenComplete(() => print("grade added to the database"))
         .catchError((e) => print(e));
   }
+
+
+
 }

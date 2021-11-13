@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:ajari/config/FirebaseReference.dart';
+import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/ClassPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,18 +21,10 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _bottomNavBarSelectedIndex = 0;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    _pageController = PageController();
-
-    super.initState();
-  }
+  final PageController _pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       bottomNavigationBar: BottomNavigationBar(
@@ -82,5 +80,19 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         );
     }
+  }
+
+  void _fetchProfile() {
+    try {
+      DocumentReference documentReferencer =
+          FirebaseReference.user.doc(globals.Get.usr().uid);
+
+      documentReferencer.snapshots().listen((event) {
+        print(event.data());
+
+        var profile = profileFromJson(jsonEncode(event.data()));
+        globals.Set.prf(profile);
+      });
+    } catch (e) {}
   }
 }

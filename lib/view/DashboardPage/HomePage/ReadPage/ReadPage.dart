@@ -54,8 +54,6 @@ class _ReadPageState extends State<ReadPage> {
               int _length = 10 - dat.length;
               int i = dat.length - 1;
 
-              // print((snapshot.data?.docs.first.data()));
-
               if (snapshot.data?.docs.length == 0) {
                 i = 1;
                 _length = 10;

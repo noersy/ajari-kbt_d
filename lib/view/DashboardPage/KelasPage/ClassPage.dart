@@ -220,64 +220,71 @@ class _ClassPageState extends State<ClassPage> {
                               'assets/images/lentrn.png',
                             ),
                           ),
-                          Container(
-                            height: 155,
-                            alignment: Alignment.bottomLeft,
-                            child: Row(
-                              children: [
-                                SizedBox(width: SpacingDimens.spacing4),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                      primary: PaletteColor.primary,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      )),
-                                  onPressed: () => Navigator.of(context)
-                                      .push(routeTransition(StudenListPage())),
-                                  child: Text(
-                                    "Santri List",
-                                    style: TypographyStyle.button2.copyWith(
-                                      color: PaletteColor.primarybg2,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(
-                                    SpacingDimens.spacing4,
-                                  ),
-                                  child: SizedBox(
-                                    width: 1,
-                                    height: SpacingDimens.spacing16,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        color: PaletteColor.primarybg2,
-                                        borderRadius: BorderRadius.circular(10),
+                          _profile.role != "Santri"
+                              ? Container(
+                                  height: 155,
+                                  alignment: Alignment.bottomLeft,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: SpacingDimens.spacing4),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                            primary: PaletteColor.primary,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            )),
+                                        onPressed: () => Navigator.of(context)
+                                            .push(routeTransition(
+                                                StudenListPage())),
+                                        child: Text(
+                                          "Santri List",
+                                          style:
+                                              TypographyStyle.button2.copyWith(
+                                            color: PaletteColor.primarybg2,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    primary: PaletteColor.primary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      routeTransition(AbsenPage())
-                                    );
-                                  },
-                                  child: Text(
-                                    "Absen",
-                                    style: TypographyStyle.button2.copyWith(
-                                      color: PaletteColor.primarybg2,
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(
+                                          SpacingDimens.spacing4,
+                                        ),
+                                        child: SizedBox(
+                                          width: 1,
+                                          height: SpacingDimens.spacing16,
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              color: PaletteColor.primarybg2,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          primary: PaletteColor.primary,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              routeTransition(AbsenPage()));
+                                        },
+                                        child: Text(
+                                          "Absen",
+                                          style:
+                                              TypographyStyle.button2.copyWith(
+                                            color: PaletteColor.primarybg2,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 )
-                              ],
-                            ),
-                          ),
+                              : SizedBox.shrink(),
                         ],
                       ),
                     ],

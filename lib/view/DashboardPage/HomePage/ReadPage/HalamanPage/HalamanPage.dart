@@ -51,122 +51,6 @@ class _PageOneState extends State<HalamanPage> {
   bool _playRecord = true;
   String? _path;
 
-  void setRecord() async {
-    try {
-      permissionsGranted = await _checkPermission();
-
-      final String filepath = await getFilePath() + 'record.m4a';
-
-      String? path = await _downloadFileExample(filepath);
-
-      if (path != null) {
-        await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
-        _path = path;
-      }
-    } catch (e) {
-      // print("$e");
-    }
-  }
-
-  Future<String> getFilePath() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    String filePath = '$appDocPath/'; // 3
-
-    Directory appFolder = Directory(appDocPath);
-    bool appFolderExists = await appFolder.exists();
-    if (!appFolderExists) {
-      final created = await appFolder.create(recursive: true);
-      print(created.path);
-    }
-
-    return filePath;
-  }
-
-  void _sendRecored(filePath) async {
-    try {
-      File file = File(filePath);
-
-      await firebase_storage.FirebaseStorage.instance
-          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
-          .putFile(file);
-    } on FirebaseException catch (e) {
-      print(e);
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future<String?> _downloadFileExample(filePath) async {
-    File downloadToFile = File('$filePath');
-    try {
-      await firebase_storage.FirebaseStorage.instance
-          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
-          .writeToFile(downloadToFile);
-      return downloadToFile.path;
-    } on FirebaseException catch (e) {
-      return "Not found $e";
-    }
-  }
-
-  void sendFile() async {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return DialogConfirmation(
-          title: "title",
-          content: "content",
-          onPressedFunction: () {
-            _sendRecored(_path);
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
-
-  Future<Uri?> saveFile({filepath}) async {
-    try {
-      File file = File(filepath);
-      Uint8List bytes = await file.readAsBytes();
-      file.writeAsBytes(bytes);
-      print(file.uri);
-      return file.uri;
-    } catch (e, r) {
-      print("$e $r");
-    }
-    return null;
-  }
-
-  void startRecord() async {
-    try {
-      if (permissionsGranted && isNotStart) {
-        print("record start");
-        setState(() {
-          isNotStart = false;
-        });
-
-        final String filepath = await getFilePath() + 'record.m4a';
-
-        await saveFile(filepath: filepath);
-        await _recorder.start(path: filepath);
-      } else {
-        _path = await _recorder.stop();
-
-        assetsAudioPlayerRecord.open(
-          Audio.file(_path!),
-          autoStart: false,
-        );
-
-        setState(() {
-          isNotStart = true;
-        });
-      }
-    } catch (e) {
-      // print("$e");
-    }
-  }
-
   @override
   initState() {
     setRecord();
@@ -321,9 +205,11 @@ class _PageOneState extends State<HalamanPage> {
                   ),
                 ),
               ),
-              widget.role == 'Santri'
-                  ? _actionSantriContainer()
-                  : _actionUstazContainer(),
+              widget.codeKelas != "-"
+                  ? widget.role == "Santri"
+                      ? _actionSantriContainer()
+                      : _actionUstazContainer()
+                  : _notJoinAction(),
               _actionPage(),
               // actionPage(),
             ],
@@ -620,7 +506,7 @@ class _PageOneState extends State<HalamanPage> {
             ),
             padding: const EdgeInsets.all(SpacingDimens.spacing16),
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 setState(() {
                   _playRecord = false;
                   _play = false;
@@ -637,22 +523,31 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
+  Widget _notJoinAction() {
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: SpacingDimens.spacing12,
+        bottom: SpacingDimens.spacing8,
+      ),
+      child: Text("You not join class yet"),
+    );
+  }
+
   void _showdialog(isPlayed) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return MessageDialog(
-          uid: widget.uid,
-          role: widget.role,
-          codeKelas: widget.codeKelas,
-          homePageCtx: context,
-          sheetDialogCtx: context,
-          nomorJilid: widget.nomorJilid,
-          nomorHalaman: widget.nomorHalaman,
-          isPlayed: isPlayed,
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return MessageDialog(
+            uid: widget.uid,
+            role: widget.role,
+            codeKelas: widget.codeKelas,
+            homePageCtx: context,
+            sheetDialogCtx: context,
+            nomorJilid: widget.nomorJilid,
+            nomorHalaman: widget.nomorHalaman,
+            isPlayed: isPlayed,
+          );
+        });
   }
 
   Widget _actionPage() {
@@ -760,8 +655,6 @@ class _PageOneState extends State<HalamanPage> {
     );
   }
 
-
-
   Future<bool> _checkPermission() async {
     Map<Permission, PermissionStatus> permissions = await [
       Permission.storage,
@@ -770,5 +663,121 @@ class _PageOneState extends State<HalamanPage> {
 
     return permissions[Permission.storage]!.isGranted &&
         permissions[Permission.microphone]!.isGranted;
+  }
+
+  void setRecord() async {
+    try {
+      permissionsGranted = await _checkPermission();
+
+      final String filepath = await getFilePath() + 'record.m4a';
+
+      String? path = await _downloadFileExample(filepath);
+
+      if (path != null) {
+        await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
+        _path = path;
+      }
+    } catch (e) {
+      // print("$e");
+    }
+  }
+
+  Future<String> getFilePath() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    String filePath = '$appDocPath/'; // 3
+
+    Directory appFolder = Directory(appDocPath);
+    bool appFolderExists = await appFolder.exists();
+    if (!appFolderExists) {
+      final created = await appFolder.create(recursive: true);
+      print(created.path);
+    }
+
+    return filePath;
+  }
+
+  void _sendRecored(filePath) async {
+    try {
+      File file = File(filePath);
+
+      await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .putFile(file);
+    } on FirebaseException catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String?> _downloadFileExample(filePath) async {
+    File downloadToFile = File('$filePath');
+    try {
+      await firebase_storage.FirebaseStorage.instance
+          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .writeToFile(downloadToFile);
+      return downloadToFile.path;
+    } on FirebaseException catch (e) {
+      return "Not found $e";
+    }
+  }
+
+  void sendFile() async {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return DialogConfirmation(
+          title: "title",
+          content: "content",
+          onPressedFunction: () {
+            _sendRecored(_path);
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
+  Future<Uri?> saveFile({filepath}) async {
+    try {
+      File file = File(filepath);
+      Uint8List bytes = await file.readAsBytes();
+      file.writeAsBytes(bytes);
+      print(file.uri);
+      return file.uri;
+    } catch (e, r) {
+      print("$e $r");
+    }
+    return null;
+  }
+
+  void startRecord() async {
+    try {
+      if (permissionsGranted && isNotStart) {
+        print("record start");
+        setState(() {
+          isNotStart = false;
+        });
+
+        final String filepath = await getFilePath() + 'record.m4a';
+
+        await saveFile(filepath: filepath);
+        await _recorder.start(path: filepath);
+      } else {
+        _path = await _recorder.stop();
+
+        assetsAudioPlayerRecord.open(
+          Audio.file(_path!),
+          autoStart: false,
+        );
+
+        setState(() {
+          isNotStart = true;
+        });
+      }
+    } catch (e) {
+      // print("$e");
+    }
   }
 }

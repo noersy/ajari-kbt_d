@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ajari/component/Dialog/DialogFailed.dart';
 import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -83,11 +84,10 @@ class _MessageDialogState extends State<MessageDialog> {
         autoStart: false,
       );
 
-      if(widget.isPlayed){
+      if (widget.isPlayed) {
         _assetsAudioPlayerRecord.play();
         _play = true;
       }
-
 
       print("Open : " + downloadToFile.path);
       return;
@@ -113,16 +113,23 @@ class _MessageDialogState extends State<MessageDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(
-          8.0,
-        ),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: contentBox(context),
-    );
+    return widget.codeKelas != "-"
+        ? Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                8.0,
+              ),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: contentBox(context),
+          )
+        : DialogFailed(
+            content: "You not join class yet",
+            onPressedFunction: () {
+              Navigator.of(context).pop();
+            },
+          );
   }
 
   TextEditingController _editingController = new TextEditingController();
@@ -290,7 +297,8 @@ class _MessageDialogState extends State<MessageDialog> {
                               children: snapshot.data!.docs.map((e) {
                                 String _role = e.get('role');
                                 DateTime date = e.get('dateTime').toDate();
-                                DateTime dateTime = DateTime(date.year, date.month, date.day);
+                                DateTime dateTime =
+                                    DateTime(date.year, date.month, date.day);
                                 if (_first) {
                                   _dateTime =
                                       DateTime(date.year, date.month, date.day);
@@ -479,10 +487,9 @@ class _MessageDialogState extends State<MessageDialog> {
                     width: 50,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        padding: const EdgeInsets.all(0)
-                      ),
+                          padding: const EdgeInsets.all(0)),
                       onPressed: () {
-                        if(_editingController.text.isEmpty) return;
+                        if (_editingController.text.isEmpty) return;
 
                         DataKelasProvider.sendMessage(
                           uid: widget.uid,
