@@ -24,7 +24,7 @@ class ClassPage extends StatefulWidget {
 
 class _ClassPageState extends State<ClassPage> {
   late PageController _pageController;
-  List<String> _listDay = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  List<String> _listDay = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   List<String> _listDate = [];
   DateTime _dateTime = DateTime.now();
   int _index = 0;
@@ -303,6 +303,7 @@ class _ClassPageState extends State<ClassPage> {
                       right: SpacingDimens.spacing16,
                     ),
                     itemBuilder: (BuildContext context, int index) {
+                      index ++;
                       return dateCard(
                         hari: _listDay[index],
                         tgl: "${_listDate[index]}",
@@ -341,6 +342,7 @@ class _ClassPageState extends State<ClassPage> {
                         });
                       },
                       children: [
+                        Center(child: Text("1")),
                         ListView(
                           physics: BouncingScrollPhysics(),
                           children: [

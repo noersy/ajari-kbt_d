@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ajari/config/FirebaseReference.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
-import 'package:ajari/model/Profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,9 @@ class DataKelasProvider extends ChangeNotifier {
   }) async {
     String _code = FirebaseReference.getRandomString(5);
     DocumentReference documentReferencerKelas =
-    FirebaseReference.kelas.doc(_code);
+        FirebaseReference.kelas.doc(_code);
     DocumentReference documentReferencerUser =
-    FirebaseReference.user.doc(user.uid);
+        FirebaseReference.user.doc(user.uid);
 
     Map<String, dynamic> data = <String, dynamic>{
       "nama": namaKelas,
@@ -46,9 +45,9 @@ class DataKelasProvider extends ChangeNotifier {
     required User user,
   }) async {
     DocumentReference documentReferencerUser =
-    FirebaseReference.user.doc(user.uid);
+        FirebaseReference.user.doc(user.uid);
     DocumentReference documentReferencerKelas =
-    FirebaseReference.kelas.doc(codeKelas);
+        FirebaseReference.kelas.doc(codeKelas);
 
     DocumentReference documentReferencerProfileinKelas = FirebaseReference.kelas
         .doc(codeKelas)
@@ -73,13 +72,12 @@ class DataKelasProvider extends ChangeNotifier {
     };
 
     bool kelasExist = false;
-    await FirebaseReference.kelas.doc(codeKelas).get().then((value) =>
-    {
-      if (value.exists)
-        {
-          kelasExist = true,
-        }
-    });
+    await FirebaseReference.kelas.doc(codeKelas).get().then((value) => {
+          if (value.exists)
+            {
+              kelasExist = true,
+            }
+        });
 
     if (kelasExist) {
       await documentReferencerProfileinKelas
@@ -142,7 +140,7 @@ class DataKelasProvider extends ChangeNotifier {
     }
 
     DocumentReference documentReferencer =
-    FirebaseReference.kelas.doc(codeKelas);
+        FirebaseReference.kelas.doc(codeKelas);
     DocumentSnapshot data = await documentReferencer.get();
     Kelas? kelas;
 
@@ -160,14 +158,15 @@ class DataKelasProvider extends ChangeNotifier {
 
   Stream<QuerySnapshot> getSantri({required codeKelas}) {
     CollectionReference documentReferencer =
-    FirebaseReference.kelas.doc(codeKelas).collection('santri');
+        FirebaseReference.kelas.doc(codeKelas).collection('santri');
     return documentReferencer.snapshots();
   }
 
-  Stream<QuerySnapshot> getMassage({required uid,
-    required codeKelas,
-    required nomorJilid,
-    required nomorHalaman}) {
+  Stream<QuerySnapshot> getMassage(
+      {required uid,
+      required codeKelas,
+      required nomorJilid,
+      required nomorHalaman}) {
     CollectionReference collectionReference = FirebaseReference.kelas
         .doc(codeKelas)
         .collection('santri')
@@ -211,10 +210,7 @@ class DataKelasProvider extends ChangeNotifier {
 
     print(documentReference);
 
-    Map<String, dynamic> data = {
-      'grade': grade,
-      'halaman' : nomorHalaman
-    };
+    Map<String, dynamic> data = {'grade': grade, 'halaman': nomorHalaman};
 
     await documentReference
         .set(data)
@@ -222,6 +218,32 @@ class DataKelasProvider extends ChangeNotifier {
         .catchError((e) => print(e));
   }
 
+  static Future<int> createAbsen({
+    required DateTime date,
+  }) async {
+    try {
+      DocumentReference documentReferencer = FirebaseReference.kelas
+          .doc(globals.Get.kls().kelasId)
+          .collection("absen")
+          .doc("$date");
 
+      Map<String, dynamic> data = {"datetime": date};
 
+      await documentReferencer.set(data);
+    } catch (e) {
+      return 400;
+    }
+    return 200;
+  }
+
+  Stream<QuerySnapshot> getsAbsen() {
+    try {
+      CollectionReference _collectionRef = FirebaseReference.kelas
+          .doc(globals.Get.kls().kelasId)
+          .collection("absen");
+      return _collectionRef.snapshots();
+    } catch (e) {
+      return Stream.error("error");
+    }
+  }
 }

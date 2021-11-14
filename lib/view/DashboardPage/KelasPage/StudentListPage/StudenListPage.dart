@@ -30,25 +30,28 @@ class StudenListPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (!snapshot.hasData)
               return Center(child: Text("There is no expense"));
-            return ListView(
-              children: snapshot.data!.docChanges
-                  .map(
-                    (e) => santriContainer(
-                      name: e.doc.get('name'),
-                      imageUrl: e.doc.get('photo'),
-                      inTo: () => Navigator.of(context).push(
-                        routeTransition(
-                          SantriDetail(
-                            role: "Santri",
-                            name: e.doc.get('name'),
-                            email: e.doc.get('email'),
-                            photoURL: e.doc.get('photo'),
+            return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: snapshot.data!.docChanges
+                    .map(
+                      (e) => santriContainer(
+                        name: e.doc.get('name'),
+                        imageUrl: e.doc.get('photo'),
+                        inTo: () => Navigator.of(context).push(
+                          routeTransition(
+                            SantriDetail(
+                              role: "Santri",
+                              name: e.doc.get('name'),
+                              email: e.doc.get('email'),
+                              photoURL: e.doc.get('photo'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                  .toList(),
+                    )
+                    .toList(),
+              ),
             );
           },
         ),

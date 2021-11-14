@@ -1,23 +1,39 @@
+import 'package:ajari/firebase/DataKelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class DialogConfirmation extends StatelessWidget {
-  final String title;
-  final String content;
-  final Function onPressedFunction;
+class DialogCreateAbsen extends StatefulWidget {
+  const DialogCreateAbsen({Key? key}) : super(key: key);
 
-  DialogConfirmation({
-    required this.title,
-    required this.content,
-    required this.onPressedFunction,
-  });
+  @override
+  State<DialogCreateAbsen> createState() => _DialogCreateAbsenState();
+}
+
+class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
+  DateTime selectedDate = DateTime.now();
+  String _stringDate = "Select Date";
+  final TextEditingController _editingController = TextEditingController();
+  DateFormat formattedDate = DateFormat('yyyy-MM-dd');
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        _stringDate = formattedDate.format(picked);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.black.withOpacity(SpacingDimens.spacing4),
       child: AlertDialog(
         backgroundColor: PaletteColor.primarybg,
         contentPadding: EdgeInsets.all(0.0),
@@ -41,7 +57,7 @@ class DialogConfirmation extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                title,
+                "Create",
                 style: TypographyStyle.subtitle1.merge(
                   TextStyle(
                     color: PaletteColor.black,
@@ -49,48 +65,40 @@ class DialogConfirmation extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 22,
+                height: SpacingDimens.spacing16,
               ),
-              Text(
-                content,
-                style: TypographyStyle.paragraph.merge(
-                  TextStyle(
-                    color: PaletteColor.grey60,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: PaletteColor.primarybg,
+                  onPrimary: PaletteColor.primary,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      side: BorderSide(
+                          color: PaletteColor.primary.withOpacity(0.5))),
+                ),
+                onPressed: () {
+                  _selectDate(context);
+                },
+                child: SizedBox(
+                  width: double.infinity,
+                  height: SpacingDimens.spacing44,
+                  child: Center(
+                    child: Text(
+                      _stringDate,
+                      style: TypographyStyle.button2
+                          .copyWith(color: PaletteColor.grey80),
+                    ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 38,
+                height: SpacingDimens.spacing16,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.2,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: PaletteColor.primarybg,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                          side: BorderSide(color: PaletteColor.primary),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'No',
-                        style: TypographyStyle.button2.merge(
-                          TextStyle(
-                            color: PaletteColor.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.2,
+                  Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: PaletteColor.primary,
@@ -100,10 +108,13 @@ class DialogConfirmation extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        onPressedFunction();
+                        DataKelasProvider.createAbsen(
+                          date: selectedDate,
+                        );
+                        Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Yes',
+                        'Submit',
                         style: TypographyStyle.button2.merge(
                           TextStyle(
                             color: PaletteColor.primarybg,
