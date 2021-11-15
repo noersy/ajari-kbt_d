@@ -108,6 +108,8 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                         ),
                       ),
                       onPressed: () {
+                        if (_stringDate == "Select Date") return;
+
                         DataKelasProvider.createAbsen(
                           date: selectedDate,
                         );
