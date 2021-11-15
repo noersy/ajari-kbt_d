@@ -198,7 +198,7 @@ class _CreateKelasState extends State<CreateKelas> {
       });
     });
 
-    await ProfileProvider.getProfile(userUid: widget.user.uid);
+    await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: widget.user.uid);
     await Provider.of<KelasProvider>(context, listen: false)
         .getKelas(codeKelas: _codeKelas)
         .then((value) {

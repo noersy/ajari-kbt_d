@@ -7,6 +7,7 @@ import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/component/ButtonLogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   final User user;
@@ -100,11 +101,11 @@ class _RegisterPage extends State<RegisterPage> {
   }
 
   void onPressedFunction() async {
-    await ProfileProvider.createProfile(
+    await Provider.of<ProfileProvider>(context, listen: false).createProfile(
       userid: widget.user.uid,
       role: _character == SingingCharacter.Santri ? "Santri" : "Pengajar",
     );
-    await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+    await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: globals.Get.usr().uid);
 
     print(widget.user.displayName);
 

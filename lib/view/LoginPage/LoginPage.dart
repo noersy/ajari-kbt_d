@@ -127,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await AuthLogin.signInWithGoogle(context: context);
-      await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: globals.Get.usr().uid);
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: globals.Get.prf().codeKelas);
     } catch (e) {
       showDialog(

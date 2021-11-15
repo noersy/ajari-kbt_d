@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ProfileProvider extends ChangeNotifier {
-  static Future<void> createProfile({
+  Future<void> createProfile({
     required String userid,
     required String role,
   }) async {
@@ -25,7 +25,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  static Future<void> updateProflie({
+  Future<void> updateProflie({
     required String userid,
     required String role,
   }) async {
@@ -42,7 +42,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  static Future<Profile?> getProfile({required userUid}) async {
+  Future<Profile?> getProfile({required userUid}) async {
     try {
       if (userUid == "") throw Exception("Error");
 
@@ -60,7 +60,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  static Future<String> chekRole({required userUid}) async {
+  Future<String> chekRole({required userUid}) async {
     try {
       DocumentSnapshot data = await FirebaseReference.user.doc(userUid).get();
 

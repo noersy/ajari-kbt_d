@@ -31,7 +31,8 @@ class _JoinKelasState extends State<JoinKelas> {
       _codeKelas = value;
     });
 
-    await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+    await Provider.of<ProfileProvider>(context, listen: false)
+        .getProfile(userUid: globals.Get.usr().uid);
     await Provider.of<KelasProvider>(context, listen: false)
         .getKelas(codeKelas: _codeKelas)
         .then((value) {

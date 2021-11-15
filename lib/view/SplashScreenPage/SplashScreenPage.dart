@@ -29,9 +29,10 @@ class _SplashScreenState extends State<SplashScreenPage> {
       var user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
 
-      var prf = await ProfileProvider.getProfile(userUid: user.uid);
-
-      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf?.codeKelas ?? " ");
+      var prf = await Provider.of<ProfileProvider>(context, listen: false)
+          .getProfile(userUid: user.uid);
+      await Provider.of<KelasProvider>(context, listen: false)
+          .getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null)
         Navigator.of(context).pushReplacement(
@@ -58,7 +59,6 @@ class _SplashScreenState extends State<SplashScreenPage> {
       }
 
       print("$e : $r");
-
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
