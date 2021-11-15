@@ -4,6 +4,7 @@ import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DialogCreateAbsen extends StatefulWidget {
   const DialogCreateAbsen({Key? key}) : super(key: key);
@@ -110,9 +111,10 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                       onPressed: () {
                         if (_stringDate == "Select Date") return;
 
-                        KelasProvider.createAbsen(
+                        Provider.of<KelasProvider>(context, listen: false).createAbsen(
                           date: selectedDate,
                         );
+
                         Navigator.of(context).pop();
                       },
                       child: Text(

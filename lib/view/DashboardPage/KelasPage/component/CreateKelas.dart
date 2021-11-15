@@ -6,6 +6,7 @@ import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateKelas extends StatefulWidget {
   final BuildContext ctx;
@@ -189,21 +190,20 @@ class _CreateKelasState extends State<CreateKelas> {
   void _createKelas() async {
     _loading = true;
 
-    try {
-      await KelasProvider.createKelas(
-        namaKelas: _editingController.text,
-        user: widget.user,
-      ).then((value) {
-        setState(() {
-          _codeKelas = value;
-        });
+    await Provider.of<KelasProvider>(context, listen: false)
+        .createKelas(namaKelas: _editingController.text, user: widget.user)
+        .then((value) {
+      setState(() {
+        _codeKelas = value;
       });
+    });
 
-      await ProfileProvider.getProfile(userUid: widget.user.uid);
-      await KelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
-        widget.freshState(value: value);
-      });
-    } catch (e) {}
+    await ProfileProvider.getProfile(userUid: widget.user.uid);
+    await Provider.of<KelasProvider>(context, listen: false)
+        .getKelas(codeKelas: _codeKelas)
+        .then((value) {
+      widget.freshState(value: value);
+    });
 
     _loading = false;
   }

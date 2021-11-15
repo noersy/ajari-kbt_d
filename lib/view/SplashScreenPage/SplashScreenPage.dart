@@ -11,6 +11,7 @@ import 'package:ajari/view/LoginPage/LoginPage.dart';
 import 'package:ajari/view/LoginPage/RegisterPage/RegisterPage.dart';
 import 'package:ajari/view/LoginPage/component/AuthLogin.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override
@@ -29,7 +30,8 @@ class _SplashScreenState extends State<SplashScreenPage> {
       if (user == null) throw Exception("Not login");
 
       var prf = await ProfileProvider.getProfile(userUid: user.uid);
-      await KelasProvider.getKelas(codeKelas: prf?.codeKelas ?? " ");
+
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null)
         Navigator.of(context).pushReplacement(
@@ -43,7 +45,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
             builder: (context) => DashboardPage(),
           ),
         );
-    } catch (e) {
+    } catch (e, r) {
       if (globals.isUserNotNull) {
         showDialog(
           context: context,
@@ -55,6 +57,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
         );
       }
 
+      print("$e : $r");
 
 
       Navigator.of(context).pushReplacement(

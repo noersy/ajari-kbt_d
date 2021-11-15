@@ -4,6 +4,7 @@ import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NilaiDialog extends StatefulWidget {
   final String uid, grade, codeKelas, nomorJilid, nomorHalaman;
@@ -139,13 +140,14 @@ class _NilaiDialogState extends State<NilaiDialog> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        KelasProvider.setGrade(
+                        Provider.of<KelasProvider>(context, listen: false).setGrade(
                           uid: widget.uid,
                           grade: dropdownValue,
                           codeKelas: widget.codeKelas,
                           nomorJilid: widget.nomorJilid,
                           nomorHalaman: widget.nomorHalaman,
                         );
+
                         Navigator.of(context).pop();
                       },
                       child: Text(

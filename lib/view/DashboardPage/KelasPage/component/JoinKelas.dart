@@ -6,6 +6,7 @@ import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class JoinKelas extends StatefulWidget {
   final Function freshState;
@@ -24,19 +25,18 @@ class _JoinKelasState extends State<JoinKelas> {
   void joinkelas(santriInput) async {
     _loading = true;
 
-    try {
-      await KelasProvider.joinKelas(
-        codeKelas: santriInput.text,
-        user: globals.Get.usr(),
-      ).then((value) {
-        _codeKelas = value;
-      });
+    await Provider.of<KelasProvider>(context, listen: false)
+        .joinKelas(codeKelas: santriInput.text, user: globals.Get.usr())
+        .then((value) {
+      _codeKelas = value;
+    });
 
-      await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
-      await KelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
-        widget.freshState(value: value);
-      });
-    } catch (e) {}
+    await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+    await Provider.of<KelasProvider>(context, listen: false)
+        .getKelas(codeKelas: _codeKelas)
+        .then((value) {
+      widget.freshState(value: value);
+    });
 
     _loading = false;
   }

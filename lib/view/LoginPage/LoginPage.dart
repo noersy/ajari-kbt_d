@@ -10,6 +10,7 @@ import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/component/ButtonLoginGoogle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'RegisterPage/RegisterPage.dart';
 import 'component/AuthLogin.dart';
@@ -124,18 +125,17 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    try{
+    try {
       await AuthLogin.signInWithGoogle(context: context);
       await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
-      await KelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
-
-    }catch (e){
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: globals.Get.prf().codeKelas);
+    } catch (e) {
       showDialog(
         context: context,
         builder: (context) {
           return DialogFailed(
             content: "Whups something wrong \n$e",
-            onPressedFunction: (){
+            onPressedFunction: () {
               Navigator.of(context).pop();
             },
           );
@@ -154,15 +154,12 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
 
-
     if (globals.isUserNotNull) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => DashboardPage(),
         ),
       );
-
-
     } else {
       showDialog(
         context: context,

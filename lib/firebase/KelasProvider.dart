@@ -11,7 +11,7 @@ class KelasProvider extends ChangeNotifier {
   Kelas? dataKelas;
   User? user;
 
-  static Future<String> createKelas({
+  Future<String> createKelas({
     required namaKelas,
     required User user,
   }) async {
@@ -39,7 +39,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  static Future<String> joinKelas({
+  Future<String> joinKelas({
     required codeKelas,
     required User user,
   }) async {
@@ -78,7 +78,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  static Future<void> sendMessage({
+  Future<void> sendMessage({
     required uid,
     required codeKelas,
     required nomorJilid,
@@ -109,7 +109,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  static Future<Kelas?> getKelas({required String codeKelas}) async {
+  Future<Kelas?> getKelas({required String codeKelas}) async {
     try {
       var data = await FirebaseReference.getKelas(codeKelas).get();
 
@@ -154,7 +154,7 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  static Future<void> setGrade({
+  Future<void> setGrade({
     required uid,
     required grade,
     required codeKelas,
@@ -177,7 +177,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  static Future<int> createAbsen({
+  Future<int> createAbsen({
     required DateTime date,
   }) async {
     try {

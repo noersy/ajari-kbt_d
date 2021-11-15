@@ -491,7 +491,7 @@ class _MessageDialogState extends State<MessageDialog> {
                       onPressed: () {
                         if (_editingController.text.isEmpty) return;
 
-                        KelasProvider.sendMessage(
+                        Provider.of<KelasProvider>(context, listen: false).sendMessage(
                           uid: widget.uid,
                           codeKelas: widget.codeKelas,
                           nomorJilid: widget.nomorJilid,
