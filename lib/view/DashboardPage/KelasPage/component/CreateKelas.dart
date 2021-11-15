@@ -1,6 +1,6 @@
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
+import 'package:ajari/firebase/ProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -190,7 +190,7 @@ class _CreateKelasState extends State<CreateKelas> {
     _loading = true;
 
     try {
-      await DataKelasProvider.createKelas(
+      await KelasProvider.createKelas(
         namaKelas: _editingController.text,
         user: widget.user,
       ).then((value) {
@@ -199,8 +199,8 @@ class _CreateKelasState extends State<CreateKelas> {
         });
       });
 
-      await DataProfileProvider.getProfile(userUid: widget.user.uid);
-      await DataKelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
+      await ProfileProvider.getProfile(userUid: widget.user.uid);
+      await KelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
         widget.freshState(value: value);
       });
     } catch (e) {}

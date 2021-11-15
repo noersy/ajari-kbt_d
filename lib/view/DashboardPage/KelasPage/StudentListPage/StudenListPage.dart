@@ -1,6 +1,6 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -25,7 +25,7 @@ class StudenListPage extends StatelessWidget {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<DataKelasProvider>(context)
+          stream: Provider.of<KelasProvider>(context)
               .getSantri(codeKelas: _codeKelas),
           builder: (context, snapshot) {
             if (!snapshot.hasData)

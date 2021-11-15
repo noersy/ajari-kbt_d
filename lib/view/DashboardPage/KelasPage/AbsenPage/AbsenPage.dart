@@ -1,5 +1,5 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
@@ -24,7 +24,7 @@ class AbsenPage extends StatelessWidget {
         ctx: context,
       ),
       body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<DataKelasProvider>(context).getsAbsen(),
+          stream: Provider.of<KelasProvider>(context).getsAbsen(),
           builder: (context, snapshot) {
             if (!snapshot.hasData)
               return Center(child: Text("There is no expense"));

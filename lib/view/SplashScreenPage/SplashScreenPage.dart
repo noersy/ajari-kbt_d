@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:ajari/component/Dialog/DialogFailed.dart';
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
+import 'package:ajari/firebase/ProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/LoginPage.dart';
@@ -28,8 +28,8 @@ class _SplashScreenState extends State<SplashScreenPage> {
       var user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
 
-      var prf = await DataProfileProvider.getProfile(userUid: user.uid);
-      await DataKelasProvider.getKelas(codeKelas: prf?.codeKelas ?? " ");
+      var prf = await ProfileProvider.getProfile(userUid: user.uid);
+      await KelasProvider.getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null)
         Navigator.of(context).pushReplacement(

@@ -1,7 +1,7 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
 import 'package:ajari/config/PathIqro.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/HalamanPage.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/HalamanContainer.dart';
@@ -40,7 +40,7 @@ class _ReadPageState extends State<ReadPage> {
       ),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-            stream: Provider.of<DataKelasProvider>(context).getGrade(
+            stream: Provider.of<KelasProvider>(context).getGrade(
               uid: widget.uid,
               codeKelas: _codeKelas,
               nomorJilid: widget.nomor,

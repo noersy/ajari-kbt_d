@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ajari/component/Dialog/DialogFailed.dart';
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -280,7 +280,7 @@ class _MessageDialogState extends State<MessageDialog> {
                       ),
                       SizedBox(height: 22),
                       StreamBuilder<QuerySnapshot>(
-                        stream: Provider.of<DataKelasProvider>(context)
+                        stream: Provider.of<KelasProvider>(context)
                             .getMassage(
                                 uid: widget.uid,
                                 codeKelas: widget.codeKelas,
@@ -491,7 +491,7 @@ class _MessageDialogState extends State<MessageDialog> {
                       onPressed: () {
                         if (_editingController.text.isEmpty) return;
 
-                        DataKelasProvider.sendMessage(
+                        KelasProvider.sendMessage(
                           uid: widget.uid,
                           codeKelas: widget.codeKelas,
                           nomorJilid: widget.nomorJilid,

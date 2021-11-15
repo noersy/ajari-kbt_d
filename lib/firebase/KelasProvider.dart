@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class DataKelasProvider extends ChangeNotifier {
+class KelasProvider extends ChangeNotifier {
   Kelas? dataKelas;
   User? user;
 
@@ -198,6 +198,7 @@ class DataKelasProvider extends ChangeNotifier {
     return FirebaseReference.kelas
         .doc(globals.Get.kls().kelasId)
         .collection("absen")
+        .orderBy("datetime", descending: false)
         .snapshots();
   }
 }

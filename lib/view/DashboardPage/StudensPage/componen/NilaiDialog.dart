@@ -1,4 +1,4 @@
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -139,7 +139,7 @@ class _NilaiDialogState extends State<NilaiDialog> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        DataKelasProvider.setGrade(
+                        KelasProvider.setGrade(
                           uid: widget.uid,
                           grade: dropdownValue,
                           codeKelas: widget.codeKelas,

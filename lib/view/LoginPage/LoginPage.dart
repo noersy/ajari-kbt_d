@@ -1,8 +1,8 @@
 import 'package:ajari/component/Dialog/DialogFailed.dart';
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
+import 'package:ajari/firebase/ProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -126,8 +126,8 @@ class _LoginPageState extends State<LoginPage> {
 
     try{
       await AuthLogin.signInWithGoogle(context: context);
-      await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
-      await DataKelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
+      await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+      await KelasProvider.getKelas(codeKelas: globals.Get.prf().codeKelas);
 
     }catch (e){
       showDialog(

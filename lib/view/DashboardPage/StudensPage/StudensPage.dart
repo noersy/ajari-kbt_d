@@ -1,6 +1,6 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/JilidPage.dart';
@@ -23,7 +23,7 @@ class _StudensPageState extends State<StudensPage> {
       appBar: AppBarBack(ctx: context, title: "Santri"),
       body: Container(
         child: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<DataKelasProvider>(context)
+          stream: Provider.of<KelasProvider>(context)
               .getSantri(codeKelas: _codeKelas),
           builder: (context, snapshot) {
             if (!snapshot.hasData)

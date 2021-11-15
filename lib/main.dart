@@ -1,6 +1,5 @@
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
-import 'package:ajari/firebase/DatabaseProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
+import 'package:ajari/firebase/ProfileProvider.dart';
 import 'package:ajari/view/SplashScreenPage/SplashScreenPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +15,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => DatabaseProvider(),
+          create: (_) => ProfileProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => DataProfileProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DataKelasProvider(),
+          create: (_) => KelasProvider(),
         ),
       ],
       child: MaterialApp(

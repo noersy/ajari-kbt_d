@@ -1,4 +1,4 @@
-import 'package:ajari/firebase/DataKelasProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -110,7 +110,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                       onPressed: () {
                         if (_stringDate == "Select Date") return;
 
-                        DataKelasProvider.createAbsen(
+                        KelasProvider.createAbsen(
                           date: selectedDate,
                         );
                         Navigator.of(context).pop();

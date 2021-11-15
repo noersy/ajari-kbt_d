@@ -1,7 +1,7 @@
 import 'package:ajari/component/Indicator/IndicatorLoad.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
+import 'package:ajari/firebase/KelasProvider.dart';
+import 'package:ajari/firebase/ProfileProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -25,15 +25,15 @@ class _JoinKelasState extends State<JoinKelas> {
     _loading = true;
 
     try {
-      await DataKelasProvider.joinKelas(
+      await KelasProvider.joinKelas(
         codeKelas: santriInput.text,
         user: globals.Get.usr(),
       ).then((value) {
         _codeKelas = value;
       });
 
-      await DataProfileProvider.getProfile(userUid: globals.Get.usr().uid);
-      await DataKelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
+      await ProfileProvider.getProfile(userUid: globals.Get.usr().uid);
+      await KelasProvider.getKelas(codeKelas: _codeKelas).then((value) {
         widget.freshState(value: value);
       });
     } catch (e) {}
