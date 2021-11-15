@@ -1,5 +1,6 @@
 import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/firebase/ProfileProvider.dart';
+import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/view/SplashScreenPage/SplashScreenPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        color: PaletteColor.primary,
         debugShowCheckedModeBanner: false,
         title: 'Ajari',
         home: SplashScreenPage(),

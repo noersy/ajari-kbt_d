@@ -1,4 +1,5 @@
 import 'package:ajari/component/AppBar/AppBarBack.dart';
+import 'package:ajari/component/Dialog/DialogDelete.dart';
 import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/route/RouteTransisition.dart';
 import 'package:ajari/theme/PaletteColor.dart';
@@ -43,41 +44,57 @@ class AbsenPage extends StatelessWidget {
                       right: SpacingDimens.spacing16,
                     ),
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          routeTransition(AbsenDetailPage())
-                        );
-                      },
+                      onLongPress: () =>
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                DialogDelete(
+                                  content: "This will delete the selected item.",
+                                  onPressedFunction: () {
+                                    Provider.of<KelasProvider>(
+                                        context, listen: false)
+                                        .deleteAbsen(date: datetime);
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                          ),
+                      onPressed: () =>
+                          Navigator.of(context)
+                              .push(routeTransition(AbsenDetailPage())),
                       child: Container(
                         width: double.infinity,
                         height: SpacingDimens.spacing44,
                         alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.date_range,
-                                  color: PaletteColor.text,
-                                  size: 18,
-                                ),
-                                SizedBox(width: SpacingDimens.spacing4),
-                                Text("$_text", style: TypographyStyle.button2)
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.access_time,
-                                  color: PaletteColor.text,
-                                  size: 18,
-                                ),
-                                SizedBox(width: SpacingDimens.spacing4),
-                                Text("12.00 - 01.00 WIB", style: TypographyStyle.button2)
-                              ],
-                            ),
-                          ],
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.date_range,
+                                    color: PaletteColor.text,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: SpacingDimens.spacing4),
+                                  Text("$_text", style: TypographyStyle.button2)
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time,
+                                    color: PaletteColor.text,
+                                    size: 18,
+                                  ),
+                                  SizedBox(width: SpacingDimens.spacing4),
+                                  Text("12.00 - 01.00 WIB",
+                                      style: TypographyStyle.button2)
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       style: ElevatedButton.styleFrom(

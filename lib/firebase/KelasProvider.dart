@@ -194,6 +194,20 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
+  Future<int> deleteAbsen({
+    required DateTime date,
+  }) async {
+    try {
+      await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date).delete();
+
+      print("deleteAbsen: Success");
+    } catch (e) {
+      print("deleteAbsen: Error");
+      return 400;
+    }
+    return 200;
+  }
+
   Stream<QuerySnapshot> getsAbsen() {
     return FirebaseReference.kelas
         .doc(globals.Get.kls().kelasId)

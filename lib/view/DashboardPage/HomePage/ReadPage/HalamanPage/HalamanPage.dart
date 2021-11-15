@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:ajari/component/AppBar/AppBarBack.dart';
 import 'package:ajari/component/Dialog/DialogConfirmation.dart';
+import 'package:ajari/component/Dialog/DialogDelete.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
@@ -49,6 +50,7 @@ class _PageOneState extends State<HalamanPage> {
   bool isNotStart = true;
   bool _play = true;
   bool _playRecord = true;
+  bool _downloadAudio = false;
   String? _path;
 
   @override
@@ -355,35 +357,47 @@ class _PageOneState extends State<HalamanPage> {
         children: [
           Row(
             children: [
-              TextButton(
-                onPressed: () {
-                  sendFile();
-                },
-                style: TextButton.styleFrom(
-                    primary: PaletteColor.primary,
-                    padding: const EdgeInsets.all(0)),
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    top: SpacingDimens.spacing8,
-                    bottom: SpacingDimens.spacing16,
-                    right: SpacingDimens.spacing8,
-                  ),
-                  decoration: BoxDecoration(
-                      color: PaletteColor.primarybg,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: Offset(0, 1), // changes position of shadow
-                        ),
-                      ]),
-                  padding: const EdgeInsets.all(SpacingDimens.spacing16),
-                  child: Icon(
-                    Icons.send,
+              Container(
+                margin: const EdgeInsets.only(
+                  top: SpacingDimens.spacing8,
+                  bottom: SpacingDimens.spacing16,
+                  right: SpacingDimens.spacing8,
+                ),
+                decoration: BoxDecoration(
                     color: _path != null
                         ? PaletteColor.primary
+                        : PaletteColor.primarybg,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.4),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(0, 1), // changes position of shadow
+                      ),
+                    ]),
+                padding: const EdgeInsets.all(SpacingDimens.spacing16),
+                child: GestureDetector(
+                  onTap: () {
+                    if (_downloadAudio) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => DialogDelete(
+                          content: "This will delete the recorded audio.",
+                          onPressedFunction: () {},
+                        ),
+                      );
+                    } else if(_path != null) {
+                      sendFile();
+                      setState(() {
+                        _downloadAudio = true;
+                      });
+                    }
+                  },
+                  child: Icon(
+                    _downloadAudio ? Icons.delete : Icons.send,
+                    color: _path != null
+                        ? PaletteColor.primarybg
                         : PaletteColor.grey80,
                   ),
                 ),
@@ -675,7 +689,11 @@ class _PageOneState extends State<HalamanPage> {
 
       if (path != null) {
         await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
-        _path = path;
+
+        setState(() {
+          _downloadAudio = true;
+          _path = path;
+        });
       }
     } catch (e) {
       // print("$e");

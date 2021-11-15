@@ -3,13 +3,11 @@ import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/material.dart';
 
-class DialogConfirmation extends StatelessWidget {
-  final String title;
+class DialogDelete extends StatelessWidget {
   final String content;
   final Function onPressedFunction;
 
-  DialogConfirmation({
-    required this.title,
+  const DialogDelete({
     required this.content,
     required this.onPressedFunction,
   });
@@ -28,6 +26,39 @@ class DialogConfirmation extends StatelessWidget {
           ),
         ),
         elevation: 5,
+        title: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.all(
+                SpacingDimens.spacing12,
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: PaletteColor.red.withOpacity(0.8),
+              ),
+              child: Icon(
+                // IconComponent.close,
+                Icons.delete_outline,
+                size: 28,
+                color: PaletteColor.primarybg,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: SpacingDimens.spacing16,
+                bottom: SpacingDimens.spacing4,
+              ),
+              child: Text(
+                'Delete!',
+                style: TypographyStyle.subtitle1.merge(
+                  TextStyle(
+                    color: PaletteColor.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
         content: Container(
           width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(SpacingDimens.spacing24),
@@ -39,17 +70,6 @@ class DialogConfirmation extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                title,
-                style: TypographyStyle.subtitle1.merge(
-                  TextStyle(
-                    color: PaletteColor.black,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 22,
-              ),
               Text(
                 content,
                 style: TypographyStyle.paragraph.merge(
@@ -72,7 +92,7 @@ class DialogConfirmation extends StatelessWidget {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
-                          side: BorderSide(color: PaletteColor.primary),
+                          side: BorderSide(color: PaletteColor.primary.withOpacity(0.5)),
                         ),
                       ),
                       onPressed: () {
@@ -92,7 +112,7 @@ class DialogConfirmation extends StatelessWidget {
                     width: MediaQuery.of(context).size.width / 3.2,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary: PaletteColor.primary,
+                        primary: PaletteColor.red,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
