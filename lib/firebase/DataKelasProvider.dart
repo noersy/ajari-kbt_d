@@ -8,98 +8,74 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DataKelasProvider extends ChangeNotifier {
+  Kelas? dataKelas;
+  User? user;
+
   static Future<String> createKelas({
     required namaKelas,
     required User user,
   }) async {
-    String _code = FirebaseReference.getRandomString(5);
-    DocumentReference documentReferencerKelas =
-        FirebaseReference.kelas.doc(_code);
-    DocumentReference documentReferencerUser =
-        FirebaseReference.user.doc(user.uid);
+    try {
+      String _code = FirebaseReference.getRandomString(5);
 
-    Map<String, dynamic> data = <String, dynamic>{
-      "nama": namaKelas,
-      "pengajar": user.displayName,
-      "pengajar_id": user.uid,
-      "jumlah_santri": 0,
-      "kelas_id": _code
-    };
+      Map<String, dynamic> dataKelas = <String, dynamic>{
+        "nama": namaKelas,
+        "pengajar": user.displayName,
+        "pengajar_id": user.uid,
+        "jumlah_santri": 0,
+        "kelas_id": _code
+      };
 
-    Map<String, dynamic> data2 = <String, dynamic>{"code_kelas": _code};
+      Map<String, dynamic> dataUser = <String, dynamic>{"code_kelas": _code};
 
-    await documentReferencerUser
-        .update(data2)
-        .whenComplete(() => print("data code class update to the profile user"))
-        .catchError((e) => print(e));
+      await FirebaseReference.getKelas(_code).update(dataUser);
+      await FirebaseReference.getUser(user.uid).set(dataKelas);
 
-    await documentReferencerKelas
-        .set(data)
-        .whenComplete(() => print("data kelas added to the database"))
-        .catchError((e) => print(e));
-    return _code;
+      print("createKelas: Success");
+      return _code;
+    } catch (e) {
+      print("createKelas: Error");
+      return "-";
+    }
   }
 
   static Future<String> joinKelas({
     required codeKelas,
     required User user,
   }) async {
-    DocumentReference documentReferencerUser =
-        FirebaseReference.user.doc(user.uid);
-    DocumentReference documentReferencerKelas =
-        FirebaseReference.kelas.doc(codeKelas);
+    try {
+      var kelas = await FirebaseReference.getKelas(codeKelas).get();
 
-    DocumentReference documentReferencerProfileinKelas = FirebaseReference.kelas
-        .doc(codeKelas)
-        .collection('santri')
-        .doc(user.uid);
+      Map<String, dynamic> newDataUser = <String, dynamic>{
+        "code_kelas": codeKelas,
+      };
 
-    Map<String, dynamic> data2 = <String, dynamic>{
-      "code_kelas": codeKelas,
-    };
+      Map<String, dynamic> newDataKelas = <String, dynamic>{
+        "jumlah_santri": kelas.get('jumlah_santri') + 1
+      };
 
-    DocumentSnapshot santri = await documentReferencerKelas.get();
-    Map<String, dynamic> data3 = <String, dynamic>{
-      "jumlah_santri": santri.get('jumlah_santri') + 1
-    };
+      Map<String, dynamic> newUserInKelas = <String, dynamic>{
+        "uid": user.uid,
+        'name': user.displayName,
+        'number': user.phoneNumber,
+        'email': user.email,
+        'photo': user.photoURL
+      };
 
-    Map<String, dynamic> data = <String, dynamic>{
-      "uid": user.uid,
-      'name': user.displayName,
-      'number': user.phoneNumber,
-      'email': user.email,
-      'photo': user.photoURL
-    };
+      var dataKelas = await FirebaseReference.kelas.doc(codeKelas).get();
+      if (!dataKelas.exists) throw Exception("Error");
 
-    bool kelasExist = false;
-    await FirebaseReference.kelas.doc(codeKelas).get().then((value) => {
-          if (value.exists)
-            {
-              kelasExist = true,
-            }
-        });
+      await FirebaseReference.getUserInKelas(codeKelas, user.uid)
+          .set(newUserInKelas);
+      await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
+      await FirebaseReference.getUser(user.uid).update(newDataUser);
 
-    if (kelasExist) {
-      await documentReferencerProfileinKelas
-          .set(data)
-          .whenComplete(() => print("berhasil add user to kelas"))
-          .catchError((e) => print(e));
-
-      await documentReferencerKelas
-          .update(data3)
-          .whenComplete(() => print("increase santri amount "))
-          .catchError((e) => print(e));
-
-      await documentReferencerUser
-          .update(data2)
-          .whenComplete(
-              () => print("data code class update to the profile user"))
-          .catchError((e) => print(e));
-
+      print("joinKelas: Success");
       return codeKelas;
+    } catch (e) {
+      print("joinKelas: Error");
+      return "-";
     }
-
-    return 'Gagal';
   }
 
   static Future<void> sendMessage({
@@ -110,72 +86,60 @@ class DataKelasProvider extends ChangeNotifier {
     required message,
     required role,
   }) async {
-    String _meesageID = FirebaseReference.getRandomString(22);
+    try {
+      String _messageId = FirebaseReference.getRandomString(22);
 
-    DocumentReference documentReference = FirebaseReference.kelas
-        .doc(codeKelas)
-        .collection('santri')
-        .doc(uid)
-        .collection("jilid" + nomorJilid)
-        .doc('halaman' + nomorHalaman)
-        .collection('message')
-        .doc(_meesageID);
+      Map<String, dynamic> data = <String, dynamic>{
+        "message": message,
+        "role": role,
+        "dateTime": DateTime.now()
+      };
 
-    Map<String, dynamic> data = <String, dynamic>{
-      "message": message,
-      "role": role,
-      "dateTime": DateTime.now()
-    };
+      await FirebaseReference.getMassageUser(
+        codeKelas,
+        uid,
+        nomorJilid,
+        nomorHalaman,
+        _messageId,
+      ).set(data);
 
-    await documentReference
-        .set(data)
-        .whenComplete(() => print("data kelas added to the database"))
-        .catchError((e) => print(e));
+      print("sendMessage: Success");
+    } catch (e) {
+      print("sendMessage: Error");
+    }
   }
 
-  static Future<Kelas?> getKelas({required String? codeKelas}) async {
-    if (codeKelas!.isEmpty) {
-      print('Failed get kelas');
-      return null;
-    }
+  static Future<Kelas?> getKelas({required String codeKelas}) async {
+    try {
+      var data = await FirebaseReference.getKelas(codeKelas).get();
 
-    DocumentReference documentReferencer =
-        FirebaseReference.kelas.doc(codeKelas);
-    DocumentSnapshot data = await documentReferencer.get();
-    Kelas? kelas;
+      if (!data.exists) throw throw Exception("Error");
 
-    if (data.data() != null) {
-      kelas = kelasFromJson(jsonEncode(data.data()));
+      Kelas kelas = kelasFromJson(jsonEncode(data.data()));
       globals.Set.kls(kelas);
-      print('Success get kelas');
-    } else {
-      print('Failed get kelas');
-      kelas = null;
-    }
 
-    return kelas;
+      print("getKelas: Success");
+      return kelas;
+    } catch (e) {
+      print("getKelas: Error");
+    }
   }
 
   Stream<QuerySnapshot> getSantri({required codeKelas}) {
-    CollectionReference documentReferencer =
-        FirebaseReference.kelas.doc(codeKelas).collection('santri');
-    return documentReferencer.snapshots();
+    return FirebaseReference.getKelas(codeKelas)
+        .collection('santri')
+        .snapshots();
   }
 
-  Stream<QuerySnapshot> getMassage(
-      {required uid,
-      required codeKelas,
-      required nomorJilid,
-      required nomorHalaman}) {
-    CollectionReference collectionReference = FirebaseReference.kelas
-        .doc(codeKelas)
-        .collection('santri')
-        .doc(uid)
-        .collection("jilid" + nomorJilid)
-        .doc('halaman' + nomorHalaman)
-        .collection('message');
-
-    return collectionReference
+  Stream<QuerySnapshot> getMassage({
+    required uid,
+    required codeKelas,
+    required nomorJilid,
+    required nomorHalaman,
+  }) {
+    return FirebaseReference.getHalaman(
+            codeKelas, uid, nomorJilid, nomorHalaman)
+        .collection('message')
         .orderBy("dateTime", descending: false)
         .snapshots();
   }
@@ -185,13 +149,9 @@ class DataKelasProvider extends ChangeNotifier {
     required codeKelas,
     required nomorJilid,
   }) {
-    CollectionReference collectionReference = FirebaseReference.kelas
-        .doc(codeKelas)
-        .collection('santri')
-        .doc(uid)
-        .collection("jilid" + nomorJilid);
-
-    return collectionReference.snapshots();
+    return FirebaseReference.getUserInKelas(codeKelas, uid)
+        .collection("jilid" + nomorJilid)
+        .snapshots();
   }
 
   static Future<void> setGrade({
@@ -201,49 +161,43 @@ class DataKelasProvider extends ChangeNotifier {
     required nomorJilid,
     required nomorHalaman,
   }) async {
-    DocumentReference documentReference = FirebaseReference.kelas
-        .doc(codeKelas)
-        .collection('santri')
-        .doc(uid)
-        .collection("jilid" + nomorJilid)
-        .doc('halaman' + nomorHalaman);
+    try {
+      Map<String, dynamic> data = {'grade': grade, 'halaman': nomorHalaman};
 
-    print(documentReference);
+      await FirebaseReference.getHalaman(
+        codeKelas,
+        uid,
+        nomorJilid,
+        nomorHalaman,
+      ).set(data);
 
-    Map<String, dynamic> data = {'grade': grade, 'halaman': nomorHalaman};
-
-    await documentReference
-        .set(data)
-        .whenComplete(() => print("grade added to the database"))
-        .catchError((e) => print(e));
+      print("setGrade: Success");
+    } catch (e) {
+      print("setGrade: Error");
+    }
   }
 
   static Future<int> createAbsen({
     required DateTime date,
   }) async {
     try {
-      DocumentReference documentReferencer = FirebaseReference.kelas
-          .doc(globals.Get.kls().kelasId)
-          .collection("absen")
-          .doc("$date");
-
       Map<String, dynamic> data = {"datetime": date};
 
-      await documentReferencer.set(data);
+      await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date)
+          .set(data);
+
+      print("createAbsen: Success");
     } catch (e) {
+      print("createAbsen: Error");
       return 400;
     }
     return 200;
   }
 
   Stream<QuerySnapshot> getsAbsen() {
-    try {
-      CollectionReference _collectionRef = FirebaseReference.kelas
-          .doc(globals.Get.kls().kelasId)
-          .collection("absen");
-      return _collectionRef.snapshots();
-    } catch (e) {
-      return Stream.error("error");
-    }
+    return FirebaseReference.kelas
+        .doc(globals.Get.kls().kelasId)
+        .collection("absen")
+        .snapshots();
   }
 }
