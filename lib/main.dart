@@ -1,7 +1,7 @@
-import 'package:ajari/firebase/KelasProvider.dart';
-import 'package:ajari/firebase/ProfileProvider.dart';
-import 'package:ajari/theme/PaletteColor.dart';
-import 'package:ajari/view/SplashScreenPage/SplashScreenPage.dart';
+import 'package:ajari/firebase/kelas_provider.dart';
+import 'package:ajari/firebase/profile_provider.dart';
+import 'package:ajari/theme/palette_color.dart';
+import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

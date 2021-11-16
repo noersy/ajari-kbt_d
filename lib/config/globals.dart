@@ -1,7 +1,7 @@
 library ajari.globals;
 
-import 'package:ajari/model/Kelas.dart';
-import 'package:ajari/model/Profile.dart';
+import 'package:ajari/model/kelas.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 late User? _user;

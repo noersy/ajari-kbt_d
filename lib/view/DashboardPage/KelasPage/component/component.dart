@@ -1,6 +1,6 @@
 
 
-import 'package:ajari/theme/PaletteColor.dart';
+import 'package:ajari/theme/palette_color.dart';
 import 'package:flutter/material.dart';
 
 Widget dateCard({hari, tgl, color, onTap}) {

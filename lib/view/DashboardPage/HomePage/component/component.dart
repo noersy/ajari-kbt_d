@@ -1,5 +1,5 @@
 
-import 'package:ajari/theme/SpacingDimens.dart';
+import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:flutter/material.dart';
 
 Widget cardStry({
