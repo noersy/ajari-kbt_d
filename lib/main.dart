@@ -1,36 +1,33 @@
-import 'package:ajari/firebase/DataKelasProvider.dart';
-import 'package:ajari/firebase/DataProfileProvider.dart';
-import 'package:ajari/firebase/DatabaseProvider.dart';
-import 'package:ajari/view/SplashScreenPage/SplashScreenPage.dart';
+import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/theme/palette_color.dart';
+import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => DatabaseProvider(),
+          create: (_) => ProfileProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => DataProfileProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => DataKelasProvider(),
+          create: (_) => KelasProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
+        color: PaletteColor.primary,
         debugShowCheckedModeBanner: false,
         title: 'Ajari',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
         home: SplashScreenPage(),
       ),
     );
