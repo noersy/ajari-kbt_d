@@ -11,6 +11,8 @@ import 'package:ajari/view/DashboardPage/KelasPage/component/CreateKelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/JoinKelas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jitsi_meet/feature_flag/feature_flag.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
 
 import 'RoomPage/RoomPage.dart';
 import 'component/component.dart';
@@ -381,10 +383,11 @@ class _ClassPageState extends State<ClassPage> {
                                           ),
                                           padding: const EdgeInsets.all(0)),
                                       onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    RoomPage()));
+                                        _joinMeeting();
+                                        // Navigator.of(context).push(
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             RoomPage()));
                                       },
                                       child: Row(
                                         mainAxisAlignment:
@@ -518,5 +521,26 @@ class _ClassPageState extends State<ClassPage> {
               ],
             ),
     );
+  }
+
+  _joinMeeting() async {
+    try {
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution.MD_RESOLUTION; // Limit video resolution to 360p
+
+      var options = JitsiMeetingOptions(room: 'myroom')
+        ..serverURL = "https://meet.jit.si/myroom"
+        ..subject = "Meeting Test"
+        ..userDisplayName = "${globals.Get.usr().displayName}"
+        ..userEmail = "myemail@email.com"
+        ..userAvatarURL = "${globals.Get.usr().photoURL}" // or .png
+        ..audioMuted = true
+        ..videoMuted = true;
+
+      await JitsiMeet.joinMeeting(options);
+    } catch (error) {
+      debugPrint("erhttps://nhentai.net/g/355004/33/ror: $error");
+    }
   }
 }

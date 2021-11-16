@@ -7,6 +7,7 @@ import 'package:ajari/component/Dialog/DialogDelete.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/MessageDialog.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/componen/NilaiDialog.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -395,7 +396,7 @@ class _PageOneState extends State<HalamanPage> {
                     }
                   },
                   child: Icon(
-                    _downloadAudio ? Icons.delete : Icons.send,
+                    _downloadAudio ? Icons.delete : CostumeIcons.upload_cloud_outline,
                     color: _path != null
                         ? PaletteColor.primarybg
                         : PaletteColor.grey80,

@@ -3,6 +3,7 @@ import 'package:ajari/model/Kelas.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/StoryPage.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/StudensPage.dart';
 import 'package:flutter/material.dart';
@@ -137,9 +138,14 @@ class _ViewUstazState extends State<ViewUstaz> {
                         bottom: SpacingDimens.spacing12),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF6EEA91), Color(0xFF008165)],
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Color(0xFF008165),
+                            Color(0xFF22997B),
+                            Color(0xFF3DAD8A),
+                            Color(0xFF6EEA91),
+                          ],
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: Stack(
@@ -235,13 +241,29 @@ class _ViewUstazState extends State<ViewUstaz> {
             ),
           ],
         ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                child: InkWell(
-                  onTap: () {
+        SizedBox(height: SpacingDimens.spacing8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: SpacingDimens.spacing4,
+                  left: SpacingDimens.spacing16,
+                  right: SpacingDimens.spacing8,
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    primary: PaletteColor.primarybg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    side: BorderSide(
+                      color: PaletteColor.grey80.withOpacity(0.08),
+                    ),
+                  ),
+                  onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => StudensPage(),
@@ -251,7 +273,6 @@ class _ViewUstazState extends State<ViewUstaz> {
                   child: Container(
                     alignment: Alignment.center,
                     height: 65,
-                    width: 150,
                     child: Row(
                       children: [
                         Container(
@@ -262,7 +283,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                               color: PaletteColor.primary.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(100)),
                           child: Icon(
-                            Icons.book,
+                            CostumeIcons.holy_quran,
                             color: PaletteColor.primary,
                           ),
                         ),
@@ -293,19 +314,32 @@ class _ViewUstazState extends State<ViewUstaz> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: SpacingDimens.spacing12,
-              ),
-              Card(
-                child: InkWell(
-                  onTap: () {
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: SpacingDimens.spacing4,
+                  right: SpacingDimens.spacing16,
+                  left: SpacingDimens.spacing8,
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    primary: PaletteColor.primarybg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    side: BorderSide(
+                      color: PaletteColor.grey80.withOpacity(0.08),
+                    ),
+                  ),
+                  onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => StoryPage()));
                   },
                   child: Container(
                     alignment: Alignment.center,
                     height: 65,
-                    width: 150,
                     child: Row(
                       children: [
                         Container(
@@ -350,8 +384,8 @@ class _ViewUstazState extends State<ViewUstaz> {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );

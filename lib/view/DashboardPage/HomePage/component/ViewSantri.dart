@@ -1,6 +1,7 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
+import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadBottomSheetDialog/ReadBottomSheetDialog.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiIbrahimPage.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiMusaPage.dart';
@@ -132,97 +133,105 @@ class ViewSantri extends StatelessWidget {
                     height: 130,
                     alignment: Alignment.bottomRight,
                     margin: const EdgeInsets.only(
-                        top: SpacingDimens.spacing16,
-                        left: SpacingDimens.spacing16,
-                        right: SpacingDimens.spacing16,
-                        bottom: SpacingDimens.spacing12),
-                    decoration: BoxDecoration(
+                      top: SpacingDimens.spacing16,
+                      left: SpacingDimens.spacing16,
+                      right: SpacingDimens.spacing16,
+                      bottom: SpacingDimens.spacing12,
+                    ),
+                    child: Ink(
+                      decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: [Color(0xFF6EEA91), Color(0xFF008165)],
+                          colors: [
+                            Color(0xFF008165),
+                            Color(0xFF22997B),
+                            Color(0xFF3DAD8A),
+                            Color(0xFF6EEA91),
+                          ],
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            '-',
-                          ),
-                          height: 100,
-                          alignment: Alignment.bottomRight,
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            top: SpacingDimens.spacing16,
-                          ),
-                          height: 130,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.menu_book_rounded,
-                                color: PaletteColor.primarybg,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: InkWell(
+                        onTap: () {},
+                        borderRadius: BorderRadius.circular(10),
+                        splashColor: PaletteColor.primary,
+                        highlightColor: PaletteColor.primary.withOpacity(0.2),
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                              child: Image.asset(
+                                'assets/images/nabi_musa.png',
                               ),
-                              SizedBox(
-                                width: 8,
+                              height: 100,
+                              alignment: Alignment.bottomRight,
+                            ),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              margin: const EdgeInsets.only(
+                                left: SpacingDimens.spacing12,
+                                top: SpacingDimens.spacing16,
                               ),
-                              Text(
-                                "Last Read",
-                                style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                              height: 130,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    CostumeIcons.book,
+                                    color: PaletteColor.primarybg,
+                                  ),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    "Last Read",
+                                    style: TypographyStyle.subtitle2.merge(
+                                        TextStyle(
+                                            color: PaletteColor.primarybg)),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            top: SpacingDimens.spacing16,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Jilid",
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              margin: const EdgeInsets.only(
+                                left: SpacingDimens.spacing12,
+                                top: SpacingDimens.spacing16,
+                              ),
+                              child: Text(
+                                "Kisah Nabi Musa",
                                 style: TypographyStyle.subtitle1.merge(
                                     TextStyle(color: PaletteColor.primarybg)),
                               ),
-                              Text(
-                                " ١",
-                                style: TypographyStyle.title.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                            ),
+                            Container(
+                              alignment: Alignment.bottomLeft,
+                              margin: const EdgeInsets.only(
+                                left: SpacingDimens.spacing12,
+                                bottom: SpacingDimens.spacing16,
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Halaman",
+                                    style: TypographyStyle.subtitle2.merge(
+                                      TextStyle(
+                                          color: PaletteColor.primarybg,
+                                          fontWeight: FontWeight.w100),
+                                    ),
+                                  ),
+                                  Text(
+                                    " 1",
+                                    style: TypographyStyle.subtitle2.merge(
+                                      TextStyle(color: PaletteColor.primarybg),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          alignment: Alignment.bottomLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            bottom: SpacingDimens.spacing16,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Halaman",
-                                style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(
-                                        color: PaletteColor.primarybg,
-                                        fontWeight: FontWeight.w100)),
-                              ),
-                              Text(
-                                " 1",
-                                style: TypographyStyle.subtitle2.merge(
-                                  TextStyle(color: PaletteColor.primarybg),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   )
                 ],
@@ -253,13 +262,28 @@ class ViewSantri extends StatelessWidget {
           ],
         ),
         SizedBox(height: SpacingDimens.spacing8),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Card(
-                child: InkWell(
-                  onTap: () {
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: SpacingDimens.spacing4,
+                  left: SpacingDimens.spacing16,
+                  right: SpacingDimens.spacing8,
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    primary: PaletteColor.primarybg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    side: BorderSide(
+                      color: PaletteColor.grey80.withOpacity(0.08),
+                    ),
+                  ),
+                  onPressed: () {
                     showModalBottomSheet(
                       context: context,
                       builder: (BuildContext context) => ReadBottomSheetDialog(
@@ -270,7 +294,6 @@ class ViewSantri extends StatelessWidget {
                   child: Container(
                     alignment: Alignment.center,
                     height: 65,
-                    width: 150,
                     child: Row(
                       children: [
                         Container(
@@ -281,7 +304,7 @@ class ViewSantri extends StatelessWidget {
                               color: PaletteColor.primary.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(100)),
                           child: Icon(
-                            Icons.book,
+                            CostumeIcons.holy_quran,
                             color: PaletteColor.primary,
                           ),
                         ),
@@ -312,28 +335,43 @@ class ViewSantri extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: SpacingDimens.spacing12,
-              ),
-              Card(
-                child: InkWell(
-                  onTap: () {
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: SpacingDimens.spacing4,
+                  right: SpacingDimens.spacing16,
+                  left: SpacingDimens.spacing8,
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 1,
+                    primary: PaletteColor.primarybg,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
+                    side: BorderSide(
+                      color: PaletteColor.grey80.withOpacity(0.08),
+                    ),
+                  ),
+                  onPressed: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => StoryPage()));
+                      MaterialPageRoute(builder: (context) => StoryPage()),
+                    );
                   },
                   child: Container(
-                    alignment: Alignment.center,
                     height: 65,
-                    width: 150,
+                    alignment: Alignment.center,
                     child: Row(
                       children: [
                         Container(
                           height: 40,
                           width: 40,
-                          margin: const EdgeInsets.all(SpacingDimens.spacing8),
                           decoration: BoxDecoration(
                               color: PaletteColor.primary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(100)),
+                              borderRadius: BorderRadius.circular(
+                                100,
+                              )),
                           child: Icon(
                             Icons.collections_bookmark_sharp,
                             color: PaletteColor.primary,
@@ -369,8 +407,8 @@ class ViewSantri extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         Container(
           margin: const EdgeInsets.only(

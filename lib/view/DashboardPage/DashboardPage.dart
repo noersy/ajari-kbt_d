@@ -4,6 +4,7 @@ import 'package:ajari/config/FirebaseReference.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
+import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/ClassPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,15 +31,15 @@ class _DashboardPageState extends State<DashboardPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(CostumeIcons.home_outline, size: 20),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.schedule),
+            icon: Icon(CostumeIcons.calendar_outlilne, size: 20),
             label: 'Class',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(Icons.person_outlined),
             label: 'Profile',
           ),
         ],

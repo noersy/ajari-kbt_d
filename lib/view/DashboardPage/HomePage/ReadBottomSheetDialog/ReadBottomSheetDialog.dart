@@ -30,7 +30,6 @@ class ReadBottomSheetDialog extends StatelessWidget {
           height: 280.0,
           padding: EdgeInsets.symmetric(
             horizontal: SpacingDimens.spacing24,
-            vertical: SpacingDimens.spacing16,
           ),
           color: PaletteColor.primarybg,
           child: Column(
@@ -38,6 +37,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
               Container(
                 height: 5,
                 width: 55,
+                margin: const EdgeInsets.only(top: SpacingDimens.spacing24),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: PaletteColor.grey60,
