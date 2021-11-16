@@ -1,6 +1,5 @@
-import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/model/profile.dart';
+import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -17,13 +16,12 @@ class UserBottomSheetDialog extends StatelessWidget {
 
   UserBottomSheetDialog({Key? key, required this.ctx}) : super(key: key);
 
-  final User _user = globals.Get.usr();
+  final User? _user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
-
-    final Profile? _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
-
+    final Profile? _profile =
+        Provider.of<ProfileProvider>(context, listen: false).profile;
 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -56,7 +54,9 @@ class UserBottomSheetDialog extends StatelessWidget {
                       width: 65.0,
                       child: CircleAvatar(
                         backgroundColor: PaletteColor.grey40,
-                        backgroundImage: NetworkImage(_user.photoURL!),
+                        backgroundImage: _user != null
+                            ? NetworkImage(_user!.photoURL!)
+                            : null,
                       ),
                     ),
                     Container(
@@ -67,7 +67,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${_user.displayName}",
+                            _user?.displayName ?? "",
                             style: TypographyStyle.subtitle2,
                           ),
                           const SizedBox(
@@ -106,14 +106,16 @@ class UserBottomSheetDialog extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(ctx).push(
-                    routeTransition(
-                      ProfilePage(
-                        user: _user,
-                        role: _profile.role,
+                  if (_user != null) {
+                    Navigator.of(ctx).push(
+                      routeTransition(
+                        ProfilePage(
+                          user: _user!,
+                          role: _profile.role,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: actionBottomSheet(
                   icon: Icons.person,

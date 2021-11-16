@@ -1,5 +1,4 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -104,7 +103,7 @@ class _RegisterPage extends State<RegisterPage> {
       role: _character == SingingCharacter.santri ? "Santri" : "Pengajar",
     );
     await Provider.of<ProfileProvider>(context, listen: false)
-        .getProfile(userUid: globals.Get.usr().uid);
+        .getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

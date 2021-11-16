@@ -1,4 +1,3 @@
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/model/kelas.dart';
@@ -11,6 +10,7 @@ import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_page.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/studen_listpage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/create_kelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/join_kelas.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
@@ -42,13 +42,8 @@ class _ClassPageState extends State<ClassPage> {
   Profile _profile = Profile.blankProfile();
   int _index = 0;
   int _indexCurret = 0;
-  Kelas _kelas = Kelas(
-    pengajarId: "-",
-    nama: "-",
-    jumlahSantri: 0,
-    kelasId: "-",
-    pengajar: "-",
-  );
+  User? user = FirebaseAuth.instance.currentUser;
+  Kelas _kelas = Kelas.blankKelas();
 
   void freshState({required Kelas value}) {
     setState(() {
@@ -91,11 +86,11 @@ class _ClassPageState extends State<ClassPage> {
       body: _kelas.kelasId == "-"
           ? _profile.role != "Pengajar"
               ? JoinKelas(freshState: freshState)
-              : CreateKelas(
+              : FirebaseAuth.instance.currentUser != null ? CreateKelas(
                   ctx: context,
-                  user: globals.Get.usr(),
+                  user: FirebaseAuth.instance.currentUser!,
                   freshState: freshState,
-                )
+                ) : null
           : Column(
               children: [
                 Padding(
@@ -532,6 +527,7 @@ class _ClassPageState extends State<ClassPage> {
 
   _joinMeeting() async {
     try {
+      var user = FirebaseAuth.instance.currentUser;
       FeatureFlag featureFlag = FeatureFlag();
       featureFlag.welcomePageEnabled = false;
       featureFlag.resolution = FeatureFlagVideoResolution
@@ -540,9 +536,9 @@ class _ClassPageState extends State<ClassPage> {
       var options = JitsiMeetingOptions(room: 'myroom')
         ..serverURL = "https://meet.jit.si/myroom"
         ..subject = "Meeting Test"
-        ..userDisplayName = "${globals.Get.usr().displayName}"
+        ..userDisplayName = user?.displayName ?? ""
         ..userEmail = "myemail@email.com"
-        ..userAvatarURL = "${globals.Get.usr().photoURL}" // or .png
+        ..userAvatarURL = user?.photoURL ?? "" // or .png
         ..audioMuted = true
         ..videoMuted = true;
 

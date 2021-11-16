@@ -1,10 +1,11 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,28 +19,33 @@ class JoinKelas extends StatefulWidget {
 }
 
 class _JoinKelasState extends State<JoinKelas> {
+  final _user = FirebaseAuth.instance.currentUser;
   TextEditingController santriInput = TextEditingController();
   String _codeKelas = '';
   bool _loading = false;
 
   void joinkelas(santriInput) async {
-    _loading = true;
+    try{
+      _loading = true;
 
-    await Provider.of<KelasProvider>(context, listen: false)
-        .joinKelas(codeKelas: santriInput.text, user: globals.Get.usr())
-        .then((value) {
-      _codeKelas = value;
-    });
+      if(_user == null) throw Exception("Not login yet.");
 
-    await Provider.of<ProfileProvider>(context, listen: false)
-        .getProfile(userUid: globals.Get.usr().uid);
-    await Provider.of<KelasProvider>(context, listen: false)
-        .getKelas(codeKelas: _codeKelas)
-        .then((value) {
+      await Provider.of<KelasProvider>(context, listen: false)
+          .joinKelas(codeKelas: santriInput.text, user: _user!)
+          .then((value) {
+        _codeKelas = value;
+      });
+
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!);
+      var value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
       widget.freshState(value: value);
-    });
 
-    _loading = false;
+      _loading = false;
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   @override

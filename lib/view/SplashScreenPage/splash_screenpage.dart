@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -10,6 +10,7 @@ import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:ajari/view/LoginPage/RegisterPage/register_page.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,16 +29,16 @@ class _SplashScreenState extends State<SplashScreenPage> {
 
   navigationPage() async {
     try {
-      var user = await AuthLogin.signInWithGoogle(context: context);
+      User? user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
 
-      var prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user.uid);
+      Profile? prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user.uid);
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: globals.Get.usr()),
+            builder: (context) => RegisterPage(user: user),
           ),
         );
       } else {
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
         );
       }
     } catch (e) {
-      if (globals.isUserNotNull) {
+      if (FirebaseAuth.instance.currentUser != null) {
         showDialog(
           context: context,
           builder: (context) {

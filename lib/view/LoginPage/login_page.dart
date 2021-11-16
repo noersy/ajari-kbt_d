@@ -1,14 +1,14 @@
 import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/providers/profile_provider.dart';
-import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/button_login_wgoogle.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -70,7 +70,8 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Container(
                         alignment: Alignment.topRight,
-                        padding: const EdgeInsets.only(top: SpacingDimens.spacing16),
+                        padding:
+                            const EdgeInsets.only(top: SpacingDimens.spacing16),
                         child: GestureDetector(
                           onTap: () {},
                           child: Text(
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await AuthLogin.signInWithGoogle(context: context);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: globals.Get.usr().uid);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
     } catch (e) {
       showDialog(
@@ -155,18 +156,16 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
 
-    if (_profile != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => RegisterPage(user: globals.Get.usr()),
-        ),
-      );
-    }
-
-    if (globals.isUserNotNull) {
+    if (FirebaseAuth.instance.currentUser != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const DashboardPage(),
+        ),
+      );
+    } else if (_profile != null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
         ),
       );
     } else {
