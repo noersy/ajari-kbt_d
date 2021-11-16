@@ -1,8 +1,9 @@
 import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/kelas_provider.dart';
-import 'package:ajari/firebase/profile_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -26,7 +27,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _nimFilter = TextEditingController();
   final TextEditingController _passwordFilter = TextEditingController();
+  Profile? _profile;
   bool isLoading = false;
+
+  @override
+  void initState() {
+    _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await AuthLogin.signInWithGoogle(context: context);
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: globals.Get.usr().uid);
-      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: globals.Get.prf().codeKelas);
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
     } catch (e) {
       showDialog(
         context: context,
@@ -147,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
 
-    if (globals.Get.prf().role == "-") {
+    if (_profile != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => RegisterPage(user: globals.Get.usr()),

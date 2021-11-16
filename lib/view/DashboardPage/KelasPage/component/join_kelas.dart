@@ -1,7 +1,7 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/kelas_provider.dart';
-import 'package:ajari/firebase/profile_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';

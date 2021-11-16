@@ -1,7 +1,5 @@
-import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
-import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/kelas_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/jilid_page.dart';
@@ -17,10 +15,12 @@ class StudensPage extends StatefulWidget {
 }
 
 class _StudensPageState extends State<StudensPage> {
-  final String _codeKelas = globals.Get.kls().kelasId;
-
   @override
   Widget build(BuildContext context) {
+
+    final String _codeKelas = context.read<KelasProvider>().kelas.kelasId;
+
+
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       // appBar: AppBarBack(ctx: context, title: "Santri"),

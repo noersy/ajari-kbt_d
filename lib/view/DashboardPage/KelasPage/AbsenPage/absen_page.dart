@@ -1,7 +1,6 @@
-import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/component/dialog/dialog_delete.dart';
-import 'package:ajari/firebase/kelas_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';

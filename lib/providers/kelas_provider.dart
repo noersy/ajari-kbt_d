@@ -1,15 +1,20 @@
 import 'dart:convert';
 
 import 'package:ajari/config/firebase_reference.dart';
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 class KelasProvider extends ChangeNotifier {
-  Kelas? dataKelas;
-  User? user;
+  Kelas _dataKelas = Kelas.blankKelas();
+
+  Kelas get kelas => _dataKelas;
+
+  void setKelas(kelas) {
+    _dataKelas = kelas;
+    notifyListeners();
+  }
 
   Future<String> createKelas({
     required namaKelas,
@@ -104,7 +109,6 @@ class KelasProvider extends ChangeNotifier {
         nomorHalaman,
         _messageId,
       ).set(data);
-
     } catch (e) {
       if (kDebugMode) {
         print("sendMessage: Error");
@@ -119,7 +123,7 @@ class KelasProvider extends ChangeNotifier {
       if (!data.exists) throw throw Exception("Error");
 
       Kelas kelas = kelasFromJson(jsonEncode(data.data()));
-      globals.Set.kls(kelas);
+      setKelas(kelas);
 
       return kelas;
     } catch (e) {
@@ -153,13 +157,14 @@ class KelasProvider extends ChangeNotifier {
     required codeKelas,
     required nomorJilid,
     required nomorHalaman,
-  }) async{
-    try{
+  }) async {
+    try {
       var data = await FirebaseReference.getHalaman(
-          codeKelas, uid, nomorJilid, nomorHalaman)
-          .collection('message').get();
+              codeKelas, uid, nomorJilid, nomorHalaman)
+          .collection('message')
+          .get();
       return data.size;
-    }catch(e){
+    } catch (e) {
       if (kDebugMode) {
         print(e);
       }
@@ -193,7 +198,6 @@ class KelasProvider extends ChangeNotifier {
         nomorJilid,
         nomorHalaman,
       ).set(data);
-
     } catch (e) {
       if (kDebugMode) {
         print("setGrade: Error");
@@ -201,15 +205,10 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createAbsen({
-    required DateTime date,
-  }) async {
+  Future<int> createAbsen({required DateTime date}) async {
     try {
       Map<String, dynamic> data = {"datetime": date};
-
-      await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date)
-          .set(data);
-
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).set(data);
     } catch (e) {
       if (kDebugMode) {
         print("createAbsen: Error");
@@ -223,8 +222,8 @@ class KelasProvider extends ChangeNotifier {
     required DateTime date,
   }) async {
     try {
-      await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date).delete();
-
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
+          .delete();
     } catch (e) {
       if (kDebugMode) {
         print("deleteAbsen: Error");
@@ -236,7 +235,7 @@ class KelasProvider extends ChangeNotifier {
 
   Stream<QuerySnapshot> getsAbsen() {
     return FirebaseReference.kelas
-        .doc(globals.Get.kls().kelasId)
+        .doc(_dataKelas.kelasId)
         .collection("absen")
         .orderBy("datetime", descending: false)
         .snapshots();

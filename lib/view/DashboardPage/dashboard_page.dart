@@ -1,8 +1,12 @@
 
+import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/kelas_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'HomePage/home_page.dart';
 import 'UserBottomSheetDialog/user_bottomsheet_dialog.dart';
@@ -19,7 +23,14 @@ class _DashboardPageState extends State<DashboardPage> {
   final PageController _pageController = PageController();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Profile _profile = context.read<ProfileProvider>().profile;
+
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       bottomNavigationBar: BottomNavigationBar(
@@ -46,7 +57,7 @@ class _DashboardPageState extends State<DashboardPage> {
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children:  [
-            HomePage(),
+            HomePage(role: _profile.role, username: FirebaseAuth.instance.currentUser?.displayName ?? ""),
             const ClassPage(),
           ],
         ),

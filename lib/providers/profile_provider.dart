@@ -2,12 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ajari/config/firebase_reference.dart';
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class ProfileProvider extends ChangeNotifier {
+  Profile _profile = Profile.blankProfile();
+  Profile get profile => _profile;
+
+  void setProfile(profile){
+    _profile = profile;
+    notifyListeners();
+  }
+
   Future<void> createProfile({
     required String userid,
     required String role,
@@ -36,7 +43,6 @@ class ProfileProvider extends ChangeNotifier {
       };
 
       await FirebaseReference.user.doc(userid).update(data);
-
     } catch (e) {
       if (kDebugMode) {
         print("updateProflie: Error");
@@ -53,7 +59,7 @@ class ProfileProvider extends ChangeNotifier {
       if (!data.exists) throw Exception("Error");
 
       Profile profile = profileFromJson(jsonEncode(data.data()));
-      globals.Set.prf(profile);
+      setProfile(profile);
 
       return profile;
     } catch (e) {

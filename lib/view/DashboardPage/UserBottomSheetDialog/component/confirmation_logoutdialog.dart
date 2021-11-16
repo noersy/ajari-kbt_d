@@ -1,4 +1,3 @@
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -128,8 +127,6 @@ class ConfirmationLogoutDialog extends StatelessWidget {
 
   void logOut(context) async {
     await AuthLogin.signOut(context: context);
-
-    globals.Set.clearAll();
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

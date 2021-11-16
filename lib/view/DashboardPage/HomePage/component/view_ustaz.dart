@@ -1,5 +1,5 @@
-import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/kelas.dart';
+import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -8,6 +8,7 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/DashboardPage/StudensPage/studens_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:provider/provider.dart';
 
 class ViewUstaz extends StatefulWidget {
   final PageController pageViewController;
@@ -21,22 +22,14 @@ class ViewUstaz extends StatefulWidget {
 }
 
 class _ViewUstazState extends State<ViewUstaz> {
-  Kelas _kelas = Kelas(
-    pengajarId: "pengajarId",
-    nama: "-",
-    jumlahSantri: 0,
-    kelasId: "kelasId",
-    pengajar: "pengajar",
-  );
 
-  @override
-  void initState() {
-    if (globals.isKelasNotNull) _kelas = globals.Get.kls();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    Kelas _kelas = context.read<KelasProvider>().kelas;
+
+
     return Column(
       children: [
         Column(

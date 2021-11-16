@@ -38,4 +38,6 @@ class Kelas {
     "kelas_id": kelasId,
     "pengajar": pengajar,
   };
+
+  static blankKelas() => Kelas(pengajarId: "-", nama: "-", jumlahSantri: 0, kelasId: "-", pengajar: "-");
 }

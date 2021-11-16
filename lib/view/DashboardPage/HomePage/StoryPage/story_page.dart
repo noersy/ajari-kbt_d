@@ -1,4 +1,4 @@
-import 'package:ajari/component/appbar/appbar_back.dart';
+import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_ibrahim_page.dart';
@@ -17,48 +17,44 @@ class _StoryPageState extends State<StoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      appBar: AppBarBack(
-        ctx: context,
-        title: "Halaman Story",
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView(
+      // appBar: AppBarBack(ctx: context, title: "Halaman Story"),
+      body: SilverAppBarBack(
+        barTitle: "Story",
+        body: GridView(
           physics: const BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
+          padding: const EdgeInsets.all(SpacingDimens.spacing8),
           children: [
             cardStry(
-              image: 'assets/images/nabi_ibrahim.png',
-              title: const Text(
-                "Kisah Nabi Ibrahim",
-                style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
-              ),
-              color: const Color(0xFF9F5A2A),
-              onTap: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const NabiIbrahimPage(),
-                  ),
-                );
-              }
-            ),
+                image: 'assets/images/nabi_ibrahim.png',
+                title: const Text(
+                  "Kisah Nabi Ibrahim",
+                  style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
+                ),
+                color: const Color(0xFF9F5A2A),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const NabiIbrahimPage(),
+                    ),
+                  );
+                }),
             cardStry(
-              image: 'assets/images/nabi_musa.png',
-              title: const Text(
-                "Kisah Nabi Musa",
-                style: TextStyle(color: Color(0xFF620101), fontSize: 16),
-              ),
-              color: const Color(0xFFF7EAC0),
-              onTap: (){
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const NabiMusaPage(),
-                  ),
-                );
-              }
-            ),
+                image: 'assets/images/nabi_musa.png',
+                title: const Text(
+                  "Kisah Nabi Musa",
+                  style: TextStyle(color: Color(0xFF620101), fontSize: 16),
+                ),
+                color: const Color(0xFFF7EAC0),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const NabiMusaPage(),
+                    ),
+                  );
+                }),
             cardStry(
               image: 'assets/images/nabi_nuh.png',
               title: const Text(
@@ -66,13 +62,13 @@ class _StoryPageState extends State<StoryPage> {
                 style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
               ),
               color: const Color(0xFF8DAA3C),
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => const NabiMusaPage(),
                   ),
                 );
-              }
+              },
             ),
           ],
         ),
@@ -90,7 +86,8 @@ class _StoryPageState extends State<StoryPage> {
         ),
         child: TextButton(
           style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+            padding:
+                MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
           ),
           onPressed: onTap,
           child: Stack(

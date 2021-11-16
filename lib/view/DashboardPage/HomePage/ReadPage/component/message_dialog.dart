@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:ajari/component/dialog/dialog_failed.dart';
-import 'package:ajari/firebase/kelas_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';

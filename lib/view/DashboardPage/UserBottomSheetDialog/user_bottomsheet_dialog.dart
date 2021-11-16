@@ -1,4 +1,5 @@
 import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -7,6 +8,7 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/ProfilePage/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'component/confirmation_logoutdialog.dart';
 
@@ -15,11 +17,14 @@ class UserBottomSheetDialog extends StatelessWidget {
 
   UserBottomSheetDialog({Key? key, required this.ctx}) : super(key: key);
 
-  final Profile _profile = globals.Get.prf();
   final User _user = globals.Get.usr();
 
   @override
   Widget build(BuildContext context) {
+
+    final Profile? _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
+
+
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
@@ -77,7 +82,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              _profile.role,
+                              _profile!.role,
                               style: TypographyStyle.subtitle2.merge(
                                 const TextStyle(
                                   color: PaletteColor.primarybg,

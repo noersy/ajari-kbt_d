@@ -26,4 +26,6 @@ class Profile {
     "role": role,
     "code_kelas": codeKelas,
   };
+
+  static blankProfile() => Profile(role: "-", codeKelas: "-");
 }

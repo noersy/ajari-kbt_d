@@ -1,4 +1,3 @@
-import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';

@@ -1,4 +1,6 @@
 import 'package:ajari/config/globals.dart' as globals;
+import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/route/route_transisition.dart';
@@ -12,11 +14,12 @@ import 'package:ajari/view/DashboardPage/KelasPage/component/join_kelas.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
+import 'package:provider/provider.dart';
 
 import 'component/component.dart';
 
 class ClassPage extends StatefulWidget {
-   const ClassPage({Key? key}) : super(key: key);
+  const ClassPage({Key? key}) : super(key: key);
 
   @override
   _ClassPageState createState() => _ClassPageState();
@@ -36,9 +39,9 @@ class _ClassPageState extends State<ClassPage> {
   ];
   final List<String> _listDate = [];
   final DateTime _dateTime = DateTime.now();
+  Profile _profile = Profile.blankProfile();
   int _index = 0;
   int _indexCurret = 0;
-  final Profile _profile = globals.Get.prf();
   Kelas _kelas = Kelas(
     pengajarId: "-",
     nama: "-",
@@ -55,8 +58,8 @@ class _ClassPageState extends State<ClassPage> {
 
   @override
   void initState() {
+    _profile = context.read<ProfileProvider>().profile;
     var weekDay = _dateTime.weekday;
-
     for (int i = 0; i <= 7; i++) {
       int _date = _dateTime.subtract(Duration(days: weekDay - i)).day;
       _listDate.add(_date.toString());
@@ -67,14 +70,14 @@ class _ClassPageState extends State<ClassPage> {
         _pageController = PageController(initialPage: i);
       }
     }
-
-    if (globals.isKelasNotNull) _kelas = globals.Get.kls();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    _kelas = context.read<KelasProvider>().kelas;
+
     return Scaffold(
       backgroundColor: PaletteColor.primarybg2,
       appBar: AppBar(
@@ -235,7 +238,8 @@ class _ClassPageState extends State<ClassPage> {
                                   alignment: Alignment.bottomLeft,
                                   child: Row(
                                     children: [
-                                      const SizedBox(width: SpacingDimens.spacing4),
+                                      const SizedBox(
+                                          width: SpacingDimens.spacing4),
                                       TextButton(
                                         style: TextButton.styleFrom(
                                             primary: PaletteColor.primary,
@@ -243,9 +247,14 @@ class _ClassPageState extends State<ClassPage> {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             )),
-                                        onPressed: () => Navigator.of(context)
-                                            .push(routeTransition(
-                                                StudenListPage())),
+                                        onPressed: () =>
+                                            Navigator.of(context).push(
+                                          routeTransition(
+                                            StudenListPage(
+                                              codeKelas: _profile.codeKelas,
+                                            ),
+                                          ),
+                                        ),
                                         child: Text(
                                           "Santri List",
                                           style:
@@ -280,7 +289,8 @@ class _ClassPageState extends State<ClassPage> {
                                         ),
                                         onPressed: () {
                                           Navigator.of(context).push(
-                                              routeTransition(const AbsenPage()));
+                                              routeTransition(
+                                                  const AbsenPage()));
                                         },
                                         child: Text(
                                           "Absen",
@@ -524,7 +534,8 @@ class _ClassPageState extends State<ClassPage> {
     try {
       FeatureFlag featureFlag = FeatureFlag();
       featureFlag.welcomePageEnabled = false;
-      featureFlag.resolution = FeatureFlagVideoResolution.MD_RESOLUTION; // Limit video resolution to 360p
+      featureFlag.resolution = FeatureFlagVideoResolution
+          .MD_RESOLUTION; // Limit video resolution to 360p
 
       var options = JitsiMeetingOptions(room: 'myroom')
         ..serverURL = "https://meet.jit.si/myroom"

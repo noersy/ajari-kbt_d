@@ -1,7 +1,6 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
-import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/firebase/kelas_provider.dart';
+import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -12,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StudenListPage extends StatelessWidget {
-  StudenListPage({Key? key}) : super(key: key);
+  final String codeKelas;
 
-  final String _codeKelas = globals.Get.prf().codeKelas;
+  const StudenListPage({Key? key, required this.codeKelas}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,7 @@ class StudenListPage extends StatelessWidget {
       body: SilverAppBarBack(
         barTitle: "Student List",
         body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context)
-              .getSantri(codeKelas: _codeKelas),
+          stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: codeKelas),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: Text("There is no expense"));
