@@ -20,7 +20,8 @@ class MessageDialog extends StatefulWidget {
   final String nomorJilid, nomorHalaman, uid, codeKelas, role;
   final bool isPlayed;
 
-  const MessageDialog({Key? key,
+  const MessageDialog({
+    Key? key,
     required this.homePageCtx,
     required this.sheetDialogCtx,
     required this.nomorJilid,
@@ -71,9 +72,7 @@ class _MessageDialogState extends State<MessageDialog> {
 
   void _downloadFileExample() async {
     try {
-      if (kDebugMode) {
-        print(await _checkPermission());
-      }
+      await _checkPermission();
 
       File downloadToFile =
           File('${_getFilePath()}audio_${widget.nomorHalaman}.m4a');
@@ -195,8 +194,8 @@ class _MessageDialogState extends State<MessageDialog> {
                                         .currentPosition,
                                     builder: (context,
                                         AsyncSnapshot<Duration> snapshot) {
-                                      Duration _data =
-                                          snapshot.data ?? const Duration(seconds: 0);
+                                      Duration _data = snapshot.data ??
+                                          const Duration(seconds: 0);
                                       String _time = "${twoDigits(
                                         _duartion.inMinutes.remainder(60) -
                                             _data.inMinutes,
@@ -226,8 +225,7 @@ class _MessageDialogState extends State<MessageDialog> {
                                               child: Icon(
                                                 !_play
                                                     ? Icons.play_circle_fill
-                                                    : Icons
-                                                        .pause_circle_outline_outlined,
+                                                    : Icons.pause_circle_outline_outlined,
                                               ),
                                             ),
                                           ),
@@ -246,7 +244,8 @@ class _MessageDialogState extends State<MessageDialog> {
                                                       const EdgeInsets.all(7),
                                                   child: Container(
                                                     height: 2,
-                                                    decoration: const BoxDecoration(
+                                                    decoration:
+                                                        const BoxDecoration(
                                                       color:
                                                           PaletteColor.grey80,
                                                     ),
@@ -286,18 +285,19 @@ class _MessageDialogState extends State<MessageDialog> {
                       ),
                       const SizedBox(height: 22),
                       StreamBuilder<QuerySnapshot>(
-                        stream: Provider.of<KelasProvider>(context)
-                            .getMassage(
-                                uid: widget.uid,
-                                codeKelas: widget.codeKelas,
-                                nomorJilid: widget.nomorJilid,
-                                nomorHalaman: widget.nomorHalaman),
+                        stream: Provider.of<KelasProvider>(context).getMassage(
+                            uid: widget.uid,
+                            codeKelas: widget.codeKelas,
+                            nomorJilid: widget.nomorJilid,
+                            nomorHalaman: widget.nomorHalaman),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return const Center(child: Text("Tidak ada pesan."));
+                            return const Center(
+                                child: Text("Tidak ada pesan."));
                           }
                           if (snapshot.data!.docChanges.isEmpty) {
-                            return const Center(child: Text("Tidak ada pesan."));
+                            return const Center(
+                                child: Text("Tidak ada pesan."));
                           }
                           return Expanded(
                             child: ListView(
@@ -499,7 +499,8 @@ class _MessageDialogState extends State<MessageDialog> {
                       onPressed: () {
                         if (_editingController.text.isEmpty) return;
 
-                        Provider.of<KelasProvider>(context, listen: false).sendMessage(
+                        Provider.of<KelasProvider>(context, listen: false)
+                            .sendMessage(
                           uid: widget.uid,
                           codeKelas: widget.codeKelas,
                           nomorJilid: widget.nomorJilid,

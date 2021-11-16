@@ -148,6 +148,25 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
+  static Future<int> fetchMassage({
+    required uid,
+    required codeKelas,
+    required nomorJilid,
+    required nomorHalaman,
+  }) async{
+    try{
+      var data = await FirebaseReference.getHalaman(
+          codeKelas, uid, nomorJilid, nomorHalaman)
+          .collection('message').get();
+      return data.size;
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return 0;
+  }
+
   Stream<QuerySnapshot> getGrade({
     required uid,
     required codeKelas,
