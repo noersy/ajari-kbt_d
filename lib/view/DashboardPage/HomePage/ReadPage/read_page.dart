@@ -40,7 +40,7 @@ class _ReadPageState extends State<ReadPage> {
       //   title: 'Jilid ${widget.nomor}',
       // ),
       body: SilverAppBarBack(
-        tittle: 'Jilid ${widget.nomor}',
+        barTitle: 'Jilid ${widget.nomor}',
         body: StreamBuilder<QuerySnapshot>(
             stream: Provider.of<KelasProvider>(context).getGrade(
               uid: widget.uid,

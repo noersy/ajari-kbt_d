@@ -1,4 +1,5 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
+import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/kelas_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -22,36 +23,40 @@ class _StudensPageState extends State<StudensPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      appBar: AppBarBack(ctx: context, title: "Santri"),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Provider.of<KelasProvider>(context)
-            .getSantri(codeKelas: _codeKelas),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: Text("There is no expense"));
-          }
-          return ListView(
-            children: snapshot.data!.docChanges
-                .map(
-                  (e) => _santriContainer(
-                    name: "${e.doc.get('name')}",
-                    imageUrl: e.doc.get('photo'),
-                    inTo: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => JilidPage(
-                            role: 'santri',
-                            uid: e.doc.get('uid'),
-                            codeKelas: _codeKelas,
+      // appBar: AppBarBack(ctx: context, title: "Santri"),
+      body: SilverAppBarBack(
+        barTitle: 'Santri',
+        body: StreamBuilder<QuerySnapshot>(
+          stream: Provider.of<KelasProvider>(context)
+              .getSantri(codeKelas: _codeKelas),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: Text("There is no expense"));
+            }
+            return ListView(
+              physics: const BouncingScrollPhysics(),
+              children: snapshot.data!.docChanges
+                  .map(
+                    (e) => _santriContainer(
+                      name: "${e.doc.get('name')}",
+                      imageUrl: e.doc.get('photo'),
+                      inTo: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => JilidPage(
+                              role: 'santri',
+                              uid: e.doc.get('uid'),
+                              codeKelas: _codeKelas,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-                .toList(),
-          );
-        },
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            );
+          },
+        ),
       ),
     );
   }

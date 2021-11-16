@@ -1,4 +1,5 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
+import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -20,30 +21,32 @@ class _StudensPageState extends State<JilidPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      appBar:
-      AppBarBack(ctx: context, title: "Jilid"),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: _page.length,
-          itemBuilder: (BuildContext context, int index) {
-            return _jilidContainer(
-              jilid: _page[index].arab,
-              text: _page[index].text,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ReadPage(
-                      nomor: "${index + 1}",
-                      uid: widget.uid,
+      // appBar: AppBarBack(ctx: context, title: "Jilid"),
+      body: SilverAppBarBack(
+        barTitle: "Jilid",
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _page.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _jilidContainer(
+                jilid: _page[index].arab,
+                text: _page[index].text,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReadPage(
+                        nomor: "${index + 1}",
+                        uid: widget.uid,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

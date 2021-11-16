@@ -1,4 +1,5 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
+import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/firebase/kelas_provider.dart';
 import 'package:ajari/route/route_transisition.dart';
@@ -19,41 +20,41 @@ class StudenListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      appBar: AppBarBack(
-        title: 'Student List',
-        ctx: context,
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Provider.of<KelasProvider>(context)
-            .getSantri(codeKelas: _codeKelas),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: Text("There is no expense"));
-          }
-          return SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: snapshot.data!.docChanges
-                  .map(
-                    (e) => santriContainer(
-                      name: e.doc.get('name'),
-                      imageUrl: e.doc.get('photo'),
-                      inTo: () => Navigator.of(context).push(
-                        routeTransition(
-                          SantriDetail(
-                            role: "Santri",
-                            name: e.doc.get('name'),
-                            email: e.doc.get('email'),
-                            photoURL: e.doc.get('photo'),
+      // appBar: AppBarBack(title: 'Student List', ctx: context),
+      body: SilverAppBarBack(
+        barTitle: "Student List",
+        body: StreamBuilder<QuerySnapshot>(
+          stream: Provider.of<KelasProvider>(context)
+              .getSantri(codeKelas: _codeKelas),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(child: Text("There is no expense"));
+            }
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: snapshot.data!.docChanges
+                    .map(
+                      (e) => santriContainer(
+                        name: e.doc.get('name'),
+                        imageUrl: e.doc.get('photo'),
+                        inTo: () => Navigator.of(context).push(
+                          routeTransition(
+                            SantriDetail(
+                              role: "Santri",
+                              name: e.doc.get('name'),
+                              email: e.doc.get('email'),
+                              photoURL: e.doc.get('photo'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          );
-        },
+                    )
+                    .toList(),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
@@ -117,7 +118,8 @@ class StudenListPage extends StatelessWidget {
           child: TextButton(
             onPressed: inTo,
             style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
+              padding: MaterialStateProperty.all<EdgeInsets>(
+                  const EdgeInsets.all(0)),
             ),
             child: const Icon(
               Icons.arrow_forward,
@@ -347,4 +349,3 @@ Widget jilidContainer({text, jilid}) {
     ),
   );
 }
-

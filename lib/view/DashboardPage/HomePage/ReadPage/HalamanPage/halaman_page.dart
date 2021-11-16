@@ -34,7 +34,7 @@ class HalamanPage extends StatelessWidget {
       //   title: "Halaman ${nomorHalaman}",
       // ),
       body: SilverAppBarBack(
-        tittle: "Halaman $nomorHalaman",
+        barTitle: "Halaman $nomorHalaman",
         body: _content(),
       ),
     );

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class SilverAppBarBack extends StatelessWidget {
   final Widget body;
-  final String tittle;
+  final String barTitle;
 
-  const SilverAppBarBack({Key? key, required this.body,required this.tittle}) : super(key: key);
+  const SilverAppBarBack({Key? key, required this.body,required this.barTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class SilverAppBarBack extends StatelessWidget {
             SliverAppBar(
               backgroundColor: PaletteColor.primarybg,
               iconTheme:  const IconThemeData(color: PaletteColor.primary),
-              title: Text(tittle, style: TypographyStyle.subtitle1),
+              title: Text(barTitle, style: TypographyStyle.subtitle1),
               pinned: false,
               floating: true,
               forceElevated: innerBoxIsScrolled,
