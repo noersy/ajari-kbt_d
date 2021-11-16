@@ -18,9 +18,12 @@ class KelasProvider extends ChangeNotifier {
 
   Future<String> createKelas({
     required namaKelas,
-    required User user,
+    required User? user,
   }) async {
     try {
+
+      if (user == null) throw Exception("user null");
+
       String _code = FirebaseReference.getRandomString(5);
 
       Map<String, dynamic> dataKelas = <String, dynamic>{
@@ -33,13 +36,13 @@ class KelasProvider extends ChangeNotifier {
 
       Map<String, dynamic> dataUser = <String, dynamic>{"code_kelas": _code};
 
-      await FirebaseReference.getKelas(_code).update(dataUser);
-      await FirebaseReference.getUser(user.uid).set(dataKelas);
+      await FirebaseReference.getKelas(_code).set(dataKelas);
+      await FirebaseReference.getUser(user.uid).update(dataUser);
 
       return _code;
-    } catch (e) {
+    } catch (e, r) {
       if (kDebugMode) {
-        print("createKelas: Error");
+        print("createKelas: Error\n $r");
       }
       return "-";
     }

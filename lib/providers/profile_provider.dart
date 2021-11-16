@@ -56,15 +56,14 @@ class ProfileProvider extends ChangeNotifier {
 
       DocumentSnapshot data = await FirebaseReference.user.doc(userUid).get();
 
-      if (!data.exists) throw Exception("Error");
-
       Profile profile = profileFromJson(jsonEncode(data.data()));
       setProfile(profile);
 
       return profile;
-    } catch (e) {
+    } catch (e, r) {
       if (kDebugMode) {
-        print("getProfile: Error");
+        print("getProfile: Error : $e");
+        print("$r");
       }
     }
   }

@@ -1,9 +1,14 @@
+import 'package:ajari/model/kelas.dart';
+import 'package:ajari/model/profile.dart';
+import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ConfirmationLogoutDialog extends StatelessWidget {
   final BuildContext homePageCtx, sheetDialogCtx;
@@ -125,8 +130,10 @@ class ConfirmationLogoutDialog extends StatelessWidget {
     );
   }
 
-  void logOut(context) async {
+  void logOut(BuildContext context) async {
     await AuthLogin.signOut(context: context);
+    context.read<KelasProvider>().setKelas(Kelas.blankKelas());
+    context.read<ProfileProvider>().setProfile(Profile.blankProfile());
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(

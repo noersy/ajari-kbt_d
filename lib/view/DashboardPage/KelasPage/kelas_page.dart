@@ -86,11 +86,10 @@ class _ClassPageState extends State<ClassPage> {
       body: _kelas.kelasId == "-"
           ? _profile.role != "Pengajar"
               ? JoinKelas(freshState: freshState)
-              : FirebaseAuth.instance.currentUser != null ? CreateKelas(
+              : CreateKelas(
                   ctx: context,
-                  user: FirebaseAuth.instance.currentUser!,
                   freshState: freshState,
-                ) : null
+                )
           : Column(
               children: [
                 Padding(

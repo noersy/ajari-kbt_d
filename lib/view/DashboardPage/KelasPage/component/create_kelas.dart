@@ -1,21 +1,21 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
+import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_provider.dart';
 import 'package:ajari/providers/profile_provider.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateKelas extends StatefulWidget {
   final BuildContext ctx;
   final Function freshState;
-  final User user;
 
    const CreateKelas({Key? key,
     required this.ctx,
-    required this.user,
     required this.freshState,
   }) : super(key: key);
 
@@ -25,11 +25,15 @@ class CreateKelas extends StatefulWidget {
 
 class _CreateKelasState extends State<CreateKelas> {
   final TextEditingController _editingController = TextEditingController();
+  final User? user = FirebaseAuth.instance.currentUser;
   bool _loading = false;
-  String _codeKelas = '';
 
   @override
   Widget build(BuildContext context) {
+
+    String _codeKelas = context.read<KelasProvider>().kelas.kelasId;
+
+
     return _loading
         ? indicatorLoad()
         : Column(
@@ -188,23 +192,20 @@ class _CreateKelasState extends State<CreateKelas> {
   }
 
   void _createKelas() async {
-    _loading = true;
+    try{
+      _loading = true;
 
-    await Provider.of<KelasProvider>(context, listen: false)
-        .createKelas(namaKelas: _editingController.text, user: widget.user)
-        .then((value) {
-      setState(() {
-        _codeKelas = value;
-      });
-    });
-
-    await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: widget.user.uid);
-    await Provider.of<KelasProvider>(context, listen: false)
-        .getKelas(codeKelas: _codeKelas)
-        .then((value) {
+      String _codeKelas = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
+      Kelas? value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
       widget.freshState(value: value);
-    });
 
-    _loading = false;
+      _loading = false;
+    }catch(e){
+      if (kDebugMode) {
+        print("$e");
+      }
+    }
+
   }
 }
