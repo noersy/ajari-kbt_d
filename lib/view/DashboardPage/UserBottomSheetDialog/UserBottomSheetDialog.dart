@@ -12,10 +12,11 @@ import 'component/ConfirmationLogoutDialog.dart';
 
 class UserBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;
-  UserBottomSheetDialog({required this.ctx});
 
-  final Profile  _profile = globals.Get.prf();
-  final User  _user = globals.Get.usr();
+  UserBottomSheetDialog({Key? key, required this.ctx}) : super(key: key);
+
+  final Profile _profile = globals.Get.prf();
+  final User _user = globals.Get.usr();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class UserBottomSheetDialog extends StatelessWidget {
       builder: (BuildContext context, StateSetter setState) {
         return Container(
           height: 280.0,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: SpacingDimens.spacing24,
             vertical: SpacingDimens.spacing16,
           ),
@@ -39,40 +40,38 @@ class UserBottomSheetDialog extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: SpacingDimens.spacing16,
                   bottom: SpacingDimens.spacing8,
                 ),
                 child: Row(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 65.0,
                       width: 65.0,
                       child: CircleAvatar(
                         backgroundColor: PaletteColor.grey40,
-                        backgroundImage: NetworkImage(
-                            '${_user.photoURL!}'),
+                        backgroundImage: NetworkImage(_user.photoURL!),
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(
+                      margin: const EdgeInsets.only(
                         left: SpacingDimens.spacing24,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            child: Text(
-                              "${_user.displayName}",
-                              style: TypographyStyle.subtitle2,
-                            ),
+                          Text(
+                            "${_user.displayName}",
+                            style: TypographyStyle.subtitle2,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: SpacingDimens.spacing8,
                           ),
                           Container(
                             alignment: Alignment.center,
-                            padding : const EdgeInsets.all(SpacingDimens.spacing4),
+                            padding:
+                                const EdgeInsets.all(SpacingDimens.spacing4),
                             decoration: BoxDecoration(
                               color: PaletteColor.primary,
                               borderRadius: BorderRadius.circular(10),
@@ -80,7 +79,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                             child: Text(
                               _profile.role,
                               style: TypographyStyle.subtitle2.merge(
-                                TextStyle(
+                                const TextStyle(
                                   color: PaletteColor.primarybg,
                                 ),
                               ),
@@ -96,7 +95,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                 height: 1,
                 width: MediaQuery.of(context).size.width,
                 color: PaletteColor.primarybg2,
-                margin: EdgeInsets.only(
+                margin: const EdgeInsets.only(
                   top: SpacingDimens.spacing8,
                 ),
               ),
@@ -104,7 +103,10 @@ class UserBottomSheetDialog extends StatelessWidget {
                 onTap: () {
                   Navigator.of(ctx).push(
                     routeTransition(
-                      ProfilePage(user: _user, role: _profile.role,),
+                      ProfilePage(
+                        user: _user,
+                        role: _profile.role,
+                      ),
                     ),
                   );
                 },
@@ -151,7 +153,7 @@ class UserBottomSheetDialog extends StatelessWidget {
     return Container(
       color: PaletteColor.primarybg,
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: SpacingDimens.spacing16,
         ),
         child: Row(
@@ -161,7 +163,7 @@ class UserBottomSheetDialog extends StatelessWidget {
               size: 25,
               color: PaletteColor.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: SpacingDimens.spacing24,
             ),
             Text(

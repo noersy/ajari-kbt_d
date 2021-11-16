@@ -14,13 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreenPage extends StatefulWidget {
+  const SplashScreenPage({Key? key}) : super(key: key);
+
   @override
-  _SplashScreenState createState() => new _SplashScreenState();
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreenPage> {
   startTime() async {
-    var _duration = new Duration(seconds: 3);
+    var _duration = const Duration(seconds: 3);
     return Timer(_duration, navigationPage);
   }
 
@@ -29,40 +31,40 @@ class _SplashScreenState extends State<SplashScreenPage> {
       var user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
 
-      var prf = await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(userUid: user.uid);
-      await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: prf?.codeKelas ?? " ");
+      var prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user.uid);
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf?.codeKelas ?? " ");
 
-      if (prf == null)
+      if (prf == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => RegisterPage(user: globals.Get.usr()),
           ),
         );
-      else
+      } else {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => DashboardPage(),
+            builder: (context) => const DashboardPage(),
           ),
         );
-    } catch (e, r) {
+      }
+    } catch (e) {
       if (globals.isUserNotNull) {
         showDialog(
           context: context,
           builder: (context) {
             return DialogFailed(
               content: "Whups something wrong",
+              onPressedFunction: () {
+                Navigator.of(context).pop();
+              },
             );
           },
         );
       }
 
-      print("$e : $r");
-
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => LoginPage(),
+          builder: (context) => const LoginPage(),
         ),
       );
     }
@@ -80,7 +82,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
       future: AuthLogin.initializeFirebase(context: context),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasError) {
-          return Text('Error initializing Firebase');
+          return const Text('Error initializing Firebase');
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             backgroundColor: PaletteColor.primarybg,

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 class JilidPage extends StatefulWidget {
   final String uid, codeKelas, role;
 
-  const JilidPage({required this.uid, required this.codeKelas, required this.role});
+   const JilidPage({Key? key, required this.uid, required this.codeKelas, required this.role}) : super(key: key);
 
   @override
   _StudensPageState createState() => _StudensPageState();
@@ -21,30 +21,28 @@ class _StudensPageState extends State<JilidPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       appBar: AppBarBack(ctx: context, title: "Jilid"),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: _page.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _jilidContainer(
-                jilid: _page[index].arab,
-                text: _page[index].text,
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ReadPage(
-                        nomor: "${index + 1}",
-                        uid: widget.uid,
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: _page.length,
+          itemBuilder: (BuildContext context, int index) {
+            return _jilidContainer(
+              jilid: _page[index].arab,
+              text: _page[index].text,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ReadPage(
+                      nomor: "${index + 1}",
+                      uid: widget.uid,
                     ),
-                  );
-                },
-              );
-            },
-          ),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
@@ -70,13 +68,13 @@ class _StudensPageState extends State<JilidPage> {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: TextButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+          padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
         ),
         onPressed: onTap,
         child: ListTile(
@@ -92,7 +90,7 @@ class _StudensPageState extends State<JilidPage> {
                 child: Text(
               jilid,
               style: TypographyStyle.title.merge(
-                TextStyle(color: PaletteColor.primary),
+                const TextStyle(color: PaletteColor.primary),
               ),
             )),
           ),

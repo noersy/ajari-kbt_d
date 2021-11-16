@@ -1,20 +1,14 @@
-import 'dart:convert';
 
-import 'package:ajari/config/FirebaseReference.dart';
-import 'package:ajari/config/globals.dart' as globals;
-import 'package:ajari/model/Profile.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/ClassPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'HomePage/HomePage.dart';
 import 'UserBottomSheetDialog/UserBottomSheetDialog.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage();
+  const DashboardPage({Key? key}) : super(key: key);
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -29,7 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(CostumeIcons.home_outline, size: 20),
             label: 'Home',
@@ -49,11 +43,11 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       body: SizedBox.expand(
         child: PageView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children: [
+          children:  [
             HomePage(),
-            ClassPage(),
+            const ClassPage(),
           ],
         ),
       ),
@@ -65,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
       if (index != 2) {
         _pageController.animateToPage(
           index,
-          duration: Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 500),
           curve: Curves.fastOutSlowIn,
         );
         setState(() {
@@ -73,27 +67,15 @@ class _DashboardPageState extends State<DashboardPage> {
         });
       }
 
-      if (index == 2)
+      if (index == 2) {
         showModalBottomSheet(
           context: context,
           builder: (BuildContext context) => UserBottomSheetDialog(
             ctx: context,
           ),
         );
+      }
     }
   }
 
-  void _fetchProfile() {
-    try {
-      DocumentReference documentReferencer =
-          FirebaseReference.user.doc(globals.Get.usr().uid);
-
-      documentReferencer.snapshots().listen((event) {
-        print(event.data());
-
-        var profile = profileFromJson(jsonEncode(event.data()));
-        globals.Set.prf(profile);
-      });
-    } catch (e) {}
-  }
 }

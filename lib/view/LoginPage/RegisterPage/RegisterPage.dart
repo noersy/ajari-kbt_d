@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 class RegisterPage extends StatefulWidget {
   final User user;
 
-  const RegisterPage({required this.user});
+  const RegisterPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _RegisterPage createState() => _RegisterPage();
@@ -41,7 +41,7 @@ class _RegisterPage extends State<RegisterPage> {
         children: [
           SafeArea(
             child: Padding(
-              padding: EdgeInsets.all(SpacingDimens.spacing24),
+              padding: const EdgeInsets.all(SpacingDimens.spacing24),
               child: Column(
                 children: [
                   Container(
@@ -52,35 +52,33 @@ class _RegisterPage extends State<RegisterPage> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          ListTile(
-                            title: const Text('Santri'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.Santri,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter? value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          title: const Text('Santri'),
+                          leading: Radio<SingingCharacter>(
+                            value: SingingCharacter.Santri,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
                           ),
-                          ListTile(
-                            title: const Text('Pengajar'),
-                            leading: Radio<SingingCharacter>(
-                              value: SingingCharacter.Pengajar,
-                              groupValue: _character,
-                              onChanged: (SingingCharacter? value) {
-                                setState(() {
-                                  _character = value;
-                                });
-                              },
-                            ),
+                        ),
+                        ListTile(
+                          title: const Text('Pengajar'),
+                          leading: Radio<SingingCharacter>(
+                            value: SingingCharacter.Pengajar,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   ButtonLogin(
@@ -91,7 +89,7 @@ class _RegisterPage extends State<RegisterPage> {
               ),
             ),
           ),
-          new Align(
+          Align(
             child: loadingIndicator,
             alignment: FractionalOffset.center,
           ),
@@ -105,13 +103,12 @@ class _RegisterPage extends State<RegisterPage> {
       userid: widget.user.uid,
       role: _character == SingingCharacter.Santri ? "Santri" : "Pengajar",
     );
-    await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: globals.Get.usr().uid);
-
-    print(widget.user.displayName);
+    await Provider.of<ProfileProvider>(context, listen: false)
+        .getProfile(userUid: globals.Get.usr().uid);
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => DashboardPage(),
+        builder: (context) => const DashboardPage(),
       ),
     );
   }

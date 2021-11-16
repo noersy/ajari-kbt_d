@@ -15,21 +15,21 @@ import 'component.dart';
 class ViewSantri extends StatelessWidget {
   final PageController pageViewController;
 
-  const ViewSantri({
+   const ViewSantri({Key? key,
     required this.pageViewController,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       children: [
         Column(
           children: [
             SizedBox(
               height: 150,
               child: PageView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 controller: pageViewController,
                 children: [
                   Container(
@@ -40,7 +40,7 @@ class ViewSantri extends StatelessWidget {
                         left: SpacingDimens.spacing16,
                         right: SpacingDimens.spacing16,
                         bottom: SpacingDimens.spacing12),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -66,17 +66,17 @@ class ViewSantri extends StatelessWidget {
                           height: 130,
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.menu_book_rounded,
                                 color: PaletteColor.primarybg,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Text(
                                 "Last Read",
                                 style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -92,12 +92,12 @@ class ViewSantri extends StatelessWidget {
                               Text(
                                 "Jilid",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                               Text(
                                 " ١",
                                 style: TypographyStyle.title.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -113,14 +113,14 @@ class ViewSantri extends StatelessWidget {
                               Text(
                                 "Halaman",
                                 style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(
+                                    const TextStyle(
                                         color: PaletteColor.primarybg,
                                         fontWeight: FontWeight.w100)),
                               ),
                               Text(
                                 " 1",
                                 style: TypographyStyle.subtitle2.merge(
-                                  TextStyle(color: PaletteColor.primarybg),
+                                  const TextStyle(color: PaletteColor.primarybg),
                                 ),
                               ),
                             ],
@@ -139,7 +139,7 @@ class ViewSantri extends StatelessWidget {
                       bottom: SpacingDimens.spacing12,
                     ),
                     child: Ink(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -176,17 +176,17 @@ class ViewSantri extends StatelessWidget {
                               height: 130,
                               child: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     CostumeIcons.book,
                                     color: PaletteColor.primarybg,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 8,
                                   ),
                                   Text(
                                     "Last Read",
                                     style: TypographyStyle.subtitle2.merge(
-                                        TextStyle(
+                                        const TextStyle(
                                             color: PaletteColor.primarybg)),
                                   ),
                                 ],
@@ -201,7 +201,7 @@ class ViewSantri extends StatelessWidget {
                               child: Text(
                                 "Kisah Nabi Musa",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                             ),
                             Container(
@@ -215,7 +215,7 @@ class ViewSantri extends StatelessWidget {
                                   Text(
                                     "Halaman",
                                     style: TypographyStyle.subtitle2.merge(
-                                      TextStyle(
+                                      const TextStyle(
                                           color: PaletteColor.primarybg,
                                           fontWeight: FontWeight.w100),
                                     ),
@@ -223,7 +223,7 @@ class ViewSantri extends StatelessWidget {
                                   Text(
                                     " 1",
                                     style: TypographyStyle.subtitle2.merge(
-                                      TextStyle(color: PaletteColor.primarybg),
+                                      const TextStyle(color: PaletteColor.primarybg),
                                     ),
                                   ),
                                 ],
@@ -244,11 +244,11 @@ class ViewSantri extends StatelessWidget {
               onDotClicked: (i) {
                 pageViewController.animateToPage(
                   i,
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.ease,
                 );
               },
-              effect: ExpandingDotsEffect(
+              effect: const ExpandingDotsEffect(
                 expansionFactor: 3,
                 spacing: 8,
                 radius: 16,
@@ -261,7 +261,7 @@ class ViewSantri extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: SpacingDimens.spacing8),
+        const SizedBox(height: SpacingDimens.spacing8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -303,7 +303,7 @@ class ViewSantri extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: PaletteColor.primary.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(100)),
-                          child: Icon(
+                          child: const Icon(
                             CostumeIcons.holy_quran,
                             color: PaletteColor.primary,
                           ),
@@ -320,13 +320,13 @@ class ViewSantri extends StatelessWidget {
                               Text(
                                 "قرأ",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
+                                    const TextStyle(
                                         color: PaletteColor.primary,
                                         fontSize: 20)),
                               ),
                               Text("Baca",
                                   style: TypographyStyle.subtitle2
-                                      .merge(TextStyle(fontSize: 12))),
+                                      .merge(const TextStyle(fontSize: 12))),
                             ],
                           ),
                         ),
@@ -356,7 +356,7 @@ class ViewSantri extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => StoryPage()),
+                      MaterialPageRoute(builder: (context) => const StoryPage()),
                     );
                   },
                   child: Container(
@@ -372,7 +372,7 @@ class ViewSantri extends StatelessWidget {
                               borderRadius: BorderRadius.circular(
                                 100,
                               )),
-                          child: Icon(
+                          child: const Icon(
                             Icons.collections_bookmark_sharp,
                             color: PaletteColor.primary,
                           ),
@@ -389,14 +389,14 @@ class ViewSantri extends StatelessWidget {
                               Text(
                                 "قصة",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
+                                    const TextStyle(
                                         color: PaletteColor.primary,
                                         fontSize: 20)),
                               ),
                               Text(
                                 "Cerita",
                                 style: TypographyStyle.subtitle2.merge(
-                                  TextStyle(fontSize: 12),
+                                  const TextStyle(fontSize: 12),
                                 ),
                               ),
                             ],
@@ -415,62 +415,62 @@ class ViewSantri extends StatelessWidget {
               top: SpacingDimens.spacing24,
               left: SpacingDimens.spacing28,
               bottom: SpacingDimens.spacing16),
-          child: Text(
+          child: const Text(
             "Something Interesting",
             style: TypographyStyle.subtitle2,
           ),
         ),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 140,
           child: ListView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: SpacingDimens.spacing28,
               ),
               cardStry(
                 image: 'assets/images/nabi_ibrahim.png',
-                title: Text(
+                title: const Text(
                   "Kisah Nabi Ibrahim",
                   style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
                 ),
-                color: Color(0xFF9F5A2A),
+                color: const Color(0xFF9F5A2A),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => NabiIbrahimPage(),
+                      builder: (context) => const NabiIbrahimPage(),
                     ),
                   );
                 },
               ),
               cardStry(
                 image: 'assets/images/nabi_musa.png',
-                title: Text(
+                title: const Text(
                   "Kisah Nabi Musa",
                   style: TextStyle(color: Color(0xFF620101), fontSize: 16),
                 ),
-                color: Color(0xFFF7EAC0),
+                color: const Color(0xFFF7EAC0),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => NabiMusaPage(),
+                      builder: (context) => const NabiMusaPage(),
                     ),
                   );
                 },
               ),
               cardStry(
                 image: 'assets/images/nabi_nuh.png',
-                title: Text(
+                title: const Text(
                   "Kisah Nabi Nuh",
                   style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
                 ),
-                color: Color(0xFF8DAA3C),
+                color: const Color(0xFF8DAA3C),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => NabihNuhPage(),
+                      builder: (context) => const NabihNuhPage(),
                     ),
                   );
                 },

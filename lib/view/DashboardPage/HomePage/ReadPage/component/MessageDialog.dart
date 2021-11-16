@@ -8,7 +8,7 @@ import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,7 +20,7 @@ class MessageDialog extends StatefulWidget {
   final String nomorJilid, nomorHalaman, uid, codeKelas, role;
   final bool isPlayed;
 
-  MessageDialog({
+  const MessageDialog({Key? key,
     required this.homePageCtx,
     required this.sheetDialogCtx,
     required this.nomorJilid,
@@ -29,7 +29,7 @@ class MessageDialog extends StatefulWidget {
     required this.codeKelas,
     required this.role,
     required this.isPlayed,
-  });
+  }) : super(key: key);
 
   @override
   State<MessageDialog> createState() => _MessageDialogState();
@@ -51,7 +51,9 @@ class _MessageDialogState extends State<MessageDialog> {
     bool appFolderExists = await appFolder.exists();
     if (!appFolderExists) {
       final created = await appFolder.create(recursive: true);
-      print(created.path);
+      if (kDebugMode) {
+        print(created.path);
+      }
     }
 
     return filePath;
@@ -69,7 +71,9 @@ class _MessageDialogState extends State<MessageDialog> {
 
   void _downloadFileExample() async {
     try {
-      print(await _checkPermission());
+      if (kDebugMode) {
+        print(await _checkPermission());
+      }
 
       File downloadToFile =
           File('${_getFilePath()}audio_${widget.nomorHalaman}.m4a');
@@ -89,13 +93,15 @@ class _MessageDialogState extends State<MessageDialog> {
         _play = true;
       }
 
-      print("Open : " + downloadToFile.path);
+      if (kDebugMode) {
+        print("Open : " + downloadToFile.path);
+      }
       return;
     } on FirebaseException catch (e) {
-      print("$e");
+      if (kDebugMode) {
+        print("$e");
+      }
       return;
-    } catch (e) {
-      print("$e");
     }
   }
 
@@ -132,7 +138,7 @@ class _MessageDialogState extends State<MessageDialog> {
           );
   }
 
-  TextEditingController _editingController = new TextEditingController();
+  final TextEditingController _editingController = TextEditingController();
 
   late DateTime _dateTime;
 
@@ -159,13 +165,13 @@ class _MessageDialogState extends State<MessageDialog> {
                       child: Text(
                         'Halaman ' + widget.nomorHalaman,
                         style: TypographyStyle.subtitle1.merge(
-                          TextStyle(
+                          const TextStyle(
                             color: PaletteColor.black,
                           ),
                         ),
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                   ],
                 ),
                 Expanded(
@@ -183,14 +189,14 @@ class _MessageDialogState extends State<MessageDialog> {
                               builder: (context, snapshot) {
                                 final _duartion =
                                     snapshot.data?.audio.duration ??
-                                        Duration(seconds: 0);
+                                        const Duration(seconds: 0);
                                 return StreamBuilder<Duration>(
                                     stream: _assetsAudioPlayerRecord
                                         .currentPosition,
                                     builder: (context,
                                         AsyncSnapshot<Duration> snapshot) {
                                       Duration _data =
-                                          snapshot.data ?? Duration(seconds: 0);
+                                          snapshot.data ?? const Duration(seconds: 0);
                                       String _time = "${twoDigits(
                                         _duartion.inMinutes.remainder(60) -
                                             _data.inMinutes,
@@ -240,7 +246,7 @@ class _MessageDialogState extends State<MessageDialog> {
                                                       const EdgeInsets.all(7),
                                                   child: Container(
                                                     height: 2,
-                                                    decoration: BoxDecoration(
+                                                    decoration: const BoxDecoration(
                                                       color:
                                                           PaletteColor.grey80,
                                                     ),
@@ -258,7 +264,7 @@ class _MessageDialogState extends State<MessageDialog> {
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(10)),
-                                                    child: Icon(
+                                                    child: const Icon(
                                                       Icons.pause_outlined,
                                                       size: 14,
                                                       color: PaletteColor
@@ -269,7 +275,7 @@ class _MessageDialogState extends State<MessageDialog> {
                                               ],
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: SpacingDimens.spacing8,
                                           ),
                                         ],
@@ -278,7 +284,7 @@ class _MessageDialogState extends State<MessageDialog> {
                               }),
                         ),
                       ),
-                      SizedBox(height: 22),
+                      const SizedBox(height: 22),
                       StreamBuilder<QuerySnapshot>(
                         stream: Provider.of<KelasProvider>(context)
                             .getMassage(
@@ -287,13 +293,15 @@ class _MessageDialogState extends State<MessageDialog> {
                                 nomorJilid: widget.nomorJilid,
                                 nomorHalaman: widget.nomorHalaman),
                         builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return Center(child: Text("Tidak ada pesan."));
-                          if (snapshot.data!.docChanges.length == 0)
-                            return Center(child: Text("Tidak ada pesan."));
+                          if (!snapshot.hasData) {
+                            return const Center(child: Text("Tidak ada pesan."));
+                          }
+                          if (snapshot.data!.docChanges.isEmpty) {
+                            return const Center(child: Text("Tidak ada pesan."));
+                          }
                           return Expanded(
                             child: ListView(
-                              physics: BouncingScrollPhysics(),
+                              physics: const BouncingScrollPhysics(),
                               children: snapshot.data!.docs.map((e) {
                                 String _role = e.get('role');
                                 DateTime date = e.get('dateTime').toDate();
@@ -384,7 +392,7 @@ class _MessageDialogState extends State<MessageDialog> {
                                               style: TypographyStyle.mini,
                                             )),
                                           )
-                                        : SizedBox.shrink(),
+                                        : const SizedBox.shrink(),
                                     Container(
                                       margin: const EdgeInsets.only(
                                         left: SpacingDimens.spacing16,
@@ -449,7 +457,7 @@ class _MessageDialogState extends State<MessageDialog> {
             ),
           ),
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: PaletteColor.primary,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(5),
@@ -469,7 +477,7 @@ class _MessageDialogState extends State<MessageDialog> {
                           borderRadius: BorderRadius.circular(10)),
                       child: TextFormField(
                         controller: _editingController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
@@ -480,7 +488,7 @@ class _MessageDialogState extends State<MessageDialog> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: SpacingDimens.spacing8,
                   ),
                   SizedBox(
@@ -501,7 +509,7 @@ class _MessageDialogState extends State<MessageDialog> {
                         );
                         _editingController.clear();
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.send,
                         color: PaletteColor.primarybg,
                       ),

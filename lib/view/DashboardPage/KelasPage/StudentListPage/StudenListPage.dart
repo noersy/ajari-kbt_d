@@ -23,38 +23,37 @@ class StudenListPage extends StatelessWidget {
         title: 'Student List',
         ctx: context,
       ),
-      body: Container(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context)
-              .getSantri(codeKelas: _codeKelas),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(child: Text("There is no expense"));
-            return SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                children: snapshot.data!.docChanges
-                    .map(
-                      (e) => santriContainer(
-                        name: e.doc.get('name'),
-                        imageUrl: e.doc.get('photo'),
-                        inTo: () => Navigator.of(context).push(
-                          routeTransition(
-                            SantriDetail(
-                              role: "Santri",
-                              name: e.doc.get('name'),
-                              email: e.doc.get('email'),
-                              photoURL: e.doc.get('photo'),
-                            ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: Provider.of<KelasProvider>(context)
+            .getSantri(codeKelas: _codeKelas),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: Text("There is no expense"));
+          }
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: snapshot.data!.docChanges
+                  .map(
+                    (e) => santriContainer(
+                      name: e.doc.get('name'),
+                      imageUrl: e.doc.get('photo'),
+                      inTo: () => Navigator.of(context).push(
+                        routeTransition(
+                          SantriDetail(
+                            role: "Santri",
+                            name: e.doc.get('name'),
+                            email: e.doc.get('email'),
+                            photoURL: e.doc.get('photo'),
                           ),
                         ),
                       ),
-                    )
-                    .toList(),
-              ),
-            );
-          },
-        ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          );
+        },
       ),
     );
   }
@@ -75,7 +74,7 @@ class StudenListPage extends StatelessWidget {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -118,9 +117,9 @@ class StudenListPage extends StatelessWidget {
           child: TextButton(
             onPressed: inTo,
             style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+              padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.arrow_forward,
               color: PaletteColor.grey,
             ),
@@ -199,7 +198,7 @@ class SantriDetail extends StatelessWidget {
                     child: Text(
                       role,
                       style: TypographyStyle.subtitle2.merge(
-                        TextStyle(
+                        const TextStyle(
                           color: PaletteColor.primarybg,
                         ),
                       ),
@@ -220,12 +219,12 @@ class SantriDetail extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.6),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: const Offset(0, 1),
                   )
                 ],
               ),
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     containerData(title: "Name", body: name),
@@ -237,7 +236,7 @@ class SantriDetail extends StatelessWidget {
                         top: SpacingDimens.spacing24,
                         bottom: SpacingDimens.spacing4,
                       ),
-                      child: Text(
+                      child: const Text(
                         "Jilids",
                         style: TypographyStyle.subtitle1,
                       ),
@@ -245,7 +244,7 @@ class SantriDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: 6,
                         itemBuilder: (BuildContext context, int index) {
@@ -320,7 +319,7 @@ Widget jilidContainer({text, jilid}) {
           color: Colors.grey.withOpacity(0.4),
           spreadRadius: 1,
           blurRadius: 2,
-          offset: Offset(0, 1),
+          offset: const Offset(0, 1),
         ),
       ],
     ),
@@ -337,7 +336,7 @@ Widget jilidContainer({text, jilid}) {
             child: Text(
           jilid,
           style: TypographyStyle.title.merge(
-            TextStyle(color: PaletteColor.primary),
+            const TextStyle(color: PaletteColor.primary),
           ),
         )),
       ),

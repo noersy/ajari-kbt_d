@@ -1,10 +1,11 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NabihNuhPage extends StatefulWidget {
+  const NabihNuhPage({Key? key}) : super(key: key);
+
   @override
   _NabiIbrahimPageState createState() => _NabiIbrahimPageState();
 }
@@ -15,12 +16,12 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           Container(
             height: 300,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFF9F5A2A),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -43,7 +44,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
                       top: SpacingDimens.spacing16,
                       left: SpacingDimens.spacing16,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back,
                       color: PaletteColor.primarybg,
                     ),
@@ -54,7 +55,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Column(
@@ -62,7 +63,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
                           Text(
                             "Kisah",
                             style: TypographyStyle.title.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: PaletteColor.primarybg,
                                 fontSize: 36,
                               ),
@@ -71,7 +72,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
                           Text(
                             "Kisah Nabi Ibrahim",
                             style: TypographyStyle.title.merge(
-                              TextStyle(color: PaletteColor.primarybg),
+                              const TextStyle(color: PaletteColor.primarybg),
                             ),
                           ),
                         ],
@@ -92,7 +93,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
               left: SpacingDimens.spacing16,
               right: SpacingDimens.spacing16,
             ),
-            child: Text(
+            child: const Text(
               "Nabi Ibrahim AS adalah salah satu Nabi dari ke-25 yang wajib diimani oleh setiap umat Islam. Kisah Nabi Ibrahim AS pun perlu diketahui oleh umat Islam. Maka dari itu, berikut ini Suara.com sajikan kisah Nabi Ibrahim AS mulai dari kecil hingga perjuangannya melawan Raja Namrud.",
               style: TypographyStyle.paragraph,
             ),
@@ -106,7 +107,7 @@ class _NabiIbrahimPageState extends State<NabihNuhPage> {
               left: SpacingDimens.spacing16,
               right: SpacingDimens.spacing16,
             ),
-            child: Text(
+            child: const Text(
               "Nabi Ibrahim AS merupakan ulul azmi yakni golongan nabi yang memiliki ketabahan yang luar biasa dalam perjuangan dakwahnya. Rasul yang termasuk ulul azmi adalah Nabi Nuh AS, Nabi Ibrahim AS, Nabi Musa AS, Nabi Isa AS, serta Nabi Muhammad SAW.",
               style: TypographyStyle.paragraph,
             ),

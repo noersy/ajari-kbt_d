@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
 class JoinKelas extends StatefulWidget {
   final Function freshState;
 
-  const JoinKelas({required this.freshState});
+   const JoinKelas({Key? key, required this.freshState}) : super(key: key);
 
   @override
   _JoinKelasState createState() => _JoinKelasState();
 }
 
 class _JoinKelasState extends State<JoinKelas> {
-  TextEditingController santriInput = new TextEditingController();
+  TextEditingController santriInput = TextEditingController();
   String _codeKelas = '';
   bool _loading = false;
 
@@ -58,10 +58,10 @@ class _JoinKelasState extends State<JoinKelas> {
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(
+                          padding: EdgeInsets.only(
                               left: SpacingDimens.spacing16,
                               top: SpacingDimens.spacing12,
                               bottom: SpacingDimens.spacing8),
@@ -98,7 +98,7 @@ class _JoinKelasState extends State<JoinKelas> {
                         primary: PaletteColor.primary80,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
-                          side: BorderSide(
+                          side: const BorderSide(
                             color: PaletteColor.green,
                           ),
                         ),
@@ -116,7 +116,7 @@ class _JoinKelasState extends State<JoinKelas> {
                           child: Text(
                             "Join",
                             style: TypographyStyle.button1.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: PaletteColor.primarybg,
                               ),
                             ),

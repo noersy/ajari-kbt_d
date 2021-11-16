@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseReference {
-  static String _chars =
+  static const String _chars =
       'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  static Random _rnd = Random();
+  static final Random _rnd = Random();
 
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   static CollectionReference user = firestore.collection('user');

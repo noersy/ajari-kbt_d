@@ -5,7 +5,7 @@ class AppBarBack extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext ctx;
   final String title;
 
-  AppBarBack({required this.ctx, required this.title});
+  const AppBarBack({Key? key, required this.ctx, required this.title}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -18,7 +18,7 @@ class AppBarBack extends StatelessWidget implements PreferredSizeWidget {
         backgroundColor: PaletteColor.primarybg,
         leading: IconButton(
           onPressed: () => Navigator.of(ctx).pop(),
-          icon: Icon(
+          icon: const Icon(
             // IconComponent.arrow_back,
             Icons.arrow_back,
             color: PaletteColor.primary,

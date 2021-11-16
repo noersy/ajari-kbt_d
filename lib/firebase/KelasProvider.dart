@@ -5,7 +5,7 @@ import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class KelasProvider extends ChangeNotifier {
   Kelas? dataKelas;
@@ -31,10 +31,11 @@ class KelasProvider extends ChangeNotifier {
       await FirebaseReference.getKelas(_code).update(dataUser);
       await FirebaseReference.getUser(user.uid).set(dataKelas);
 
-      print("createKelas: Success");
       return _code;
     } catch (e) {
-      print("createKelas: Error");
+      if (kDebugMode) {
+        print("createKelas: Error");
+      }
       return "-";
     }
   }
@@ -70,10 +71,11 @@ class KelasProvider extends ChangeNotifier {
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
       await FirebaseReference.getUser(user.uid).update(newDataUser);
 
-      print("joinKelas: Success");
       return codeKelas;
     } catch (e) {
-      print("joinKelas: Error");
+      if (kDebugMode) {
+        print("joinKelas: Error");
+      }
       return "-";
     }
   }
@@ -103,9 +105,10 @@ class KelasProvider extends ChangeNotifier {
         _messageId,
       ).set(data);
 
-      print("sendMessage: Success");
     } catch (e) {
-      print("sendMessage: Error");
+      if (kDebugMode) {
+        print("sendMessage: Error");
+      }
     }
   }
 
@@ -118,10 +121,11 @@ class KelasProvider extends ChangeNotifier {
       Kelas kelas = kelasFromJson(jsonEncode(data.data()));
       globals.Set.kls(kelas);
 
-      print("getKelas: Success");
       return kelas;
     } catch (e) {
-      print("getKelas: Error");
+      if (kDebugMode) {
+        print("getKelas: Error");
+      }
     }
   }
 
@@ -171,9 +175,10 @@ class KelasProvider extends ChangeNotifier {
         nomorHalaman,
       ).set(data);
 
-      print("setGrade: Success");
     } catch (e) {
-      print("setGrade: Error");
+      if (kDebugMode) {
+        print("setGrade: Error");
+      }
     }
   }
 
@@ -186,9 +191,10 @@ class KelasProvider extends ChangeNotifier {
       await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date)
           .set(data);
 
-      print("createAbsen: Success");
     } catch (e) {
-      print("createAbsen: Error");
+      if (kDebugMode) {
+        print("createAbsen: Error");
+      }
       return 400;
     }
     return 200;
@@ -200,9 +206,10 @@ class KelasProvider extends ChangeNotifier {
     try {
       await FirebaseReference.getAbsen(globals.Get.kls().kelasId, date).delete();
 
-      print("deleteAbsen: Success");
     } catch (e) {
-      print("deleteAbsen: Error");
+      if (kDebugMode) {
+        print("deleteAbsen: Error");
+      }
       return 400;
     }
     return 200;

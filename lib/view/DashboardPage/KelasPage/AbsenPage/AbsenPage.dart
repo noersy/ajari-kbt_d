@@ -8,7 +8,6 @@ import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/AbsenDetailPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/CreateAbsen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -27,10 +26,11 @@ class AbsenPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
           stream: Provider.of<KelasProvider>(context).getsAbsen(),
           builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(child: Text("There is no expense"));
+            if (!snapshot.hasData) {
+              return const Center(child: Text("There is no expense"));
+            }
             return SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: snapshot.data!.docs.map((e) {
                   var data = e.data() as Map<String, dynamic>;
@@ -60,7 +60,7 @@ class AbsenPage extends StatelessWidget {
                           ),
                       onPressed: () =>
                           Navigator.of(context)
-                              .push(routeTransition(AbsenDetailPage())),
+                              .push(routeTransition(const AbsenDetailPage())),
                       child: Container(
                         width: double.infinity,
                         height: SpacingDimens.spacing44,
@@ -72,17 +72,17 @@ class AbsenPage extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.date_range,
                                     color: PaletteColor.text,
                                     size: 18,
                                   ),
-                                  SizedBox(width: SpacingDimens.spacing4),
-                                  Text("$_text", style: TypographyStyle.button2)
+                                  const SizedBox(width: SpacingDimens.spacing4),
+                                  Text(_text, style: TypographyStyle.button2)
                                 ],
                               ),
                               Row(
-                                children: [
+                                children: const [
                                   Icon(
                                     Icons.access_time,
                                     color: PaletteColor.text,
@@ -116,10 +116,10 @@ class AbsenPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         splashColor: PaletteColor.green,
         backgroundColor: PaletteColor.primary,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           showDialog(
-              context: context, builder: (context) => DialogCreateAbsen());
+              context: context, builder: (context) => const DialogCreateAbsen());
         },
       ),
     );

@@ -9,7 +9,7 @@ Route routeTransition(Widget target) {
   return PageRouteBuilder(
     pageBuilder: (context, animation, secondaryAnimation) => target,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(1.0, 0.0);
+      var begin = const Offset(1.0, 0.0);
       var end = Offset.zero;
       var curve = Curves.easeInOutQuart;
 

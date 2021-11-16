@@ -1,12 +1,13 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'component/ChatPage.dart';
 
 class RoomPage extends StatefulWidget {
+  const RoomPage({Key? key}) : super(key: key);
+
   @override
   _RoomPageState createState() => _RoomPageState();
 }
@@ -21,46 +22,44 @@ class _RoomPageState extends State<RoomPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: SpacingDimens.spacing32,
-                left: SpacingDimens.spacing12,
-                right: SpacingDimens.spacing12,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text("In Room", style: TypographyStyle.subtitle1),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: GridView(
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        avatarMeet(nama: "Pengajar"),
-                      ],
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                      ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: SpacingDimens.spacing32,
+              left: SpacingDimens.spacing12,
+              right: SpacingDimens.spacing12,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text("In Room", style: TypographyStyle.subtitle1),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: GridView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      avatarMeet(nama: "Pengajar"),
+                    ],
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
                     ),
                   ),
-                  Text("Listening", style: TypographyStyle.subtitle1),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: GridView(
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        avatarMeet(nama: "Nur Syahfei"),
-                      ],
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
-                      ),
+                ),
+                const Text("Listening", style: TypographyStyle.subtitle1),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: GridView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      avatarMeet(nama: "Nur Syahfei"),
+                    ],
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
                     ),
                   ),
-                  SizedBox(height: 100)
-                ],
-              ),
+                ),
+                const SizedBox(height: 100)
+              ],
             ),
           ),
           Positioned(
@@ -74,7 +73,7 @@ class _RoomPageState extends State<RoomPage> {
               ),
               decoration: BoxDecoration(
                 color: PaletteColor.primary,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
@@ -83,7 +82,7 @@ class _RoomPageState extends State<RoomPage> {
                     color: Colors.grey.withOpacity(0.4),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 0),
+                    offset: const Offset(0, 0),
                   )
                 ],
               ),
@@ -102,7 +101,7 @@ class _RoomPageState extends State<RoomPage> {
                           color: PaletteColor.primarybg,
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        child: Icon(Icons.mic),
+                        child: const Icon(Icons.mic),
                       ),
                       Container(
                         height: 56,
@@ -118,12 +117,12 @@ class _RoomPageState extends State<RoomPage> {
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
-                                RoundedRectangleBorder()),
+                                const RoundedRectangleBorder()),
                           ),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.call_end,
                             color: PaletteColor.primarybg,
                           ),
@@ -136,7 +135,7 @@ class _RoomPageState extends State<RoomPage> {
                           color: PaletteColor.primarybg,
                           borderRadius: BorderRadius.circular(24),
                         ),
-                        child: Icon(Icons.videocam_off),
+                        child: const Icon(Icons.videocam_off),
                       ),
                     ],
                   ),
@@ -151,13 +150,13 @@ class _RoomPageState extends State<RoomPage> {
                       style: ButtonStyle(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder()),
+                                const RoundedRectangleBorder()),
                       ),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ChatPage()));
+                            builder: (context) => const ChatPage()));
                       },
-                      child: Icon(
+                      child: const Icon(
                         Icons.message,
                         color: PaletteColor.grey,
                       ),
@@ -185,8 +184,8 @@ class _RoomPageState extends State<RoomPage> {
             decoration: BoxDecoration(
                 color: PaletteColor.grey40,
                 borderRadius: BorderRadius.circular(50)),
-            child: Padding(
-              padding: const EdgeInsets.all(SpacingDimens.spacing8),
+            child: const Padding(
+              padding: EdgeInsets.all(SpacingDimens.spacing8),
               child: Icon(
                 Icons.person,
                 size: 30,

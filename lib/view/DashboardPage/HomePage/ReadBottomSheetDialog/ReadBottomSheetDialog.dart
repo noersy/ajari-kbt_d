@@ -3,15 +3,14 @@ import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/ReadPage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReadBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;
 
-  ReadBottomSheetDialog({
+  ReadBottomSheetDialog({Key? key,
     required this.ctx,
-  });
+  }) : super(key: key);
 
   final List<Jilid> _page = [
     Jilid("١", "Satu"),
@@ -28,7 +27,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
       builder: (BuildContext context, StateSetter setState) {
         return Container(
           height: 280.0,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: SpacingDimens.spacing24,
           ),
           color: PaletteColor.primarybg,
@@ -45,7 +44,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
               ),
               Expanded(
                 child: ListView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   children: [
                     Container(
                       margin: const EdgeInsets.only(
@@ -54,14 +53,14 @@ class ReadBottomSheetDialog extends StatelessWidget {
                         right: SpacingDimens.spacing12,
                       ),
                       alignment: Alignment.centerLeft,
-                      child: Text(
+                      child: const Text(
                         "Pilih Jilid",
                         style: TypographyStyle.button1,
                       ),
                     ),
-                    Divider(),
+                    const Divider(),
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: 6,
                       itemBuilder: (BuildContext context, int index) {
@@ -104,13 +103,13 @@ class ReadBottomSheetDialog extends StatelessWidget {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: TextButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+          padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
         ),
         onPressed: onTap,
         child: ListTile(
@@ -126,7 +125,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
                 child: Text(
               jilid,
               style: TypographyStyle.title.merge(
-                TextStyle(color: PaletteColor.primary),
+                const TextStyle(color: PaletteColor.primary),
               ),
             )),
           ),
@@ -143,7 +142,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
     return Container(
       color: PaletteColor.primarybg,
       child: Padding(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: SpacingDimens.spacing16,
         ),
         child: Row(
@@ -153,7 +152,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
               size: 25,
               color: PaletteColor.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: SpacingDimens.spacing24,
             ),
             Text(

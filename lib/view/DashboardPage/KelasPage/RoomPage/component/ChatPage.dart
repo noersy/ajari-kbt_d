@@ -7,6 +7,8 @@ import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({Key? key}) : super(key: key);
+
   @override
   _ChatBox createState() => _ChatBox();
 }
@@ -36,19 +38,19 @@ class _ChatBox extends State<ChatPage> {
                       Text(
                         'Tidak ada pesan.',
                         style: TypographyStyle.paragraph.merge(
-                          TextStyle(
+                          const TextStyle(
                             color: PaletteColor.grey60,
                           ),
                         ),
                       ),
-                      SizedBox(height: 38),
+                      const SizedBox(height: 38),
                     ],
                   ),
                 ),
               ],
             ),
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: PaletteColor.primary,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(5),
@@ -67,7 +69,7 @@ class _ChatBox extends State<ChatPage> {
                             color: PaletteColor.primarybg,
                             borderRadius: BorderRadius.circular(10)),
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             isDense: true,
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
@@ -78,10 +80,10 @@ class _ChatBox extends State<ChatPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: SpacingDimens.spacing8,
                     ),
-                    Icon(
+                    const Icon(
                       Icons.send,
                       color: PaletteColor.primarybg,
                     ),

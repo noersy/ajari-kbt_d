@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:ajari/config/globals.dart' as globals;
 
 class AuthLogin {
@@ -56,8 +56,10 @@ class AuthLogin {
           );
         }
       } catch (e, r) {
-        print(e);
-        print(r);
+        if (kDebugMode) {
+          print(e);
+          print(r);
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           AuthLogin.customSnackBar(
             content: 'Error occurred using Google Sign In. Try again.',
@@ -74,7 +76,7 @@ class AuthLogin {
       backgroundColor: Colors.black,
       content: Text(
         content,
-        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+        style: const TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
       ),
     );
   }

@@ -12,8 +12,8 @@ Widget cardStry({
     color: color,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     child: TextButton(
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.all(0),
       ),
       onPressed: onTap,
       child: Stack(
@@ -28,7 +28,7 @@ Widget cardStry({
               alignment: Alignment.bottomLeft,
             ),
           ),
-          Container(
+          SizedBox(
             width: 120,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

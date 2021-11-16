@@ -9,16 +9,14 @@ import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/AbsenPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/StudenListPage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/CreateKelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/JoinKelas.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 
-import 'RoomPage/RoomPage.dart';
 import 'component/component.dart';
 
 class ClassPage extends StatefulWidget {
-  const ClassPage();
+   const ClassPage({Key? key}) : super(key: key);
 
   @override
   _ClassPageState createState() => _ClassPageState();
@@ -36,11 +34,11 @@ class _ClassPageState extends State<ClassPage> {
     'Sat',
     'Sun'
   ];
-  List<String> _listDate = [];
-  DateTime _dateTime = DateTime.now();
+  final List<String> _listDate = [];
+  final DateTime _dateTime = DateTime.now();
   int _index = 0;
   int _indexCurret = 0;
-  Profile _profile = globals.Get.prf();
+  final Profile _profile = globals.Get.prf();
   Kelas _kelas = Kelas(
     pengajarId: "-",
     nama: "-",
@@ -66,7 +64,7 @@ class _ClassPageState extends State<ClassPage> {
       if (_dateTime.day == _date) {
         _index = i;
         _indexCurret = i;
-        _pageController = new PageController(initialPage: i);
+        _pageController = PageController(initialPage: i);
       }
     }
 
@@ -82,7 +80,7 @@ class _ClassPageState extends State<ClassPage> {
       appBar: AppBar(
         backgroundColor: PaletteColor.primarybg,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Class",
           style: TypographyStyle.subtitle1,
         ),
@@ -106,7 +104,7 @@ class _ClassPageState extends State<ClassPage> {
                           Container(
                             height: 150,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
+                              gradient: const LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [Color(0xFF6EEA91), Color(0xFF008165)],
@@ -117,7 +115,7 @@ class _ClassPageState extends State<ClassPage> {
                                   color: Colors.grey.withOpacity(0.4),
                                   spreadRadius: 1,
                                   blurRadius: 2,
-                                  offset: Offset(0, 1),
+                                  offset: const Offset(0, 1),
                                 ),
                               ],
                             ),
@@ -131,9 +129,9 @@ class _ClassPageState extends State<ClassPage> {
                                 bottom: SpacingDimens.spacing8,
                               ),
                               child: Text(
-                                "${_kelas.nama}",
+                                _kelas.nama,
                                 style: TypographyStyle.title.merge(
-                                  TextStyle(
+                                  const TextStyle(
                                     color: PaletteColor.primarybg2,
                                   ),
                                 ),
@@ -151,14 +149,14 @@ class _ClassPageState extends State<ClassPage> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.person,
                                       color: PaletteColor.primarybg2,
                                     ),
                                     Text(
-                                      "${_kelas.pengajar}",
+                                      _kelas.pengajar,
                                       style: TypographyStyle.button1.merge(
-                                        TextStyle(
+                                        const TextStyle(
                                           fontSize: 18,
                                           color: PaletteColor.primarybg2,
                                         ),
@@ -180,7 +178,7 @@ class _ClassPageState extends State<ClassPage> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.people,
                                       size: 18,
                                       color: PaletteColor.primarybg2,
@@ -188,7 +186,7 @@ class _ClassPageState extends State<ClassPage> {
                                     Text(
                                       " ${_kelas.jumlahSantri}",
                                       style: TypographyStyle.button1.merge(
-                                        TextStyle(
+                                        const TextStyle(
                                           fontSize: 13,
                                           color: PaletteColor.primarybg2,
                                         ),
@@ -209,7 +207,7 @@ class _ClassPageState extends State<ClassPage> {
                                   right: SpacingDimens.spacing16,
                                 ),
                                 child: Text(
-                                  "${_kelas.kelasId}",
+                                  _kelas.kelasId,
                                   style: TypographyStyle.button1.merge(
                                     TextStyle(
                                         fontSize: 12,
@@ -237,7 +235,7 @@ class _ClassPageState extends State<ClassPage> {
                                   alignment: Alignment.bottomLeft,
                                   child: Row(
                                     children: [
-                                      SizedBox(width: SpacingDimens.spacing4),
+                                      const SizedBox(width: SpacingDimens.spacing4),
                                       TextButton(
                                         style: TextButton.styleFrom(
                                             primary: PaletteColor.primary,
@@ -282,7 +280,7 @@ class _ClassPageState extends State<ClassPage> {
                                         ),
                                         onPressed: () {
                                           Navigator.of(context).push(
-                                              routeTransition(AbsenPage()));
+                                              routeTransition(const AbsenPage()));
                                         },
                                         child: Text(
                                           "Absen",
@@ -295,7 +293,7 @@ class _ClassPageState extends State<ClassPage> {
                                     ],
                                   ),
                                 )
-                              : SizedBox.shrink(),
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ],
@@ -317,19 +315,18 @@ class _ClassPageState extends State<ClassPage> {
                       index++;
                       return dateCard(
                         hari: _listDay[index],
-                        tgl: "${_listDate[index]}",
+                        tgl: _listDate[index],
                         color: _index != index
                             ? _indexCurret != index
                                 ? PaletteColor.grey80
                                 : PaletteColor.primary.withOpacity(0.6)
                             : PaletteColor.primary,
                         onTap: () {
-                          print(index);
                           setState(() {
                             _index = index;
                             _pageController.animateToPage(
                               index,
-                              duration: Duration(milliseconds: 500),
+                              duration: const Duration(milliseconds: 500),
                               curve: Curves.ease,
                             );
                           });
@@ -345,7 +342,7 @@ class _ClassPageState extends State<ClassPage> {
                       left: SpacingDimens.spacing16,
                     ),
                     child: PageView(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       controller: _pageController,
                       onPageChanged: (value) {
                         setState(() {
@@ -353,9 +350,9 @@ class _ClassPageState extends State<ClassPage> {
                         });
                       },
                       children: [
-                        Center(child: Text("1")),
+                        const Center(child: Text("1")),
                         ListView(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
@@ -393,8 +390,8 @@ class _ClassPageState extends State<ClassPage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
+                                          const Padding(
+                                            padding: EdgeInsets.only(
                                               left: SpacingDimens.spacing12,
                                             ),
                                             child: Icon(
@@ -406,7 +403,7 @@ class _ClassPageState extends State<ClassPage> {
                                             "Join",
                                             style:
                                                 TypographyStyle.button1.merge(
-                                              TextStyle(
+                                              const TextStyle(
                                                   color:
                                                       PaletteColor.primarybg),
                                             ),
@@ -420,7 +417,7 @@ class _ClassPageState extends State<ClassPage> {
                                                     .withOpacity(0.8),
                                                 borderRadius:
                                                     BorderRadius.circular(15)),
-                                            child: Text("0+",
+                                            child: const Text("0+",
                                                 style: TypographyStyle.button1),
                                           ),
                                         ],
@@ -457,18 +454,18 @@ class _ClassPageState extends State<ClassPage> {
                                               "08:40",
                                               style:
                                                   TypographyStyle.button2.merge(
-                                                TextStyle(
+                                                const TextStyle(
                                                     color:
                                                         PaletteColor.primary),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 2,
                                             ),
                                             Text(
                                               "WIB",
                                               style: TypographyStyle.mini.merge(
-                                                TextStyle(
+                                                const TextStyle(
                                                     color:
                                                         PaletteColor.primary),
                                               ),
@@ -508,12 +505,12 @@ class _ClassPageState extends State<ClassPage> {
                             ),
                           ],
                         ),
-                        Center(child: Text("2")),
-                        Center(child: Text("3")),
-                        Center(child: Text("4")),
-                        Center(child: Text("5")),
-                        Center(child: Text("6")),
-                        Center(child: Text("7"))
+                        const Center(child: Text("2")),
+                        const Center(child: Text("3")),
+                        const Center(child: Text("4")),
+                        const Center(child: Text("5")),
+                        const Center(child: Text("6")),
+                        const Center(child: Text("7"))
                       ],
                     ),
                   ),

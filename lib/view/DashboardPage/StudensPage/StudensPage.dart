@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StudensPage extends StatefulWidget {
+  const StudensPage({Key? key}) : super(key: key);
+
   @override
   _StudensPageState createState() => _StudensPageState();
 }
@@ -21,36 +23,35 @@ class _StudensPageState extends State<StudensPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       appBar: AppBarBack(ctx: context, title: "Santri"),
-      body: Container(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context)
-              .getSantri(codeKelas: _codeKelas),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData)
-              return Center(child: Text("There is no expense"));
-            return ListView(
-              children: snapshot.data!.docChanges
-                  .map(
-                    (e) => _santriContainer(
-                      name: "${e.doc.get('name')}",
-                      imageUrl: e.doc.get('photo'),
-                      inTo: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => JilidPage(
-                              role: 'santri',
-                              uid: e.doc.get('uid'),
-                              codeKelas: _codeKelas,
-                            ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: Provider.of<KelasProvider>(context)
+            .getSantri(codeKelas: _codeKelas),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: Text("There is no expense"));
+          }
+          return ListView(
+            children: snapshot.data!.docChanges
+                .map(
+                  (e) => _santriContainer(
+                    name: "${e.doc.get('name')}",
+                    imageUrl: e.doc.get('photo'),
+                    inTo: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => JilidPage(
+                            role: 'santri',
+                            uid: e.doc.get('uid'),
+                            codeKelas: _codeKelas,
                           ),
-                        );
-                      },
-                    ),
-                  )
-                  .toList(),
-            );
-          },
-        ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+                .toList(),
+          );
+        },
       ),
     );
   }
@@ -71,7 +72,7 @@ class _StudensPageState extends State<StudensPage> {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -113,10 +114,10 @@ class _StudensPageState extends State<StudensPage> {
           ),
           child: TextButton(
             onPressed: inTo,
-            style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.all(0),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.arrow_forward,
               color: PaletteColor.grey,
             ),

@@ -1,10 +1,11 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NabiMusaPage extends StatefulWidget {
+  const NabiMusaPage({Key? key}) : super(key: key);
+
   @override
   _NabiIbrahimPageState createState() => _NabiIbrahimPageState();
 }
@@ -15,12 +16,12 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           Container(
             height: 300,
             width: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFFF7EAC0),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
@@ -42,7 +43,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
                       top: SpacingDimens.spacing16,
                       left: SpacingDimens.spacing16,
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back,
                       color: PaletteColor.primarybg,
                     ),
@@ -53,7 +54,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Column(
@@ -61,7 +62,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
                           Text(
                             "Kisah",
                             style: TypographyStyle.title.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: Color(0xFF620101),
                                 fontSize: 36,
                               ),
@@ -70,7 +71,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
                           Text(
                             "Kisah Nabi Musa",
                             style: TypographyStyle.title.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: Color(0xFF620101),
                               ),
                             ),
@@ -94,7 +95,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
               left: SpacingDimens.spacing16,
               right: SpacingDimens.spacing16,
             ),
-            child: Text(
+            child: const Text(
               "Nabi Musa AS merupakan nabi yang diutus Allah SWT di tengah kekejaman Raja Firaun. Kisahnya saat berperang melawan penyihir kerajaan merupakan salah satu tanda kekuasaan Allah SWT.",
               style: TypographyStyle.paragraph,
             ),
@@ -109,7 +110,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
               left: SpacingDimens.spacing16,
               right: SpacingDimens.spacing16,
             ),
-            child: Text(
+            child: const Text(
               "Nabi Musa AS merupakan nabi ke-14 dalam silsilah 25 nabi yang wajib kita imani. Kisah Nabi Musa AS diceritakan dalam Al Quran dan berbagai riwayat.",
               style: TypographyStyle.paragraph,
             ),
@@ -120,7 +121,7 @@ class _NabiIbrahimPageState extends State<NabiMusaPage> {
               right: SpacingDimens.spacing16,
               top: SpacingDimens.spacing12,
             ),
-            child: Text(
+            child: const Text(
               "Diceritakan dalam buku Musa 'Alaihissalam karya Abu Haafizh Abdurrahman, Raja Firaun adalah raja yang berkuasa di Mesir pada waktu itu. Bahkan ia mengaku sebagai Tuhan. Sehingga seluruh rakyat harus tunduk padanya.",
               style: TypographyStyle.paragraph,
             ),

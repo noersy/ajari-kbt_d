@@ -13,11 +13,11 @@ class CreateKelas extends StatefulWidget {
   final Function freshState;
   final User user;
 
-  const CreateKelas({
+   const CreateKelas({Key? key,
     required this.ctx,
     required this.user,
     required this.freshState,
-  });
+  }) : super(key: key);
 
   @override
   State<CreateKelas> createState() => _CreateKelasState();
@@ -43,11 +43,11 @@ class _CreateKelasState extends State<CreateKelas> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: Column(
-                    children: [
+                    children: const [
                       Align(
                         alignment: Alignment.center,
                         child: Padding(
-                          padding: const EdgeInsets.only(
+                          padding: EdgeInsets.only(
                               top: SpacingDimens.spacing28,
                               bottom: SpacingDimens.spacing28),
                           child: Text("you not have class yet"),
@@ -73,7 +73,7 @@ class _CreateKelasState extends State<CreateKelas> {
                         padding: const EdgeInsets.all(0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(3.0),
-                          side: BorderSide(
+                          side: const BorderSide(
                             color: PaletteColor.green,
                           ),
                         ),
@@ -92,7 +92,7 @@ class _CreateKelasState extends State<CreateKelas> {
                           child: Text(
                             "Create",
                             style: TypographyStyle.button1.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: PaletteColor.primarybg,
                               ),
                             ),
@@ -122,8 +122,8 @@ class _CreateKelasState extends State<CreateKelas> {
         backgroundColor: PaletteColor.primarybg.withOpacity(0),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
+            const Padding(
+              padding: EdgeInsets.only(
                 top: SpacingDimens.spacing28,
                 bottom: SpacingDimens.spacing8,
               ),
@@ -136,11 +136,11 @@ class _CreateKelasState extends State<CreateKelas> {
               padding: const EdgeInsets.all(SpacingDimens.spacing16),
               child: TextFormField(
                 controller: _editingController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'Name'),
               ),
             ),
-            Expanded(child: SizedBox()),
+            const Expanded(child: SizedBox()),
             Padding(
               padding: const EdgeInsets.only(
                 left: SpacingDimens.spacing16,
@@ -153,7 +153,7 @@ class _CreateKelasState extends State<CreateKelas> {
                   padding: const EdgeInsets.all(0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(3.0),
-                    side: BorderSide(
+                    side: const BorderSide(
                       color: PaletteColor.green,
                     ),
                   ),
@@ -169,7 +169,7 @@ class _CreateKelasState extends State<CreateKelas> {
                     child: Text(
                       "Create",
                       style: TypographyStyle.button1.merge(
-                        TextStyle(
+                        const TextStyle(
                           color: PaletteColor.primarybg,
                         ),
                       ),
@@ -178,7 +178,7 @@ class _CreateKelasState extends State<CreateKelas> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: SpacingDimens.spacing16,
             ),
           ],

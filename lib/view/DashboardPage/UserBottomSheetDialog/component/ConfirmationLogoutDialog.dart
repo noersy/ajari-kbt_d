@@ -9,8 +9,11 @@ import 'package:flutter/material.dart';
 class ConfirmationLogoutDialog extends StatelessWidget {
   final BuildContext homePageCtx, sheetDialogCtx;
 
-  ConfirmationLogoutDialog(
-      {required this.homePageCtx, required this.sheetDialogCtx});
+  const ConfirmationLogoutDialog({
+    Key? key,
+    required this.homePageCtx,
+    required this.sheetDialogCtx,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
       children: [
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.all(SpacingDimens.spacing24),
+          padding: const EdgeInsets.all(SpacingDimens.spacing24),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: PaletteColor.primarybg,
@@ -43,23 +46,23 @@ class ConfirmationLogoutDialog extends StatelessWidget {
               Text(
                 'Confirmation Logout',
                 style: TypographyStyle.subtitle1.merge(
-                  TextStyle(
+                  const TextStyle(
                     color: PaletteColor.black,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 22,
               ),
               Text(
                 'Are you sure you want to logout now?',
                 style: TypographyStyle.paragraph.merge(
-                  TextStyle(
+                  const TextStyle(
                     color: PaletteColor.grey60,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 38,
               ),
               Row(
@@ -73,7 +76,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
-                          side: BorderSide(color: PaletteColor.primary),
+                          side: const BorderSide(color: PaletteColor.primary),
                         ),
                       ),
                       onPressed: () {
@@ -82,7 +85,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
                       child: Text(
                         'No',
                         style: TypographyStyle.button2.merge(
-                          TextStyle(
+                          const TextStyle(
                             color: PaletteColor.primary,
                           ),
                         ),
@@ -107,7 +110,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
                       child: Text(
                         'Yes',
                         style: TypographyStyle.button2.merge(
-                          TextStyle(
+                          const TextStyle(
                             color: PaletteColor.primarybg,
                           ),
                         ),
@@ -124,14 +127,13 @@ class ConfirmationLogoutDialog extends StatelessWidget {
   }
 
   void logOut(context) async {
-
     await AuthLogin.signOut(context: context);
 
     globals.Set.clearAll();
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => SplashScreenPage(),
+        builder: (context) => const SplashScreenPage(),
       ),
     );
   }

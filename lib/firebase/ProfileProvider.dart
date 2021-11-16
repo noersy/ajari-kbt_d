@@ -5,7 +5,7 @@ import 'package:ajari/config/FirebaseReference.dart';
 import 'package:ajari/config/globals.dart' as globals;
 import 'package:ajari/model/Profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfileProvider extends ChangeNotifier {
   Future<void> createProfile({
@@ -19,9 +19,10 @@ class ProfileProvider extends ChangeNotifier {
       };
 
       await FirebaseReference.user.doc(userid).set(data);
-      print("createProfile: Success");
     } catch (e) {
-      print("createProfile: Error");
+      if (kDebugMode) {
+        print("createProfile: Error");
+      }
     }
   }
 
@@ -36,9 +37,10 @@ class ProfileProvider extends ChangeNotifier {
 
       await FirebaseReference.user.doc(userid).update(data);
 
-      print("updateProflie: Success");
     } catch (e) {
-      print("updateProflie: Error");
+      if (kDebugMode) {
+        print("updateProflie: Error");
+      }
     }
   }
 
@@ -52,11 +54,12 @@ class ProfileProvider extends ChangeNotifier {
 
       Profile profile = profileFromJson(jsonEncode(data.data()));
       globals.Set.prf(profile);
-      print("getProfile: Success");
 
       return profile;
     } catch (e) {
-      print("getProfile: Error");
+      if (kDebugMode) {
+        print("getProfile: Error");
+      }
     }
   }
 
@@ -68,10 +71,11 @@ class ProfileProvider extends ChangeNotifier {
 
       await createProfile(role: '', userid: userUid);
 
-      print("chekRole: exists");
       return data.get("role");
     } catch (e) {
-      print("chekRole: Not Found");
+      if (kDebugMode) {
+        print("chekRole: Not Found");
+      }
       return "Tidak ada";
     }
   }

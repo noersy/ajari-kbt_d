@@ -6,7 +6,7 @@ Widget indicatorLoad() {
   return SpinKitFadingCircle(
     size: 45,
     itemBuilder: (BuildContext context, int index) {
-      return DecoratedBox(
+      return const DecoratedBox(
         decoration: BoxDecoration(
           color: PaletteColor.primary,
           shape: BoxShape.circle,

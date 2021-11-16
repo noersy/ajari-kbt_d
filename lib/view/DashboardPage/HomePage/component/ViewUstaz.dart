@@ -12,9 +12,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class ViewUstaz extends StatefulWidget {
   final PageController pageViewController;
 
-  ViewUstaz({
+  const ViewUstaz({Key? key,
     required this.pageViewController,
-  });
+  }) : super(key: key);
 
   @override
   State<ViewUstaz> createState() => _ViewUstazState();
@@ -44,7 +44,7 @@ class _ViewUstazState extends State<ViewUstaz> {
             SizedBox(
               height: 150,
               child: PageView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 controller: widget.pageViewController,
                 children: [
                   Container(
@@ -55,7 +55,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                         left: SpacingDimens.spacing16,
                         right: SpacingDimens.spacing16,
                         bottom: SpacingDimens.spacing12),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
@@ -81,17 +81,17 @@ class _ViewUstazState extends State<ViewUstaz> {
                           height: 130,
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.people,
                                 color: PaletteColor.primarybg,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Text(
                                 "Studens",
                                 style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -105,7 +105,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                           child: Text(
                             "${_kelas.jumlahSantri}",
                             style: TypographyStyle.title.merge(
-                                TextStyle(color: PaletteColor.primarybg)),
+                                const TextStyle(color: PaletteColor.primarybg)),
                           ),
                         ),
                         Container(
@@ -119,7 +119,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                                 left: SpacingDimens.spacing8),
                             child: Text(
                               " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(TextStyle(
+                              style: TypographyStyle.subtitle2.merge(const TextStyle(
                                   color: PaletteColor.primarybg,
                                   fontWeight: FontWeight.w100)),
                             ),
@@ -136,7 +136,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                         left: SpacingDimens.spacing16,
                         right: SpacingDimens.spacing16,
                         bottom: SpacingDimens.spacing12),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomLeft,
                           end: Alignment.topRight,
@@ -167,17 +167,17 @@ class _ViewUstazState extends State<ViewUstaz> {
                           height: 130,
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.people,
                                 color: PaletteColor.primarybg,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
                               Text(
                                 "Studens",
                                 style: TypographyStyle.subtitle2.merge(
-                                    TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -191,7 +191,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                           child: Text(
                             "${_kelas.jumlahSantri}",
                             style: TypographyStyle.title.merge(
-                                TextStyle(color: PaletteColor.primarybg)),
+                                const TextStyle(color: PaletteColor.primarybg)),
                           ),
                         ),
                         Container(
@@ -205,7 +205,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                                 left: SpacingDimens.spacing8),
                             child: Text(
                               " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(TextStyle(
+                              style: TypographyStyle.subtitle2.merge(const TextStyle(
                                   color: PaletteColor.primarybg,
                                   fontWeight: FontWeight.w100)),
                             ),
@@ -224,11 +224,11 @@ class _ViewUstazState extends State<ViewUstaz> {
               onDotClicked: (i) {
                 widget.pageViewController.animateToPage(
                   i,
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.ease,
                 );
               },
-              effect: ExpandingDotsEffect(
+              effect: const ExpandingDotsEffect(
                 expansionFactor: 3,
                 spacing: 8,
                 radius: 16,
@@ -241,7 +241,7 @@ class _ViewUstazState extends State<ViewUstaz> {
             ),
           ],
         ),
-        SizedBox(height: SpacingDimens.spacing8),
+        const SizedBox(height: SpacingDimens.spacing8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -266,7 +266,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => StudensPage(),
+                        builder: (context) => const StudensPage(),
                       ),
                     );
                   },
@@ -282,7 +282,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                           decoration: BoxDecoration(
                               color: PaletteColor.primary.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(100)),
-                          child: Icon(
+                          child: const Icon(
                             CostumeIcons.holy_quran,
                             color: PaletteColor.primary,
                           ),
@@ -299,13 +299,13 @@ class _ViewUstazState extends State<ViewUstaz> {
                               Text(
                                 "قيم",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
+                                    const TextStyle(
                                         color: PaletteColor.primary,
                                         fontSize: 20)),
                               ),
                               Text("Nilai",
                                   style: TypographyStyle.subtitle2
-                                      .merge(TextStyle(fontSize: 12))),
+                                      .merge(const TextStyle(fontSize: 12))),
                             ],
                           ),
                         ),
@@ -335,7 +335,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => StoryPage()));
+                        MaterialPageRoute(builder: (context) => const StoryPage()));
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -349,7 +349,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                           decoration: BoxDecoration(
                               color: PaletteColor.primary.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(100)),
-                          child: Icon(
+                          child: const Icon(
                             Icons.collections_bookmark_sharp,
                             color: PaletteColor.primary,
                           ),
@@ -366,14 +366,14 @@ class _ViewUstazState extends State<ViewUstaz> {
                               Text(
                                 "قصة",
                                 style: TypographyStyle.subtitle1.merge(
-                                    TextStyle(
+                                    const TextStyle(
                                         color: PaletteColor.primary,
                                         fontSize: 20)),
                               ),
                               Text(
                                 "Cerita",
                                 style: TypographyStyle.subtitle2.merge(
-                                  TextStyle(fontSize: 12),
+                                  const TextStyle(fontSize: 12),
                                 ),
                               ),
                             ],

@@ -8,7 +8,7 @@ class AppBarNotification extends StatelessWidget
   final BuildContext ctx;
   final String title;
 
-  AppBarNotification({required this.ctx, required this.title});
+  const AppBarNotification({Key? key, required this.ctx, required this.title}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -25,7 +25,7 @@ class AppBarNotification extends StatelessWidget
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               // IconComponent.notification,
               Icons.wysiwyg,
             ),

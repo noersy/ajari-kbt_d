@@ -3,14 +3,14 @@ import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
   final String role;
 
-  const ProfilePage({required this.user, required this.role});
+  const ProfilePage({Key? key, required this.user, required this.role})
+      : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -40,10 +40,12 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.all(SpacingDimens.spacing8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Image.network(
-                          '${widget.user.photoURL!}',
-                          fit: BoxFit.fill,
-                        ),
+                        child: widget.user.photoURL?.isNotEmpty != null
+                            ? Image.network(
+                                widget.user.photoURL!,
+                                fit: BoxFit.fill,
+                              )
+                            : const SizedBox.shrink(),
                       ),
                     ),
                   ),
@@ -65,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Text(
                       widget.role,
                       style: TypographyStyle.subtitle2.merge(
-                        TextStyle(
+                        const TextStyle(
                           color: PaletteColor.primarybg,
                         ),
                       ),
@@ -86,21 +88,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.grey.withOpacity(0.6),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: const Offset(0, 1),
                   )
                 ],
               ),
               child: ListView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   containerData(
-                    title: "Name",
-                    body: '${widget.user.displayName}'
-                  ),
-                  containerData(
-                    title: "Email",
-                    body: '${widget.user.email}'
-                  ),
+                      title: "Name", body: '${widget.user.displayName}'),
+                  containerData(title: "Email", body: '${widget.user.email}'),
                 ],
               ),
             ),

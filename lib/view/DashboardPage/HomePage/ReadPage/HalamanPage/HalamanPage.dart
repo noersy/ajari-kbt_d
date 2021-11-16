@@ -13,7 +13,7 @@ import 'package:ajari/view/DashboardPage/StudensPage/componen/NilaiDialog.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,7 +24,7 @@ class HalamanPage extends StatefulWidget {
   final String pathAudio;
   final String nomorHalaman, nomorJilid, uid, codeKelas, role, grade;
 
-  const HalamanPage({
+   const HalamanPage({Key? key,
     required this.pathBacaan,
     required this.pathAudio,
     required this.nomorHalaman,
@@ -33,7 +33,7 @@ class HalamanPage extends StatefulWidget {
     required this.role,
     required this.grade,
     required this.codeKelas,
-  });
+  }) : super(key: key);
 
   @override
   _PageOneState createState() => _PageOneState();
@@ -88,7 +88,7 @@ class _PageOneState extends State<HalamanPage> {
           right: SpacingDimens.spacing16,
         ),
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Container(
@@ -99,7 +99,7 @@ class _PageOneState extends State<HalamanPage> {
                 child: StreamBuilder(
                     stream: assetsAudioPlayer.currentPosition,
                     builder: (context, AsyncSnapshot<Duration> snapshot) {
-                      final _data = snapshot.data ?? Duration(seconds: 0);
+                      final _data = snapshot.data ?? const Duration(seconds: 0);
                       return Row(
                         children: [
                           GestureDetector(
@@ -138,7 +138,7 @@ class _PageOneState extends State<HalamanPage> {
                                   padding: const EdgeInsets.all(7),
                                   child: Container(
                                     height: 2,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       color: PaletteColor.grey80,
                                     ),
                                   ),
@@ -152,7 +152,7 @@ class _PageOneState extends State<HalamanPage> {
                                         color: PaletteColor.primary,
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: Icon(
+                                    child: const Icon(
                                       Icons.pause_outlined,
                                       size: 14,
                                       color: PaletteColor.primarybg,
@@ -162,14 +162,14 @@ class _PageOneState extends State<HalamanPage> {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: SpacingDimens.spacing8,
                           ),
                         ],
                       );
                     }),
               ),
-              SizedBox(height: SpacingDimens.spacing12),
+              const SizedBox(height: SpacingDimens.spacing12),
               Container(
                 padding: const EdgeInsets.only(
                   left: SpacingDimens.spacing16,
@@ -189,7 +189,7 @@ class _PageOneState extends State<HalamanPage> {
                   ),
                 ),
               ),
-              SizedBox(height: SpacingDimens.spacing8),
+              const SizedBox(height: SpacingDimens.spacing8),
               Container(
                 padding: const EdgeInsets.only(
                   top: SpacingDimens.spacing16,
@@ -251,7 +251,7 @@ class _PageOneState extends State<HalamanPage> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ]),
                 child: TextButton(
@@ -273,9 +273,9 @@ class _PageOneState extends State<HalamanPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25),
                     ),
-                    padding: EdgeInsets.all(SpacingDimens.spacing16),
+                    padding: const EdgeInsets.all(SpacingDimens.spacing16),
                   ),
-                  child: Text(
+                  child: const Text(
                     "Nilai",
                     style: TypographyStyle.button1,
                   ),
@@ -298,7 +298,7 @@ class _PageOneState extends State<HalamanPage> {
                       color: Colors.grey.withOpacity(0.4),
                       spreadRadius: 1,
                       blurRadius: 2,
-                      offset: Offset(0, 1), // changes position of shadow
+                      offset: const Offset(0, 1), // changes position of shadow
                     ),
                   ],
                 ),
@@ -307,7 +307,7 @@ class _PageOneState extends State<HalamanPage> {
                   onTap: () {
                     _showdialog(false);
                   },
-                  child: Icon(Icons.insert_comment_outlined),
+                  child: const Icon(Icons.insert_comment_outlined),
                 ),
               ),
               Container(
@@ -324,7 +324,7 @@ class _PageOneState extends State<HalamanPage> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ]),
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
@@ -334,7 +334,7 @@ class _PageOneState extends State<HalamanPage> {
                       _showdialog(true);
                     }
                   },
-                  child: Icon(Icons.play_arrow),
+                  child: const Icon(Icons.play_arrow),
                 ),
               ),
             ],
@@ -374,7 +374,7 @@ class _PageOneState extends State<HalamanPage> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ]),
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
@@ -416,7 +416,7 @@ class _PageOneState extends State<HalamanPage> {
                         color: Colors.grey.withOpacity(0.4),
                         spreadRadius: 1,
                         blurRadius: 2,
-                        offset: Offset(0, 1), // changes position of shadow
+                        offset: const Offset(0, 1), // changes position of shadow
                       ),
                     ]),
                 padding: const EdgeInsets.all(SpacingDimens.spacing16),
@@ -441,7 +441,7 @@ class _PageOneState extends State<HalamanPage> {
                       color: Colors.grey.withOpacity(0.4),
                       spreadRadius: 1,
                       blurRadius: 2,
-                      offset: Offset(0, 1),
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -450,12 +450,12 @@ class _PageOneState extends State<HalamanPage> {
                     stream: assetsAudioPlayerRecord.current,
                     builder: (context, AsyncSnapshot<Playing?> snapshot) {
                       Duration _duartion =
-                          snapshot.data?.audio.duration ?? Duration(seconds: 0);
+                          snapshot.data?.audio.duration ?? const Duration(seconds: 0);
                       return StreamBuilder(
                           stream: assetsAudioPlayerRecord.currentPosition,
                           builder: (context, AsyncSnapshot<Duration> snapshot) {
                             Duration _data =
-                                snapshot.data ?? Duration(seconds: 0);
+                                snapshot.data ?? const Duration(seconds: 0);
                             String _time = "${twoDigits(
                               _duartion.inMinutes.remainder(60) -
                                   _data.inMinutes,
@@ -487,7 +487,7 @@ class _PageOneState extends State<HalamanPage> {
                                     Icon(_playRecord
                                         ? Icons.play_arrow
                                         : Icons.pause),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: SpacingDimens.spacing4,
                                     ),
                                     Text(
@@ -515,7 +515,7 @@ class _PageOneState extends State<HalamanPage> {
                   color: Colors.grey.withOpacity(0.4),
                   spreadRadius: 1,
                   blurRadius: 2,
-                  offset: Offset(0, 1), // changes position of shadow
+                  offset: const Offset(0, 1), // changes position of shadow
                 ),
               ],
             ),
@@ -530,7 +530,7 @@ class _PageOneState extends State<HalamanPage> {
                 assetsAudioPlayerRecord.stop();
                 _showdialog(false);
               },
-              child: Icon(Icons.insert_comment_outlined),
+              child: const Icon(Icons.insert_comment_outlined),
             ),
           ),
         ],
@@ -539,8 +539,8 @@ class _PageOneState extends State<HalamanPage> {
   }
 
   Widget _notJoinAction() {
-    return Padding(
-      padding: const EdgeInsets.only(
+    return const Padding(
+      padding: EdgeInsets.only(
         top: SpacingDimens.spacing12,
         bottom: SpacingDimens.spacing8,
       ),
@@ -594,14 +594,14 @@ class _PageOneState extends State<HalamanPage> {
                       color: Colors.grey.withOpacity(0.4),
                       spreadRadius: 1,
                       blurRadius: 2,
-                      offset: Offset(0, 1),
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
                 child: Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.only(
+                      padding: EdgeInsets.only(
                         left: SpacingDimens.spacing8,
                         right: SpacingDimens.spacing8,
                       ),
@@ -612,14 +612,14 @@ class _PageOneState extends State<HalamanPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
+                      padding: EdgeInsets.only(
                         left: SpacingDimens.spacing24,
                         right: SpacingDimens.spacing24,
                       ),
                       child: Text("1"),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
+                      padding: EdgeInsets.only(
                         left: SpacingDimens.spacing8,
                         right: SpacingDimens.spacing8,
                       ),
@@ -646,15 +646,15 @@ class _PageOneState extends State<HalamanPage> {
                       color: Colors.grey.withOpacity(0.4),
                       spreadRadius: 1,
                       blurRadius: 2,
-                      offset: Offset(0, 1),
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
                 padding: const EdgeInsets.all(SpacingDimens.spacing4),
                 child: Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.all(SpacingDimens.spacing4),
+                      padding: EdgeInsets.all(SpacingDimens.spacing4),
                       child: Icon(
                         Icons.arrow_forward,
                         size: 20,
@@ -710,7 +710,9 @@ class _PageOneState extends State<HalamanPage> {
     bool appFolderExists = await appFolder.exists();
     if (!appFolderExists) {
       final created = await appFolder.create(recursive: true);
-      print(created.path);
+      if (kDebugMode) {
+        print(created.path);
+      }
     }
 
     return filePath;
@@ -724,9 +726,13 @@ class _PageOneState extends State<HalamanPage> {
           .ref('uploads/audio_${widget.nomorHalaman}.m4a')
           .putFile(file);
     } on FirebaseException catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -763,10 +769,14 @@ class _PageOneState extends State<HalamanPage> {
       File file = File(filepath);
       Uint8List bytes = await file.readAsBytes();
       file.writeAsBytes(bytes);
-      print(file.uri);
+      if (kDebugMode) {
+        print(file.uri);
+      }
       return file.uri;
     } catch (e, r) {
-      print("$e $r");
+      if (kDebugMode) {
+        print("$e $r");
+      }
     }
     return null;
   }
@@ -774,7 +784,6 @@ class _PageOneState extends State<HalamanPage> {
   void startRecord() async {
     try {
       if (permissionsGranted && isNotStart) {
-        print("record start");
         setState(() {
           isNotStart = false;
         });

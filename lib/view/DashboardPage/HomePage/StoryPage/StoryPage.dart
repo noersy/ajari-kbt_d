@@ -6,6 +6,8 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/NabiM
 import 'package:flutter/material.dart';
 
 class StoryPage extends StatefulWidget {
+  const StoryPage({Key? key}) : super(key: key);
+
   @override
   _StoryPageState createState() => _StoryPageState();
 }
@@ -19,62 +21,60 @@ class _StoryPageState extends State<StoryPage> {
         ctx: context,
         title: "Halaman Story",
       ),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView(
-            physics: BouncingScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-            ),
-            children: [
-              cardStry(
-                image: 'assets/images/nabi_ibrahim.png',
-                title: Text(
-                  "Kisah Nabi Ibrahim",
-                  style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
-                ),
-                color: Color(0xFF9F5A2A),
-                onTap: (){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => NabiIbrahimPage(),
-                    ),
-                  );
-                }
-              ),
-              cardStry(
-                image: 'assets/images/nabi_musa.png',
-                title: Text(
-                  "Kisah Nabi Musa",
-                  style: TextStyle(color: Color(0xFF620101), fontSize: 16),
-                ),
-                color: Color(0xFFF7EAC0),
-                onTap: (){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => NabiMusaPage(),
-                    ),
-                  );
-                }
-              ),
-              cardStry(
-                image: 'assets/images/nabi_nuh.png',
-                title: Text(
-                  "Kisah Nabi Nuh",
-                  style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
-                ),
-                color: Color(0xFF8DAA3C),
-                onTap: (){
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => NabiMusaPage(),
-                    ),
-                  );
-                }
-              ),
-            ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: GridView(
+          physics: const BouncingScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
           ),
+          children: [
+            cardStry(
+              image: 'assets/images/nabi_ibrahim.png',
+              title: const Text(
+                "Kisah Nabi Ibrahim",
+                style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
+              ),
+              color: const Color(0xFF9F5A2A),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const NabiIbrahimPage(),
+                  ),
+                );
+              }
+            ),
+            cardStry(
+              image: 'assets/images/nabi_musa.png',
+              title: const Text(
+                "Kisah Nabi Musa",
+                style: TextStyle(color: Color(0xFF620101), fontSize: 16),
+              ),
+              color: const Color(0xFFF7EAC0),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const NabiMusaPage(),
+                  ),
+                );
+              }
+            ),
+            cardStry(
+              image: 'assets/images/nabi_nuh.png',
+              title: const Text(
+                "Kisah Nabi Nuh",
+                style: TextStyle(color: PaletteColor.primarybg, fontSize: 16),
+              ),
+              color: const Color(0xFF8DAA3C),
+              onTap: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const NabiMusaPage(),
+                  ),
+                );
+              }
+            ),
+          ],
         ),
       ),
     );
@@ -90,7 +90,7 @@ class _StoryPageState extends State<StoryPage> {
         ),
         child: TextButton(
           style: ButtonStyle(
-            padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+            padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
           ),
           onPressed: onTap,
           child: Stack(
@@ -105,7 +105,7 @@ class _StoryPageState extends State<StoryPage> {
                   alignment: Alignment.bottomLeft,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: 120,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -8,7 +8,6 @@ import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/DashboardPage.dart';
 import 'package:ajari/view/LoginPage/component/ButtonLoginGoogle.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +17,15 @@ import 'component/ButtonLogin.dart';
 import 'component/MainForms.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _nimFilter = new TextEditingController();
-  final TextEditingController _passwordFilter = new TextEditingController();
+  final TextEditingController _nimFilter = TextEditingController();
+  final TextEditingController _passwordFilter = TextEditingController();
   bool isLoading = false;
 
   @override
@@ -45,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.all(SpacingDimens.spacing24),
+                  padding: const EdgeInsets.all(SpacingDimens.spacing24),
                   child: Column(
                     children: [
                       Container(
@@ -61,13 +62,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Container(
                         alignment: Alignment.topRight,
-                        padding: EdgeInsets.only(top: SpacingDimens.spacing16),
+                        padding: const EdgeInsets.only(top: SpacingDimens.spacing16),
                         child: GestureDetector(
                           onTap: () {},
                           child: Text(
                             "Forgot password?",
                             style: TypographyStyle.caption2.merge(
-                              TextStyle(
+                              const TextStyle(
                                 color: PaletteColor.primary,
                               ),
                             ),
@@ -75,24 +76,24 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       ButtonLogin(
-                        onPressedFunction: this.onPressedFunction,
+                        onPressedFunction: onPressedFunction,
                         title: "Login",
                       ),
                       ButtonLoginGoogle(
-                        onPressedFunction: this.loginWIthGoogle,
+                        onPressedFunction: loginWIthGoogle,
                       ),
-                      SizedBox(height: SpacingDimens.spacing8),
-                      Divider(),
-                      SizedBox(height: SpacingDimens.spacing8),
-                      Text("Not have account yet? Register now!"),
-                      SizedBox(height: SpacingDimens.spacing8),
+                      const SizedBox(height: SpacingDimens.spacing8),
+                      const Divider(),
+                      const SizedBox(height: SpacingDimens.spacing8),
+                      const Text("Not have account yet? Register now!"),
+                      const SizedBox(height: SpacingDimens.spacing8),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-          new Align(
+          Align(
             child: loadingIndicator,
             alignment: FractionalOffset.center,
           ),
@@ -106,16 +107,15 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = true;
     });
 
-    User? user = await AuthLogin.signInWithGoogle(context: context);
+    await AuthLogin.signInWithGoogle(context: context);
 
     setState(() {
       isLoading = false;
     });
 
-    print(user!.displayName);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => DashboardPage(),
+        builder: (context) => const DashboardPage(),
       ),
     );
   }
@@ -147,17 +147,18 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
 
-    if (globals.Get.prf().role == "-")
+    if (globals.Get.prf().role == "-") {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => RegisterPage(user: globals.Get.usr()),
         ),
       );
+    }
 
     if (globals.isUserNotNull) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => DashboardPage(),
+          builder: (context) => const DashboardPage(),
         ),
       );
     } else {

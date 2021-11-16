@@ -1,19 +1,18 @@
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 class ButtonLoginGoogle extends StatelessWidget {
   final VoidCallback onPressedFunction;
 
-  ButtonLoginGoogle({required this.onPressedFunction});
+  const ButtonLoginGoogle({Key? key, required this.onPressedFunction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: SpacingDimens.spacing12),
+      margin: const EdgeInsets.only(top: SpacingDimens.spacing12),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: TextButton(
@@ -23,12 +22,12 @@ class ButtonLoginGoogle extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(3.0),
-              side: BorderSide(
+              side: const BorderSide(
                 color: PaletteColor.green,
               ),
             ),
           ),
-          onPressed: this.onPressedFunction,
+          onPressed: onPressedFunction,
           child: SizedBox(
             height: 48,
             child: Row(
@@ -38,7 +37,7 @@ class ButtonLoginGoogle extends StatelessWidget {
                 Text(
                   "Log In with Google",
                   style: TypographyStyle.button1.merge(
-                    TextStyle(
+                    const TextStyle(
                       color: PaletteColor.grey60,
                     ),
                   ),

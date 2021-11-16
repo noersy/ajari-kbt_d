@@ -2,20 +2,19 @@ import 'package:ajari/firebase/KelasProvider.dart';
 import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NilaiDialog extends StatefulWidget {
   final String uid, grade, codeKelas, nomorJilid, nomorHalaman;
 
-  const NilaiDialog({
+   const NilaiDialog({Key? key,
     required this.uid,
     required this.grade,
     required this.codeKelas,
     required this.nomorJilid,
     required this.nomorHalaman,
-  });
+  }) : super(key: key);
 
   @override
   _NilaiDialogState createState() => _NilaiDialogState();
@@ -66,13 +65,13 @@ class _NilaiDialogState extends State<NilaiDialog> {
                     child: Text(
                       'Nilai',
                       style: TypographyStyle.title.merge(
-                        TextStyle(
+                        const TextStyle(
                           color: PaletteColor.black,
                         ),
                       ),
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                 ],
               ),
               Column(
@@ -90,7 +89,7 @@ class _NilaiDialogState extends State<NilaiDialog> {
                       'A : >80, B+ : >=75, B : >=70, C+ : >=60, C : >=55, D : >=40, E : <40',
                       textAlign: TextAlign.center,
                       style: TypographyStyle.caption2.merge(
-                        TextStyle(
+                        const TextStyle(
                           color: PaletteColor.grey,
                         ),
                       ),
@@ -152,7 +151,7 @@ class _NilaiDialogState extends State<NilaiDialog> {
                       },
                       child: Text(
                         "Submit",
-                        style: TypographyStyle.button1.merge(TextStyle(
+                        style: TypographyStyle.button1.merge(const TextStyle(
                           color: PaletteColor.primarybg2,
                         )),
                       ),
@@ -170,12 +169,12 @@ class _NilaiDialogState extends State<NilaiDialog> {
             child: TextButton(
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.all(SpacingDimens.spacing8),
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Icon(
+              child: const Icon(
                 Icons.close,
                 color: PaletteColor.grey60,
               ),

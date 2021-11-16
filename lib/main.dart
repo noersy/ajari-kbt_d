@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
           create: (_) => KelasProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         color: PaletteColor.primary,
         debugShowCheckedModeBanner: false,
         title: 'Ajari',

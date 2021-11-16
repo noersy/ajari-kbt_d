@@ -2,16 +2,14 @@ import 'package:ajari/theme/PaletteColor.dart';
 import 'package:ajari/theme/SpacingDimens.dart';
 import 'package:ajari/theme/TypographyStyle.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/MessageDialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 class HalamanContainer extends StatelessWidget {
   final BuildContext ctx;
-  final inTo;
+  final Function() inTo;
   final String nomorHalaman, nomorJilid, uid, codeKelas, role, grade;
 
-  HalamanContainer({
+  const HalamanContainer({Key? key,
     required this.nomorJilid,
     required this.nomorHalaman,
     required this.ctx,
@@ -19,8 +17,8 @@ class HalamanContainer extends StatelessWidget {
     required this.codeKelas,
     required this.role,
     required this.grade,
-    this.inTo,
-  });
+    required this.inTo,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +37,7 @@ class HalamanContainer extends StatelessWidget {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 2,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -54,9 +52,9 @@ class HalamanContainer extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              this.nomorHalaman,
+              nomorHalaman,
               style: TypographyStyle.subtitle1.merge(
-                TextStyle(color: PaletteColor.primary),
+                const TextStyle(color: PaletteColor.primary),
               ),
             ),
           ),
@@ -75,9 +73,9 @@ class HalamanContainer extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(grade),
                 ),
-                Padding(
+                const Padding(
                   padding:
-                      const EdgeInsets.only(right: SpacingDimens.spacing12),
+                      EdgeInsets.only(right: SpacingDimens.spacing12),
                   child: Text("|"),
                 ),
                 Container(
@@ -99,7 +97,7 @@ class HalamanContainer extends StatelessWidget {
                     onPressed: (){
                       _showDialog(false);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.comment,
                       size: 16,
                       color: PaletteColor.grey80,
@@ -117,12 +115,12 @@ class HalamanContainer extends StatelessWidget {
                   child: TextButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
-                          EdgeInsets.all(0)),
+                          const EdgeInsets.all(0)),
                     ),
                     onPressed: (){
                       _showDialog(true);
                     },
-                    child: Icon(
+                    child: const Icon(
                       Icons.play_arrow,
                       size: 18,
                       color: PaletteColor.grey80,
@@ -140,9 +138,9 @@ class HalamanContainer extends StatelessWidget {
           child: TextButton(
             onPressed: inTo,
             style: ButtonStyle(
-              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(0)),
+              padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.all(0)),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.arrow_forward,
               color: PaletteColor.grey,
             ),
