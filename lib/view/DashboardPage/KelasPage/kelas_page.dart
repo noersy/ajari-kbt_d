@@ -1,7 +1,7 @@
-import 'package:ajari/providers/kelas_providers.dart';
-import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
+import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -70,7 +70,6 @@ class _ClassPageState extends State<ClassPage> {
 
   @override
   Widget build(BuildContext context) {
-
     _kelas = context.read<KelasProvider>().kelas;
 
     return Scaffold(
@@ -194,26 +193,6 @@ class _ClassPageState extends State<ClassPage> {
                               ),
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: SpacingDimens.spacing8+1,
-                                  right: SpacingDimens.spacing4,
-                                ),
-                                child: Text(
-                                  _kelas.kelasId,
-                                  style: TypographyStyle.button1.copyWith(fontSize: 12, color: PaletteColor.primarybg2.withOpacity(0.8),),
-                              ),
-                                ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: SpacingDimens.spacing4+3, right: SpacingDimens.spacing8),
-                                child: Icon(Icons.content_copy, size: 16, color: PaletteColor.primarybg,),
-                              )
-                            ],
-                          ),
                           Container(
                             height: 120,
                             margin: const EdgeInsets.only(
@@ -222,6 +201,56 @@ class _ClassPageState extends State<ClassPage> {
                             alignment: Alignment.topRight,
                             child: Image.asset(
                               'assets/images/lentrn.png',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 150,
+                            child: Align(
+                              alignment: Alignment.bottomRight,
+                              child: SizedBox(
+                                width: 60,
+                                height: 30,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Copy code kelas."),
+                                        duration: Duration(milliseconds: 300),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: SpacingDimens.spacing8 + 1,
+                                          right: SpacingDimens.spacing4,
+                                        ),
+                                        child: Text(
+                                          _kelas.kelasId,
+                                          style: TypographyStyle.button1.copyWith(
+                                            fontSize: 12,
+                                            color: PaletteColor.primarybg2
+                                                .withOpacity(0.8),
+                                          ),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(
+                                            bottom: SpacingDimens.spacing4 + 3,
+                                            right: SpacingDimens.spacing8),
+                                        child: Icon(
+                                          Icons.content_copy,
+                                          size: 16,
+                                          color: PaletteColor.primarybg,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           _profile.role != "Santri"
