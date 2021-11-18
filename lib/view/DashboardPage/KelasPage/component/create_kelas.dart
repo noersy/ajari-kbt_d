@@ -12,11 +12,9 @@ import 'package:provider/provider.dart';
 
 class CreateKelas extends StatefulWidget {
   final BuildContext ctx;
-  final Function freshState;
 
    const CreateKelas({Key? key,
     required this.ctx,
-    required this.freshState,
   }) : super(key: key);
 
   @override
@@ -31,7 +29,6 @@ class _CreateKelasState extends State<CreateKelas> {
   @override
   Widget build(BuildContext context) {
 
-    String _codeKelas = context.read<KelasProvider>().kelas.kelasId;
 
 
     return _loading
@@ -198,7 +195,8 @@ class _CreateKelasState extends State<CreateKelas> {
       String _codeKelas = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
       Kelas? value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
-      widget.freshState(value: value);
+
+      if(value != null)context.read<KelasProvider>().setKelas(value);
 
       _loading = false;
     }catch(e){

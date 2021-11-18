@@ -118,7 +118,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                   }
                 },
                 child: actionBottomSheet(
-                  icon: Icons.person,
+                  icon: Icons.person_outlined,
                   title: "My Profile",
                 ),
               ),

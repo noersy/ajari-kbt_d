@@ -6,7 +6,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/component/create_absen.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

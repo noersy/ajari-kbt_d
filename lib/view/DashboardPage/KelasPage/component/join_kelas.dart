@@ -10,9 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class JoinKelas extends StatefulWidget {
-  final Function freshState;
 
-   const JoinKelas({Key? key, required this.freshState}) : super(key: key);
+   const JoinKelas({Key? key}) : super(key: key);
 
   @override
   _JoinKelasState createState() => _JoinKelasState();
@@ -38,7 +37,8 @@ class _JoinKelasState extends State<JoinKelas> {
 
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!);
       var value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
-      widget.freshState(value: value);
+
+      if(value != null) context.read<KelasProvider>().setKelas(value);
 
       _loading = false;
     }catch(e){
