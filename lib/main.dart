@@ -1,5 +1,5 @@
-import 'package:ajari/providers/kelas_provider.dart';
-import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/material.dart';

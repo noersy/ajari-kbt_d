@@ -1,5 +1,5 @@
-import 'package:ajari/providers/kelas_provider.dart';
-import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/route/route_transisition.dart';
@@ -7,7 +7,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_page.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/studen_listpage.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/student_listpage.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/create_kelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/join_kelas.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -194,27 +194,25 @@ class _ClassPageState extends State<ClassPage> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 150,
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: Padding(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.only(
-                                  bottom: SpacingDimens.spacing8,
-                                  right: SpacingDimens.spacing16,
+                                  bottom: SpacingDimens.spacing8+1,
+                                  right: SpacingDimens.spacing4,
                                 ),
                                 child: Text(
                                   _kelas.kelasId,
-                                  style: TypographyStyle.button1.merge(
-                                    TextStyle(
-                                        fontSize: 12,
-                                        color: PaletteColor.primarybg2
-                                            .withOpacity(0.8),
-                                        fontStyle: FontStyle.italic),
-                                  ),
-                                ),
+                                  style: TypographyStyle.button1.copyWith(fontSize: 12, color: PaletteColor.primarybg2.withOpacity(0.8),),
                               ),
-                            ),
+                                ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: SpacingDimens.spacing4+3, right: SpacingDimens.spacing8),
+                                child: Icon(Icons.content_copy, size: 16, color: PaletteColor.primarybg,),
+                              )
+                            ],
                           ),
                           Container(
                             height: 120,

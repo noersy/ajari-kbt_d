@@ -1,4 +1,4 @@
-import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -15,8 +15,12 @@ class DialogCreateAbsen extends StatefulWidget {
 
 class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
   DateTime selectedDate = DateTime.now();
-  String _stringDate = "Select Date";
+  DateTime selectedTimeStart = DateTime.now();
+  DateTime selectedTimeEnd = DateTime.now();
   DateFormat formattedDate = DateFormat('yyyy-MM-dd');
+  String _stringDate = "Select Date";
+  String _stringTimeStartAt = "Start At";
+  String _stringTimeEndAt = "End At";
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -24,10 +28,42 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
+
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
         _stringDate = formattedDate.format(picked);
+      });
+    }
+  }
+
+  Future<void> _selectStartTime(BuildContext context) async {
+    TimeOfDay _selectedTimeStart = TimeOfDay.now();
+    
+    final TimeOfDay? _pickedS = await showTimePicker(
+      context: context,
+      initialTime: _selectedTimeStart,
+    );
+
+    if (_pickedS != null && _pickedS != _selectedTimeStart) {
+      setState(() {
+        selectedTimeStart = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, _pickedS.hour, _pickedS.minute);
+        _stringTimeStartAt = _pickedS.format(context);
+      }); 
+    }
+  }
+
+  Future<void> _selectEndTime(BuildContext context) async {
+    TimeOfDay _selectedTimeEnd = TimeOfDay.now();
+    final TimeOfDay? _pickedS = await showTimePicker(
+      context: context,
+      initialTime: _selectedTimeEnd,
+    );
+
+    if (_pickedS != null && _pickedS != _selectedTimeEnd) {
+      setState(() {
+        selectedTimeEnd = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, _pickedS.hour, _pickedS.minute);
+        _stringTimeEndAt =  _pickedS.format(context);
       });
     }
   }
@@ -64,9 +100,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: SpacingDimens.spacing16,
-            ),
+            const SizedBox(height: SpacingDimens.spacing16),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary: PaletteColor.primarybg,
@@ -92,9 +126,58 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: SpacingDimens.spacing16,
+            const SizedBox(height: SpacingDimens.spacing16),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: PaletteColor.primarybg,
+                onPrimary: PaletteColor.primary,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                  side: BorderSide(color: PaletteColor.primary.withOpacity(0.5)),
+                ),
+              ),
+              onPressed: () {
+                _selectStartTime(context);
+              },
+              child: SizedBox(
+                width: double.infinity,
+                height: SpacingDimens.spacing44,
+                child: Center(
+                  child: Text(
+                    _stringTimeStartAt,
+                    style: TypographyStyle.button2
+                        .copyWith(color: PaletteColor.grey80),
+                  ),
+                ),
+              ),
             ),
+            const SizedBox(height: SpacingDimens.spacing8),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: PaletteColor.primarybg,
+                onPrimary: PaletteColor.primary,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0),
+                  side: BorderSide(color: PaletteColor.primary.withOpacity(0.5)),
+                ),
+              ),
+              onPressed: () {
+                _selectEndTime(context);
+              },
+              child: SizedBox(
+                width: double.infinity,
+                height: SpacingDimens.spacing44,
+                child: Center(
+                  child: Text(
+                    _stringTimeEndAt,
+                    style: TypographyStyle.button2.copyWith(color: PaletteColor.grey80),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: SpacingDimens.spacing8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -108,13 +191,23 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                       ),
                     ),
                     onPressed: () {
-                      if (_stringDate == "Select Date") return;
+                      if (_stringDate == "Select Date" || _stringTimeStartAt == "Start At" || _stringTimeEndAt == "End At"){
+                        Navigator.of(context).pop("Please select to submit absents.");
+                        return;
+                      }
+                      
+                      if(selectedTimeStart.compareTo(selectedTimeEnd) > 0){
+                        Navigator.of(context).pop("Failed, make sure you select right.");
+                        return;
+                      }
 
                       Provider.of<KelasProvider>(context, listen: false).createAbsen(
-                        date: selectedDate,
+                        date:  DateTime(selectedDate.year, selectedDate.month, selectedDate.day, selectedTimeStart.hour, selectedTimeStart.minute) ,
+                        startAt: selectedTimeStart,
+                        endAt: selectedTimeEnd,
                       );
 
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop("Success create absent.");
                     },
                     child: Text(
                       'Submit',

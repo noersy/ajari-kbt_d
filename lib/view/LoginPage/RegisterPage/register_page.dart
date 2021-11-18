@@ -1,5 +1,5 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';

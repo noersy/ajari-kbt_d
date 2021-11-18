@@ -5,6 +5,7 @@ import 'package:ajari/model/kelas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class KelasProvider extends ChangeNotifier {
   Kelas _dataKelas = Kelas.blankKelas();
@@ -21,7 +22,6 @@ class KelasProvider extends ChangeNotifier {
     required User? user,
   }) async {
     try {
-
       if (user == null) throw Exception("user null");
 
       String _code = FirebaseReference.getRandomString(5);
@@ -208,13 +208,35 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createAbsen({required DateTime date}) async {
+  Future<int> createAbsen({ required DateTime date, required DateTime startAt, required DateTime  endAt}) async {
     try {
-      Map<String, dynamic> data = {"datetime": date};
+      Map<String, dynamic> data = {
+        "datetime": date,
+        "start_at": startAt,
+        "end_at": endAt,
+      };
       await FirebaseReference.getAbsen(_dataKelas.kelasId, date).set(data);
+      QuerySnapshot santri = await FirebaseReference.kelas.doc(_dataKelas.kelasId).collection("santri").get();
+
+      final allData = santri.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      for (Map<String, dynamic> element in allData) {
+
+        Map<String, dynamic> _newData ={
+          "name" : element["name"],
+          "uid" : element["uid"],
+          "photo" : element["photo"],
+          "kehadiran" : false
+        };
+
+        await FirebaseReference.getAbsen(_dataKelas.kelasId, date).collection("santri").doc(element["uid"]).set(_newData);
+      }
+
     } catch (e) {
       if (kDebugMode) {
-        print("createAbsen: Error");
+        print("createAbsen: ${e.runtimeType}");
+        print(e);
+        print(e);
       }
       return 400;
     }
@@ -225,8 +247,7 @@ class KelasProvider extends ChangeNotifier {
     required DateTime date,
   }) async {
     try {
-      await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
-          .delete();
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).delete();
     } catch (e) {
       if (kDebugMode) {
         print("deleteAbsen: Error");
@@ -241,6 +262,16 @@ class KelasProvider extends ChangeNotifier {
         .doc(_dataKelas.kelasId)
         .collection("absen")
         .orderBy("datetime", descending: false)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getsAbsenStudents(DateTime date) {
+    return FirebaseReference.kelas
+        .doc(_dataKelas.kelasId)
+        .collection("absen")
+        .doc("$date")
+        .collection("santri")
+        .orderBy("name", descending: false)
         .snapshots();
   }
 }

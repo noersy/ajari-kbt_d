@@ -1,7 +1,7 @@
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/config/path_iqro.dart';
-import 'package:ajari/providers/kelas_provider.dart';
-import 'package:ajari/providers/profile_provider.dart';
+import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/halaman_page.dart';

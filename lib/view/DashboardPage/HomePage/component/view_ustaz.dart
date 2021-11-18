@@ -1,5 +1,5 @@
 import 'package:ajari/model/kelas.dart';
-import 'package:ajari/providers/kelas_provider.dart';
+import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
