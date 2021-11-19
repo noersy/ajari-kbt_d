@@ -79,7 +79,7 @@ class _CreateKelasState extends State<CreateKelas> {
                 const SizedBox(height: SpacingDimens.spacing8),
                 const Text("Mulai mengajar santri kamu.", style: TypographyStyle.paragraph),
                 const SizedBox(height: SpacingDimens.spacing52),
-                Image.asset('assets/images/teach.png'),
+                SizedBox(height: 250,child: Image.asset('assets/images/teach.png'),),
               ],
             ),
           ),

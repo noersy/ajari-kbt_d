@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class AppBarBack extends StatelessWidget implements PreferredSizeWidget {
   final BuildContext ctx;
   final String title;
+  final List<Widget>? actions;
 
-  const AppBarBack({Key? key, required this.ctx, required this.title}) : super(key: key);
+  const AppBarBack({Key? key, required this.ctx, required this.title, this.actions}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
@@ -28,6 +29,7 @@ class AppBarBack extends StatelessWidget implements PreferredSizeWidget {
           title,
           style: TypographyStyle.subtitle1,
         ),
+        actions: actions,
       ),
     );
   }

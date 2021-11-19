@@ -39,8 +39,10 @@ class _JoinKelasState extends State<JoinKelas> {
         _codeKelas = value;
       });
 
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
-      var value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
+      await Provider.of<ProfileProvider>(context, listen: false)
+          .getProfile(userUid: _user!.uid);
+      var value = await Provider.of<KelasProvider>(context, listen: false)
+          .getKelas(codeKelas: _codeKelas);
 
       if (value == null) throw Exception("Join failed");
 
@@ -57,92 +59,155 @@ class _JoinKelasState extends State<JoinKelas> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _loading
-        ? indicatorLoad()
-        : Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  left: SpacingDimens.spacing12,
-                  right: SpacingDimens.spacing12,
-                ),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SpacingDimens.spacing16,
-                              top: SpacingDimens.spacing12,
-                              bottom: SpacingDimens.spacing8),
-                          child: Text("Not have class yet"),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(SpacingDimens.spacing8),
-                        child: TextFormField(
-                          controller: santriInput,
-                          decoration: InputDecoration(
-                            labelText: "Codeclass",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+  Widget _joinKelas() {
+    return AlertDialog(
+      backgroundColor: PaletteColor.primarybg,
+      contentPadding: const EdgeInsets.all(0.0),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(SpacingDimens.spacing4)),
+      ),
+      elevation: 5,
+      content: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width - 150,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: PaletteColor.primarybg,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 22,
+            ),
+            Text(
+              "Kelas Baru",
+              style: TypographyStyle.subtitle1.merge(
+                const TextStyle(
+                  color: PaletteColor.black,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: SpacingDimens.spacing24,
-                  right: SpacingDimens.spacing24,
-                  top: SpacingDimens.spacing8,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(SpacingDimens.spacing16),
+              child: TextFormField(
+                controller: santriInput,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Code kelas',
                 ),
-                child: Card(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: PaletteColor.primary,
-                        primary: PaletteColor.primary80,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3.0),
-                          side: const BorderSide(
-                            color: PaletteColor.green,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        joinkelas(santriInput);
-                        setState(() {
-                          santriInput.value =
-                              TextEditingValue(text: santriInput.text);
-                        });
-                      },
-                      child: SizedBox(
-                        height: 48,
-                        child: Center(
-                          child: Text(
-                            "Join",
-                            style: TypographyStyle.button1.merge(
-                              const TextStyle(
-                                color: PaletteColor.primarybg,
-                              ),
-                            ),
-                          ),
+              ),
+            ),
+            const Expanded(child: SizedBox()),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: SpacingDimens.spacing16,
+                right: SpacingDimens.spacing16,
+              ),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: PaletteColor.primary,
+                  padding: const EdgeInsets.all(0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3.0),
+                  ),
+                ),
+                onPressed: () {
+                  joinkelas(santriInput);
+                  setState(() {
+                    santriInput.value =
+                        TextEditingValue(text: santriInput.text);
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: SizedBox(
+                  height: 48,
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      "Join",
+                      style: TypographyStyle.button1.merge(
+                        const TextStyle(
+                          color: PaletteColor.primarybg,
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ],
-          );
+            ),
+            const SizedBox(
+              height: SpacingDimens.spacing16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_loading) {
+      return Center(child: indicatorLoad());
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(
+          left: SpacingDimens.spacing24,
+          right: SpacingDimens.spacing24,
+          top: 32,
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: PaletteColor.primary,
+                    padding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(
+                        color: PaletteColor.green,
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _joinKelas();
+                      },
+                    );
+                  },
+                  child: SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        "Join",
+                        style: TypographyStyle.button1.merge(
+                          const TextStyle(
+                            color: PaletteColor.primarybg,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: SpacingDimens.spacing8),
+                const Text("Kamu membutuhkan pembimbing.",
+                    style: TypographyStyle.paragraph),
+                const SizedBox(height: SpacingDimens.spacing52),
+                SizedBox(
+                  height: 250,
+                  child: Image.asset('assets/images/santri_join.png'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    ;
   }
 }

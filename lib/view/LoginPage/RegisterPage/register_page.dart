@@ -2,6 +2,7 @@ import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
+import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/button_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,10 +42,8 @@ class _RegisterPage extends State<RegisterPage> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: Image.asset(
-                      'assets/images/ajarilogo.png',
-                      width: 150,
-                    ),
+                    padding: const EdgeInsets.all(SpacingDimens.spacing12),
+                    child: const Text("Pilih Peran", style: TypographyStyle.title),
                   ),
                   Expanded(
                     child: Column(
@@ -55,10 +54,10 @@ class _RegisterPage extends State<RegisterPage> {
                               setState(() {
                                 _selected = "Santri";
                               });
-                              _pageController.animateToPage(0, duration: const Duration(seconds: 1), curve: Curves.ease);
+                              _pageController.animateToPage(0, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn);
                             }),
                             _elevatedButton("Pengajar", () {
-                              _pageController.animateToPage(1, duration: const Duration(seconds: 1), curve: Curves.ease);
+                              _pageController.animateToPage(1, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn);
                               setState(() {
                                 _selected = "Pengajar";
                               });
@@ -66,18 +65,15 @@ class _RegisterPage extends State<RegisterPage> {
                           ],
                         ),
                         Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                              vertical: SpacingDimens.spacing8,
-                              horizontal: SpacingDimens.spacing8
-                            ),
-                            child: PageView(
-                              controller: _pageController,
-                              children:  [
-                                _text("Disini description santri"),
-                                _text("Disini description pengajar"),
-                              ],
-                            ),
+                          child: PageView(
+                            controller: _pageController,
+                            children:  [
+                              Padding(
+                                padding: const EdgeInsets.only(top: SpacingDimens.spacing8),
+                                child: _text("assets/images/santri.png"),
+                              ),
+                              _text("assets/images/ustaz.png"),
+                            ],
                           ),
                         )
                       ],
@@ -100,9 +96,9 @@ class _RegisterPage extends State<RegisterPage> {
     );
   }
 
-  Center _text(text){
+  Center _text(path){
     return Center(
-      child: Text(text),
+      child: Image.asset(path),
     );
   }
   Expanded _elevatedButton(String title, Function() onPressed) {

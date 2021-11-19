@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: PaletteColor.primarybg,
+      backgroundColor: PaletteColor.primarybg2,
       appBar: AppBarNotification(
         ctx: context,
         title: 'Hallo, $username!',

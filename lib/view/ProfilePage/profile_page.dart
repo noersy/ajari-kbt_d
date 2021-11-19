@@ -25,6 +25,19 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBarBack(
         ctx: context,
         title: "Profile",
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                primary: PaletteColor.grey,
+              ),
+              onPressed: () {},
+              icon: const Icon(Icons.mode_edit_outlined, color: PaletteColor.text,),
+              label: const Text("Edit", style: TypographyStyle.button1,),
+            ),
+          )
+        ],
       ),
       body: Column(
         children: [
