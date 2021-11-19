@@ -49,9 +49,6 @@ class _CreateKelasState extends State<CreateKelas> {
                     padding: const EdgeInsets.all(0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(
-                        color: PaletteColor.green,
-                      ),
                     ),
                   ),
                   onPressed: () {
@@ -77,9 +74,11 @@ class _CreateKelasState extends State<CreateKelas> {
                   ),
                 ),
                 const SizedBox(height: SpacingDimens.spacing8),
-                const Text("Mulai mengajar santri kamu.", style: TypographyStyle.paragraph),
+                const Text("Mulai mengajar santri kamu.",
+                    style: TypographyStyle.paragraph),
                 const SizedBox(height: SpacingDimens.spacing52),
-                SizedBox(height: 250,child: Image.asset('assets/images/teach.png'),),
+                SizedBox(
+                  height: 250, child: Image.asset('assets/images/teach.png'),),
               ],
             ),
           ),
@@ -88,30 +87,39 @@ class _CreateKelasState extends State<CreateKelas> {
     }
   }
 
-  Widget createKelas() {
-    return Container(
-      decoration: BoxDecoration(
+
+  AlertDialog createKelas() {
+    return AlertDialog(
+      backgroundColor: PaletteColor.primarybg,
+      contentPadding: const EdgeInsets.all(0.0),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(SpacingDimens.spacing4)),
+      ),
+      elevation: 5,
+      content: Container(
+        width: MediaQuery
+            .of(context)
+            .size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .width - 150,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
           color: PaletteColor.primarybg,
-          borderRadius: BorderRadius.circular(10),
-      ),
-      margin: const EdgeInsets.only(
-        left: SpacingDimens.spacing28,
-        right: SpacingDimens.spacing28,
-        top: SpacingDimens.spacing36,
-        bottom: SpacingDimens.spacing36,
-      ),
-      child: Scaffold(
-        backgroundColor: PaletteColor.primarybg.withOpacity(0),
-        body: Column(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(
-                top: SpacingDimens.spacing28,
-                bottom: SpacingDimens.spacing8,
-              ),
-              child: Text(
-                'Create New Class',
-                style: TypographyStyle.subtitle2,
+            const SizedBox(
+              height: 22,
+            ),
+            Text(
+              "Kelas Baru",
+              style: TypographyStyle.subtitle1.merge(
+                const TextStyle(
+                  color: PaletteColor.black,
+                ),
               ),
             ),
             Padding(
@@ -119,7 +127,9 @@ class _CreateKelasState extends State<CreateKelas> {
               child: TextFormField(
                 controller: _editingController,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(), labelText: 'Name'),
+                  border: OutlineInputBorder(),
+                  labelText: 'Code kelas',
+                ),
               ),
             ),
             const Expanded(child: SizedBox()),
@@ -128,29 +138,24 @@ class _CreateKelasState extends State<CreateKelas> {
                 left: SpacingDimens.spacing16,
                 right: SpacingDimens.spacing16,
               ),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: PaletteColor.primary,
-                  primary: PaletteColor.primary80,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: PaletteColor.primary,
                   padding: const EdgeInsets.all(0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(3.0),
-                    side: const BorderSide(
-                      color: PaletteColor.green,
-                    ),
                   ),
                 ),
-                onPressed: ()  {
+                onPressed: () {
                   _createKelas(context);
-
-                   Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: SizedBox(
                   height: 48,
                   width: double.infinity,
                   child: Center(
                     child: Text(
-                      "Create",
+                      "Buat",
                       style: TypographyStyle.button1.merge(
                         const TextStyle(
                           color: PaletteColor.primarybg,
@@ -177,9 +182,13 @@ class _CreateKelasState extends State<CreateKelas> {
       });
 
 
-      String _codeKelas = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
-      Kelas? value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
+      String _codeKelas = await Provider.of<KelasProvider>(
+          context, listen: false).createKelas(
+          namaKelas: _editingController.text, user: user);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(
+          userUid: user?.uid ?? "");
+      Kelas? value = await Provider.of<KelasProvider>(context, listen: false)
+          .getKelas(codeKelas: _codeKelas);
 
 
       if (value == null) throw Exception("Create Kelas failed");
