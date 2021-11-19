@@ -19,6 +19,8 @@ class _StoryPageState extends State<StoryPage> {
       backgroundColor: PaletteColor.primarybg,
       // appBar: AppBarBack(ctx: context, title: "Halaman Story"),
       body: SilverAppBarBack(
+        pinned: true,
+        floating: true,
         barTitle: "Story",
         body: GridView(
           physics: const BouncingScrollPhysics(),

@@ -21,6 +21,8 @@ class AbsenPage extends StatelessWidget {
       backgroundColor: PaletteColor.primarybg,
       // appBar: AppBarBack(title: "Absensi", ctx: context),
       body: SilverAppBarBack(
+        pinned: true,
+        floating: true,
         barTitle: "Absensi",
         body: StreamBuilder<QuerySnapshot>(
             stream: Provider.of<KelasProvider>(context).getsAbsen(),

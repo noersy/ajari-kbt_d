@@ -1,4 +1,5 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
+import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -10,8 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class JoinKelas extends StatefulWidget {
+  final Function(Kelas) freshState;
 
-   const JoinKelas({Key? key}) : super(key: key);
+  const JoinKelas({Key? key, required this.freshState}) : super(key: key);
 
   @override
   _JoinKelasState createState() => _JoinKelasState();
@@ -24,10 +26,12 @@ class _JoinKelasState extends State<JoinKelas> {
   bool _loading = false;
 
   void joinkelas(santriInput) async {
-    try{
-      _loading = true;
+    try {
+      setState(() {
+        _loading = true;
+      });
 
-      if(_user == null) throw Exception("Not login yet.");
+      if (_user == null) throw Exception("Not login yet.");
 
       await Provider.of<KelasProvider>(context, listen: false)
           .joinKelas(codeKelas: santriInput.text, user: _user!)
@@ -35,13 +39,18 @@ class _JoinKelasState extends State<JoinKelas> {
         _codeKelas = value;
       });
 
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
       var value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
 
-      if(value != null) context.read<KelasProvider>().setKelas(value);
+      if (value == null) throw Exception("Join failed");
 
-      _loading = false;
-    }catch(e){
+      Provider.of<KelasProvider>(context, listen: false).setKelas(value);
+
+      widget.freshState(value);
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
       if (kDebugMode) {
         print(e);
       }

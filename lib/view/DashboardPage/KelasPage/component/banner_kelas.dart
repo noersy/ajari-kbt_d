@@ -8,23 +8,16 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_page.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/student_listpage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BannerKelas extends StatelessWidget {
   const BannerKelas({Key? key}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    final Profile profile = context
-        .watch<ProfileProvider>()
-        .profile;
-    final Kelas kelas = context
-        .watch<KelasProvider>()
-        .kelas;
-
+    final Profile profile = context.watch<ProfileProvider>().profile;
+    final Kelas kelas = context.watch<KelasProvider>().kelas;
 
     return Padding(
       padding: const EdgeInsets.all(SpacingDimens.spacing12),
@@ -141,7 +134,7 @@ class BannerKelas extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomRight,
               child: SizedBox(
-                width: 60,
+                width: 100,
                 height: 30,
                 child: GestureDetector(
                   onTap: () {
@@ -187,68 +180,67 @@ class BannerKelas extends StatelessWidget {
           ),
           profile.role != "Santri"
               ? Container(
-            height: 155,
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              children: [
-                const SizedBox(width: SpacingDimens.spacing4),
-                TextButton(
-                  style: TextButton.styleFrom(
-                      primary: PaletteColor.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
-                  onPressed: () =>
-                      Navigator.of(context).push(
-                        routeTransition(
-                          StudenListPage(
-                            codeKelas: profile.codeKelas,
+                  height: 155,
+                  alignment: Alignment.bottomLeft,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: SpacingDimens.spacing4),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            primary: PaletteColor.primary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            )),
+                        onPressed: () => Navigator.of(context).push(
+                          routeTransition(
+                            StudenListPage(
+                              codeKelas: profile.codeKelas,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          "Santri List",
+                          style: TypographyStyle.button2.copyWith(
+                            color: PaletteColor.primarybg2,
                           ),
                         ),
                       ),
-                  child: Text(
-                    "Santri List",
-                    style: TypographyStyle.button2.copyWith(
-                      color: PaletteColor.primarybg2,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(
-                    SpacingDimens.spacing4,
-                  ),
-                  child: SizedBox(
-                    width: 1,
-                    height: SpacingDimens.spacing16,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: PaletteColor.primarybg2,
-                        borderRadius: BorderRadius.circular(10),
+                      Padding(
+                        padding: const EdgeInsets.all(
+                          SpacingDimens.spacing4,
+                        ),
+                        child: SizedBox(
+                          width: 1,
+                          height: SpacingDimens.spacing16,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: PaletteColor.primarybg2,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    primary: PaletteColor.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(routeTransition(const AbsenPage()));
-                  },
-                  child: Text(
-                    "Absen",
-                    style: TypographyStyle.button2.copyWith(
-                      color: PaletteColor.primarybg2,
-                    ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: PaletteColor.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(routeTransition(const AbsenPage()));
+                        },
+                        child: Text(
+                          "Absen",
+                          style: TypographyStyle.button2.copyWith(
+                            color: PaletteColor.primarybg2,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 )
-              ],
-            ),
-          )
               : const SizedBox.shrink(),
         ],
       ),

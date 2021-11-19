@@ -2,6 +2,7 @@ import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -41,9 +42,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: widget.user.photoURL?.isNotEmpty != null
-                            ? Image.network(
-                                widget.user.photoURL!,
+                            ? CachedNetworkImage(
                                 fit: BoxFit.fill,
+                                imageUrl: widget.user.photoURL!,
                               )
                             : const SizedBox.shrink(),
                       ),

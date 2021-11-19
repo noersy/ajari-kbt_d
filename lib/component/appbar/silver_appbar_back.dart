@@ -5,12 +5,14 @@ import 'package:flutter/material.dart';
 class SilverAppBarBack extends StatelessWidget {
   final Widget body;
   final String barTitle;
+  final bool pinned, floating;
 
   const SilverAppBarBack({
     Key? key,
     required this.barTitle,
     required this.body,
-    required,
+    required this.pinned,
+    required this.floating,
   }) : super(key: key);
 
   @override
@@ -22,11 +24,12 @@ class SilverAppBarBack extends StatelessWidget {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
+              elevation: 2,
               backgroundColor: PaletteColor.primarybg,
               iconTheme: const IconThemeData(color: PaletteColor.primary),
               title: Text(barTitle, style: TypographyStyle.subtitle1),
-              pinned: false,
-              floating: true,
+              pinned: pinned,
+              floating: floating,
               forceElevated: innerBoxIsScrolled,
             ),
           ];

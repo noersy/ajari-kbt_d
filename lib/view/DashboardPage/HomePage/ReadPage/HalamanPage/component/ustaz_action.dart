@@ -2,7 +2,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/message_dialog.dart';
-import 'package:ajari/view/DashboardPage/StudensPage/componen/nilai_dialog.dart';
+import 'package:ajari/view/DashboardPage/HomePage/StudensPage/componen/nilai_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'component.dart';

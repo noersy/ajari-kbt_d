@@ -10,7 +10,7 @@ class ProfileProvider extends ChangeNotifier {
   Profile _profile = Profile.blankProfile();
   Profile get profile => _profile;
 
-  void setProfile(profile){
+  void setProfile(Profile profile){
     _profile = profile;
     notifyListeners();
   }
@@ -22,7 +22,7 @@ class ProfileProvider extends ChangeNotifier {
     try {
       Map<String, dynamic> data = <String, dynamic>{
         "role": role,
-        "code_kelas": ''
+        "code_kelas": '-'
       };
 
       await FirebaseReference.user.doc(userid).set(data);
@@ -54,9 +54,10 @@ class ProfileProvider extends ChangeNotifier {
     try {
       if (userUid == "") throw Exception("Error");
 
-      DocumentSnapshot data = await FirebaseReference.user.doc(userUid).get();
+      final DocumentSnapshot data = await FirebaseReference.user.doc(userUid).get();
 
-      Profile profile = profileFromJson(jsonEncode(data.data()));
+      final Profile profile = profileFromJson(jsonEncode(data.data()));
+
       setProfile(profile);
 
       return profile;

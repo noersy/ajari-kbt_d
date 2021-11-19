@@ -4,12 +4,12 @@ import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/kelas_page.dart';
+import 'package:ajari/view/UserBottomSheetDialog/user_bottomsheet_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'HomePage/home_page.dart';
-import 'UserBottomSheetDialog/user_bottomsheet_dialog.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);

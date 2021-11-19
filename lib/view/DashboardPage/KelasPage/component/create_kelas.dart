@@ -11,11 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateKelas extends StatefulWidget {
-  final BuildContext ctx;
 
-   const CreateKelas({Key? key,
-    required this.ctx,
-  }) : super(key: key);
+  final Function(Kelas) freshState;
+
+  const CreateKelas({Key? key, required this.freshState}) : super(key: key);
 
   @override
   State<CreateKelas> createState() => _CreateKelasState();
@@ -23,96 +22,78 @@ class CreateKelas extends StatefulWidget {
 
 class _CreateKelasState extends State<CreateKelas> {
   final TextEditingController _editingController = TextEditingController();
+
   final User? user = FirebaseAuth.instance.currentUser;
+
   bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    return _loading
-        ? indicatorLoad()
-        : Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(
-                  left: SpacingDimens.spacing12,
-                  right: SpacingDimens.spacing12,
-                ),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    children: const [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: SpacingDimens.spacing28,
-                              bottom: SpacingDimens.spacing28),
-                          child: Text("you not have class yet"),
-                        ),
+    if (_loading) {
+      return Center(child: indicatorLoad());
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(
+          left: SpacingDimens.spacing24,
+          right: SpacingDimens.spacing24,
+          top: 32,
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: PaletteColor.primary,
+                    padding: const EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(
+                        color: PaletteColor.green,
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(
-                  left: SpacingDimens.spacing24,
-                  right: SpacingDimens.spacing24,
-                  top: SpacingDimens.spacing8,
-                ),
-                child: Card(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: PaletteColor.primary,
-                        primary: PaletteColor.green,
-                        padding: const EdgeInsets.all(0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3.0),
-                          side: const BorderSide(
-                            color: PaletteColor.green,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return createKelas();
-                          },
-                        );
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return createKelas();
                       },
-                      child: SizedBox(
-                        height: 48,
-                        child: Center(
-                          child: Text(
-                            "Create",
-                            style: TypographyStyle.button1.merge(
-                              const TextStyle(
-                                color: PaletteColor.primarybg,
-                              ),
-                            ),
+                    );
+                  },
+                  child: SizedBox(
+                    height: 48,
+                    child: Center(
+                      child: Text(
+                        "Create",
+                        style: TypographyStyle.button1.merge(
+                          const TextStyle(
+                            color: PaletteColor.primarybg,
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
+                const SizedBox(height: SpacingDimens.spacing8),
+                const Text("Mulai mengajar santri kamu.", style: TypographyStyle.paragraph),
+                const SizedBox(height: SpacingDimens.spacing52),
+                Image.asset('assets/images/teach.png'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget createKelas() {
     return Container(
       decoration: BoxDecoration(
           color: PaletteColor.primarybg,
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(10),
+      ),
       margin: const EdgeInsets.only(
         left: SpacingDimens.spacing28,
         right: SpacingDimens.spacing28,
@@ -159,9 +140,10 @@ class _CreateKelasState extends State<CreateKelas> {
                     ),
                   ),
                 ),
-                onPressed: () {
-                  _createKelas();
-                  Navigator.of(context).pop();
+                onPressed: ()  {
+                  _createKelas(context);
+
+                   Navigator.of(context).pop();
                 },
                 child: SizedBox(
                   height: 48,
@@ -188,22 +170,33 @@ class _CreateKelasState extends State<CreateKelas> {
     );
   }
 
-  void _createKelas() async {
-    try{
-      _loading = true;
+  Future<Kelas> _createKelas(ctx) async {
+    try {
+      setState(() {
+        _loading = true;
+      });
+
 
       String _codeKelas = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
       Kelas? value = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _codeKelas);
 
-      if(value != null)context.read<KelasProvider>().setKelas(value);
 
-      _loading = false;
-    }catch(e){
+      if (value == null) throw Exception("Create Kelas failed");
+
+      widget.freshState(value);
+      Provider.of<KelasProvider>(context, listen: false).setKelas(value);
+
+      return value;
+    } catch (e) {
       if (kDebugMode) {
         print("$e");
       }
     }
 
+    setState(() {
+      _loading = false;
+    });
+    return Kelas.blankKelas();
   }
 }

@@ -1,19 +1,21 @@
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
-import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
-import 'package:ajari/view/DashboardPage/StudensPage/studens_page.dart';
+import 'package:ajari/view/DashboardPage/HomePage/StudensPage/studens_page.dart';
+import 'package:ajari/view/DashboardPage/HomePage/component/home_button.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ViewUstaz extends StatefulWidget {
   final PageController pageViewController;
 
-  const ViewUstaz({Key? key,
+  const ViewUstaz({
+    Key? key,
     required this.pageViewController,
   }) : super(key: key);
 
@@ -22,13 +24,9 @@ class ViewUstaz extends StatefulWidget {
 }
 
 class _ViewUstazState extends State<ViewUstaz> {
-
-
   @override
   Widget build(BuildContext context) {
-
     Kelas _kelas = context.read<KelasProvider>().kelas;
-
 
     return Column(
       children: [
@@ -84,7 +82,8 @@ class _ViewUstazState extends State<ViewUstaz> {
                               Text(
                                 "Studens",
                                 style: TypographyStyle.subtitle2.merge(
-                                    const TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(
+                                        color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -112,9 +111,10 @@ class _ViewUstazState extends State<ViewUstaz> {
                                 left: SpacingDimens.spacing8),
                             child: Text(
                               " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(const TextStyle(
-                                  color: PaletteColor.primarybg,
-                                  fontWeight: FontWeight.w100)),
+                              style: TypographyStyle.subtitle2.merge(
+                                  const TextStyle(
+                                      color: PaletteColor.primarybg,
+                                      fontWeight: FontWeight.w100)),
                             ),
                           ),
                         ),
@@ -170,7 +170,8 @@ class _ViewUstazState extends State<ViewUstaz> {
                               Text(
                                 "Studens",
                                 style: TypographyStyle.subtitle2.merge(
-                                    const TextStyle(color: PaletteColor.primarybg)),
+                                    const TextStyle(
+                                        color: PaletteColor.primarybg)),
                               ),
                             ],
                           ),
@@ -198,9 +199,10 @@ class _ViewUstazState extends State<ViewUstaz> {
                                 left: SpacingDimens.spacing8),
                             child: Text(
                               " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(const TextStyle(
-                                  color: PaletteColor.primarybg,
-                                  fontWeight: FontWeight.w100)),
+                              style: TypographyStyle.subtitle2.merge(
+                                  const TextStyle(
+                                      color: PaletteColor.primarybg,
+                                      fontWeight: FontWeight.w100)),
                             ),
                           ),
                         ),
@@ -237,145 +239,25 @@ class _ViewUstazState extends State<ViewUstaz> {
         const SizedBox(height: SpacingDimens.spacing8),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: SpacingDimens.spacing4,
-                  left: SpacingDimens.spacing16,
-                  right: SpacingDimens.spacing8,
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 1,
-                    primary: PaletteColor.primarybg,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    side: BorderSide(
-                      color: PaletteColor.grey80.withOpacity(0.08),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const StudensPage(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 65,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: const EdgeInsets.all(SpacingDimens.spacing8),
-                          decoration: BoxDecoration(
-                              color: PaletteColor.primary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(100)),
-                          child: const Icon(
-                            CostumeIcons.holyQuran,
-                            color: PaletteColor.primary,
-                          ),
-                        ),
-                        Container(
-                          width: 70,
-                          padding: const EdgeInsets.only(
-                              bottom: SpacingDimens.spacing12,
-                              left: SpacingDimens.spacing12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "قيم",
-                                style: TypographyStyle.subtitle1.merge(
-                                    const TextStyle(
-                                        color: PaletteColor.primary,
-                                        fontSize: 20)),
-                              ),
-                              Text("Nilai",
-                                  style: TypographyStyle.subtitle2
-                                      .merge(const TextStyle(fontSize: 12))),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+          children: const [
+            Padding(
+              padding: EdgeInsets.only(left: SpacingDimens.spacing4),
+              child: HomeButton(
+                icon: CostumeIcons.holyQuran,
+                titleArab: "قيم",
+                title: "Nilai",
+                target: StudentsPage(),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: SpacingDimens.spacing4,
-                  right: SpacingDimens.spacing16,
-                  left: SpacingDimens.spacing8,
-                ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 1,
-                    primary: PaletteColor.primarybg,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                    ),
-                    side: BorderSide(
-                      color: PaletteColor.grey80.withOpacity(0.08),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const StoryPage()));
-                  },
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 65,
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          margin: const EdgeInsets.all(SpacingDimens.spacing8),
-                          decoration: BoxDecoration(
-                              color: PaletteColor.primary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(100)),
-                          child: const Icon(
-                            Icons.collections_bookmark_sharp,
-                            color: PaletteColor.primary,
-                          ),
-                        ),
-                        Container(
-                          width: 60,
-                          padding: const EdgeInsets.only(
-                              bottom: SpacingDimens.spacing12,
-                              left: SpacingDimens.spacing12),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "قصة",
-                                style: TypographyStyle.subtitle1.merge(
-                                    const TextStyle(
-                                        color: PaletteColor.primary,
-                                        fontSize: 20)),
-                              ),
-                              Text(
-                                "Cerita",
-                                style: TypographyStyle.subtitle2.merge(
-                                  const TextStyle(fontSize: 12),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+            SizedBox(width: SpacingDimens.spacing4),
+            Padding(
+              padding: EdgeInsets.only(left: SpacingDimens.spacing4),
+              child: HomeButton(
+                icon: Icons.collections_bookmark_sharp,
+                iconSize: 28.0,
+                titleArab: "قصة",
+                title: "Story Page",
+                target: StoryPage(),
               ),
             ),
           ],

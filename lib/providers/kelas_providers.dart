@@ -11,7 +11,7 @@ class KelasProvider extends ChangeNotifier {
 
   Kelas get kelas => _dataKelas;
 
-  void setKelas(Kelas kelas) {
+  void setKelas(Kelas kelas) async {
     _dataKelas = kelas;
     notifyListeners();
   }
@@ -73,8 +73,7 @@ class KelasProvider extends ChangeNotifier {
       var dataKelas = await FirebaseReference.kelas.doc(codeKelas).get();
       if (!dataKelas.exists) throw Exception("Error");
 
-      await FirebaseReference.getUserInKelas(codeKelas, user.uid)
-          .set(newUserInKelas);
+      await FirebaseReference.getUserInKelas(codeKelas, user.uid).set(newUserInKelas);
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
       await FirebaseReference.getUser(user.uid).update(newDataUser);
 
@@ -122,9 +121,10 @@ class KelasProvider extends ChangeNotifier {
     try {
       var data = await FirebaseReference.getKelas(codeKelas).get();
 
-      if (!data.exists) throw throw Exception("Error");
+      if (!data.exists && data.data() == null) throw throw Exception("Error");
 
       Kelas kelas = kelasFromJson(jsonEncode(data.data()));
+
       setKelas(kelas);
 
       return kelas;
@@ -175,10 +175,11 @@ class KelasProvider extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot> getGrade({
-    required uid,
-    required codeKelas,
-    required nomorJilid,
+    required String uid,
+    required String codeKelas,
+    required String nomorJilid,
   }) {
+    if(codeKelas == "-") return const Stream.empty();
     return FirebaseReference.getUserInKelas(codeKelas, uid)
         .collection("jilid" + nomorJilid)
         .snapshots();

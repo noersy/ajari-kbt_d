@@ -2,37 +2,84 @@ import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
-import 'package:ajari/view/DashboardPage/StudensPage/jilid_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StudensPage extends StatefulWidget {
-  const StudensPage({Key? key}) : super(key: key);
+import 'jilid_page.dart';
+
+class StudentsPage extends StatefulWidget {
+  const StudentsPage({Key? key}) : super(key: key);
 
   @override
-  _StudensPageState createState() => _StudensPageState();
+  _StudentsPageState createState() => _StudentsPageState();
 }
 
-class _StudensPageState extends State<StudensPage> {
+class _StudentsPageState extends State<StudentsPage> {
   @override
   Widget build(BuildContext context) {
-
     final String _codeKelas = context.read<KelasProvider>().kelas.kelasId;
 
-
     return Scaffold(
-      backgroundColor: PaletteColor.primarybg,
+      backgroundColor: PaletteColor.primarybg2,
       // appBar: AppBarBack(ctx: context, title: "Santri"),
       body: SilverAppBarBack(
         barTitle: 'Santri',
+        pinned: true,
+        floating: true,
         body: StreamBuilder<QuerySnapshot>(
           stream: Provider.of<KelasProvider>(context)
               .getSantri(codeKelas: _codeKelas),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(child: Text("There is no expense"));
+              return Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: SpacingDimens.spacing28),
+                        child: Image.asset("assets/images/not_found.png"),
+                      ),
+                      Text("Belum ada santri disini."),
+                    ],
+                  ),
+                  Container(
+                    color: PaletteColor.primarybg.withOpacity(0.25),
+                    child: const SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                    ),
+                  ),
+                ],
+              );
             }
+
+            if (snapshot.data!.size <= 0) {
+              return Stack(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: SpacingDimens.spacing28),
+                          child: Image.asset("assets/images/not_found.png"),
+                      ),
+                      Text("Belum ada santri disini."),
+                    ],
+                  ),
+                  Container(
+                    color: PaletteColor.primarybg.withOpacity(0.25),
+                    child: const SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                    ),
+                  ),
+                ],
+              );
+            }
+
             return ListView(
               physics: const BouncingScrollPhysics(),
               children: snapshot.data!.docChanges
@@ -92,7 +139,7 @@ class _StudensPageState extends State<StudensPage> {
           ),
           child: CircleAvatar(
             foregroundColor: PaletteColor.primary,
-            backgroundImage: NetworkImage(imageUrl),
+            backgroundImage: CachedNetworkImageProvider(imageUrl),
           ),
         ),
         title: Container(

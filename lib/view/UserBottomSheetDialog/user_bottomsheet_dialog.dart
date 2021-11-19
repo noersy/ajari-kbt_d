@@ -5,6 +5,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/ProfilePage/profile_page.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                       child: CircleAvatar(
                         backgroundColor: PaletteColor.grey40,
                         backgroundImage: _user != null
-                            ? NetworkImage(_user!.photoURL!)
+                            ? CachedNetworkImageProvider(_user!.photoURL!)
                             : null,
                       ),
                     ),

@@ -22,6 +22,8 @@ class _StudensPageState extends State<JilidPage> {
       backgroundColor: PaletteColor.primarybg,
       // appBar: AppBarBack(ctx: context, title: "Jilid"),
       body: SilverAppBarBack(
+        pinned: true,
+        floating: true,
         barTitle: "Jilid",
         body: Padding(
           padding: const EdgeInsets.all(8.0),

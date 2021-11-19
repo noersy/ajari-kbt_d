@@ -53,7 +53,7 @@ Widget actionPage() {
                     child: Text(
                       "",
                       style:
-                      TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                          TextStyle(color: PaletteColor.grey60, fontSize: 12),
                     ),
                   ),
                   Padding(
@@ -71,7 +71,7 @@ Widget actionPage() {
                     child: Text(
                       "2",
                       style:
-                      TextStyle(color: PaletteColor.grey60, fontSize: 12),
+                          TextStyle(color: PaletteColor.grey60, fontSize: 12),
                     ),
                   ),
                 ],
@@ -116,12 +116,24 @@ Widget actionPage() {
 }
 
 Widget notJoinAction() {
-  return const Padding(
-    padding: EdgeInsets.only(
-      top: SpacingDimens.spacing12,
-      bottom: SpacingDimens.spacing8,
+  return Padding(
+    padding: const EdgeInsets.only(
+      top: SpacingDimens.spacing16,
     ),
-    child: Text("You not join class yet"),
+    child: Container(
+      height: 42,
+      width: double.infinity,
+      alignment: Alignment.center,
+      decoration:  BoxDecoration(
+        color: PaletteColor.primarybg,
+        boxShadow: [BoxShadow(
+          color: PaletteColor.grey60.withOpacity(0.4),
+          offset: const Offset(0, -1),
+          spreadRadius: 1
+        )],
+      ),
+      child: const Text("Kamu belum memiliki kelas."),
+    ),
   );
 }
 

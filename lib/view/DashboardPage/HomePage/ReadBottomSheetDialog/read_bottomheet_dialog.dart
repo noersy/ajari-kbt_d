@@ -72,7 +72,7 @@ class ReadBottomSheetDialog extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) => ReadPage(
                                   nomor: "${index + 1}",
-                                  uid: FirebaseAuth.instance.currentUser?.uid ?? "",
+                                  uid: FirebaseAuth.instance.currentUser?.uid ?? "-",
                                 ),
                               ),
                             );

@@ -100,7 +100,7 @@ class _SantriActionState extends State<SantriAction> {
                       showDialog(
                         context: context,
                         builder: (context) => DialogDelete(
-                          content: "This will delete the recorded audio.",
+                          content: "Ini akan menghapus record audio.",
                           onPressedFunction: () {},
                         ),
                       );
@@ -282,8 +282,8 @@ class _SantriActionState extends State<SantriAction> {
       context: context,
       builder: (_) {
         return DialogConfirmation(
-          title: "title",
-          content: "content",
+          title: "Kirim Audio",
+          content: "Ini akan mengirim record ke ustaz",
           onPressedFunction: () {
             _sendRecored(_path);
             Navigator.of(context).pop();

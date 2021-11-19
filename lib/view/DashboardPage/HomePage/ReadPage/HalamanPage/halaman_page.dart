@@ -1,6 +1,6 @@
-import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
+import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/audio_top.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/santri_action.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/ustaz_action.dart';
@@ -33,10 +33,35 @@ class HalamanPage extends StatelessWidget {
       //   ctx: context,
       //   title: "Halaman ${nomorHalaman}",
       // ),
-      body: SilverAppBarBack(
-        barTitle: "Halaman $nomorHalaman",
+      body: NestedScrollView(
+        physics: const BouncingScrollPhysics(),
         body: _content(),
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              backgroundColor: PaletteColor.primarybg,
+              shadowColor: Colors.transparent,
+              elevation: 0,
+              iconTheme: const IconThemeData(color: PaletteColor.primary),
+              title:  Text("Halaman $nomorHalaman", style: TypographyStyle.subtitle1),
+              bottom: const PreferredSize(
+                preferredSize: Size(0.0, 50),
+                child: AudioTop(),
+              ),
+              pinned: true,
+              floating: true,
+              forceElevated: innerBoxIsScrolled,
+            ),
+          ];
+        },
       ),
+
+      // SilverAppBarBack(
+      //   pinned: false,
+      //   floating: true,
+      //   barTitle: "Halaman $nomorHalaman",
+      //   body: _content(),
+      // ),
     );
   }
 
@@ -45,7 +70,6 @@ class HalamanPage extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          const AudioTop(),
           const SizedBox(height: SpacingDimens.spacing12),
           Container(
             padding: const EdgeInsets.only(
