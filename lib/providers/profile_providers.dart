@@ -33,6 +33,21 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteProfile({
+    required String userid,
+  }) async {
+    try {
+      await FirebaseReference.user.doc(userid).delete();
+      if(_profile.codeKelas != "-") {
+        await FirebaseReference.getUserInKelas(_profile.codeKelas, userid).delete();
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("deleteProfile: Error");
+      }
+    }
+  }
+
   Future<void> updateProflie({
     required String userid,
     required String role,

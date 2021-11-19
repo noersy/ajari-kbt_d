@@ -164,12 +164,8 @@ class _JoinKelasState extends State<JoinKelas> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: PaletteColor.primary,
-                    padding: const EdgeInsets.all(0),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(
-                        color: PaletteColor.green,
-                      ),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                   onPressed: () {

@@ -1,10 +1,18 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
+import 'package:ajari/component/dialog/dialog_delete.dart';
+import 'package:ajari/model/kelas.dart';
+import 'package:ajari/model/profile.dart';
+import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:ajari/view/LoginPage/component/auth_login.dart';
+import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -18,6 +26,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  void _delete() async {
+    await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.user.uid);
+    await AuthLogin.signOut(context: context);
+    context.read<KelasProvider>().setKelas(Kelas.blankKelas());
+    context.read<ProfileProvider>().setProfile(Profile.blankProfile());
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,9 +49,21 @@ class _ProfilePageState extends State<ProfilePage> {
               style: TextButton.styleFrom(
                 primary: PaletteColor.grey,
               ),
-              onPressed: () {},
-              icon: const Icon(Icons.mode_edit_outlined, color: PaletteColor.text,),
-              label: const Text("Edit", style: TypographyStyle.button1,),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (_) => DialogDelete(
+                  content: "content",
+                  onPressedFunction: _delete,
+                ),
+              ),
+              icon: const Icon(
+                Icons.mode_edit_outlined,
+                color: PaletteColor.text,
+              ),
+              label: const Text(
+                "Edit",
+                style: TypographyStyle.button1,
+              ),
             ),
           )
         ],

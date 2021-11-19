@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                         title: "Login",
                       ),
                       ButtonLoginGoogle(
-                        onPressedFunction: loginWIthGoogle,
+                        onPressedFunction: onPressedFunction,
                       ),
                       const SizedBox(height: SpacingDimens.spacing8),
                       const Divider(),
@@ -136,8 +136,10 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await AuthLogin.signInWithGoogle(context: context);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
-      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
+      await Provider.of<ProfileProvider>(context, listen: false)
+          .getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
+      await Provider.of<KelasProvider>(context, listen: false)
+          .getKelas(codeKelas: _profile?.codeKelas ?? "");
     } catch (e) {
       showDialog(
         context: context,
@@ -156,19 +158,7 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
 
-    if (FirebaseAuth.instance.currentUser != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const DashboardPage(),
-        ),
-      );
-    } else if (_profile != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
-        ),
-      );
-    } else {
+    if (FirebaseAuth.instance.currentUser == null) {
       showDialog(
         context: context,
         builder: (context) {
@@ -179,5 +169,31 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
+
+    if (_profile == null) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) =>
+              RegisterPage(user: FirebaseAuth.instance.currentUser!),
+        ),
+      );
+      return;
+    }
+
+    if (_profile!.role == "-") {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) =>
+              RegisterPage(user: FirebaseAuth.instance.currentUser!),
+        ),
+      );
+      return;
+    }
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const DashboardPage(),
+      ),
+    );
   }
 }

@@ -7,9 +7,9 @@ import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
-import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:ajari/view/LoginPage/RegisterPage/register_page.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
+import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +32,10 @@ class _SplashScreenState extends State<SplashScreenPage> {
       User? user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
 
-      Profile? prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user.uid);
-      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf?.codeKelas ?? " ");
+      Profile? prf = await Provider.of<ProfileProvider>(context, listen: false)
+          .getProfile(userUid: user.uid);
+      await Provider.of<KelasProvider>(context, listen: false)
+          .getKelas(codeKelas: prf?.codeKelas ?? " ");
 
       if (prf == null) {
         Navigator.of(context).pushReplacement(
@@ -41,13 +43,21 @@ class _SplashScreenState extends State<SplashScreenPage> {
             builder: (context) => RegisterPage(user: user),
           ),
         );
-      } else {
+      }
+
+      if(prf!.role == "-"){
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const DashboardPage(),
+            builder: (context) => RegisterPage(user: user),
           ),
         );
       }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const DashboardPage(),
+        ),
+      );
     } catch (e) {
       if (FirebaseAuth.instance.currentUser != null) {
         showDialog(
