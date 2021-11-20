@@ -25,11 +25,44 @@ class AbsenPage extends StatelessWidget {
         floating: true,
         barTitle: "Absensi",
         body: StreamBuilder<QuerySnapshot>(
-            stream: Provider.of<KelasProvider>(context).getsAbsen(),
+            stream: Provider.of<KelasProvider>(context).getsAbsents(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const Center(child: Text("There is no expense"));
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.create_new_folder_outlined,
+                        size:80,
+                        color: PaletteColor.grey40,
+                      ),
+                      Text("Belum ada data disini.", style: TextStyle(
+                          color: PaletteColor.grey60
+                      ),)
+                    ],
+                  ),
+                );
               }
+
+              if (snapshot.data!.size <= 0) {
+                return  Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(
+                        Icons.create_new_folder_outlined,
+                        size:80,
+                        color: PaletteColor.grey40,
+                      ),
+                      Text("Belum ada data disini.", style: TextStyle(
+                        color: PaletteColor.grey60
+                      ),)
+                    ],
+                  ),
+                );
+              }
+
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Column(
@@ -50,8 +83,8 @@ class AbsenPage extends StatelessWidget {
         child: const Icon(Icons.add),
         onPressed: () async {
           var result = await showDialog(
-              context: context,
-              builder: (context) => const DialogCreateAbsen(),
+            context: context,
+            builder: (context) => const DialogCreateAbsen(),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
@@ -60,7 +93,7 @@ class AbsenPage extends StatelessWidget {
     );
   }
 
-  Widget _absenList(ctx, DateTime datetime, DateTime startAt, DateTime endAt){
+  Widget _absenList(ctx, DateTime datetime, DateTime startAt, DateTime endAt) {
     final _text = DateFormat("yyyy-MM-dd").format(datetime);
     return Padding(
       padding: const EdgeInsets.only(
@@ -102,14 +135,16 @@ class AbsenPage extends StatelessWidget {
                   ],
                 ),
                 Row(
-                  children:  [
+                  children: [
                     const Icon(
                       Icons.access_time,
                       color: PaletteColor.text,
                       size: 18,
                     ),
                     const SizedBox(width: SpacingDimens.spacing4),
-                    Text("${TimeOfDay.fromDateTime(startAt).format(ctx)} - ${TimeOfDay.fromDateTime(endAt).format(ctx)} WIB", style: TypographyStyle.button2)
+                    Text(
+                        "${TimeOfDay.fromDateTime(startAt).format(ctx)} - ${TimeOfDay.fromDateTime(endAt).format(ctx)} WIB",
+                        style: TypographyStyle.button2)
                   ],
                 ),
               ],

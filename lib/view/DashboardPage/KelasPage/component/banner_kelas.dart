@@ -184,13 +184,17 @@ class BannerKelas extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: Row(
                     children: [
-                      const SizedBox(width: SpacingDimens.spacing4),
                       TextButton(
                         style: TextButton.styleFrom(
-                            primary: PaletteColor.primary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
+                          primary: PaletteColor.primarybg,
+                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            ),
+                          ),
+                        ),
                         onPressed: () => Navigator.of(context).push(
                           routeTransition(
                             StudenListPage(
@@ -205,26 +209,15 @@ class BannerKelas extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(
-                          SpacingDimens.spacing4,
-                        ),
-                        child: SizedBox(
-                          width: 1,
-                          height: SpacingDimens.spacing16,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: PaletteColor.primarybg2,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          primary: PaletteColor.primary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          primary: PaletteColor.primarybg,
+                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                            ),
                           ),
                         ),
                         onPressed: () {

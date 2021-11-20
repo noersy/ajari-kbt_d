@@ -257,7 +257,7 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Stream<QuerySnapshot> getsAbsen() {
+  Stream<QuerySnapshot> getsAbsents() {
     return FirebaseReference.kelas
         .doc(_dataKelas.kelasId)
         .collection("absen")
