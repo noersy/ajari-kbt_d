@@ -13,15 +13,24 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: PaletteColor.primarybg2,
-      appBar: AppBarNotification(
-        ctx: context,
-        title: 'Hallo, $username!',
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF6EEA91), Color(0xFF008165)],
+        ),
       ),
-      body: role == "Santri"
-          ? ViewSantri(pageViewController: _pageViewController)
-          : ViewUstaz(pageViewController: _pageViewController),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        // appBar: AppBarNotification(
+        //   ctx: context,
+        //   title: 'Hallo, $username!',
+        // ),
+        body: role == "Santri"
+            ? ViewSantri(pageViewController: _pageViewController, name: username)
+            : ViewUstaz(pageViewController: _pageViewController, name: username),
+      ),
     );
   }
 }

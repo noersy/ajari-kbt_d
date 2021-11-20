@@ -7,7 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DialogCreateAbsen extends StatefulWidget {
-  const DialogCreateAbsen({Key? key}) : super(key: key);
+  final DateTime? date;
+  const DialogCreateAbsen({Key? key, this.date}) : super(key: key);
 
   @override
   State<DialogCreateAbsen> createState() => _DialogCreateAbsenState();
@@ -70,6 +71,10 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.date != null) {
+      _stringDate = formattedDate.format(widget.date!);
+    }
+
     return AlertDialog(
       backgroundColor: PaletteColor.primarybg,
       contentPadding: const EdgeInsets.all(0.0),
@@ -111,9 +116,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                     side: BorderSide(
                         color: PaletteColor.primary.withOpacity(0.5))),
               ),
-              onPressed: () {
-                _selectDate(context);
-              },
+              onPressed: widget.date == null ? () => _selectDate(context) : null,
               child: SizedBox(
                 width: double.infinity,
                 height: SpacingDimens.spacing44,
@@ -137,9 +140,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                   side: BorderSide(color: PaletteColor.primary.withOpacity(0.5)),
                 ),
               ),
-              onPressed: () {
-                _selectStartTime(context);
-              },
+              onPressed: () => _selectStartTime(context),
               child: SizedBox(
                 width: double.infinity,
                 height: SpacingDimens.spacing44,

@@ -23,15 +23,16 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
+    return Padding(
+      padding: const EdgeInsets.all(SpacingDimens.spacing8),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 1,
-          primary: PaletteColor.primarybg,
+          primary: const Color(0xFF42BF80),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+            borderRadius: BorderRadius.circular(10),
           ),
+          padding: const EdgeInsets.all(0),
           side: BorderSide(
             color: PaletteColor.grey80.withOpacity(0.08),
           ),
@@ -44,49 +45,54 @@ class HomeButton extends StatelessWidget {
             ),
           );
         },
-        child: Row(
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              margin: const EdgeInsets.all(SpacingDimens.spacing8),
-              decoration: BoxDecoration(
-                color: PaletteColor.primary.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Icon(
-                // CostumeIcons.holyQuran,
-                icon,
-                color: PaletteColor.primary,
-                size: iconSize ?? 32.0,
-              ),
-            ),
-            Container(
-              width: 75,
-              padding: const EdgeInsets.only(
-                bottom: SpacingDimens.spacing12,
-                left: SpacingDimens.spacing12,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    // "قيم",
-                    titleArab,
-                    style: TypographyStyle.subtitle1.copyWith(
-                        color: PaletteColor.primary, fontSize: 20,
+        child: SizedBox(
+          height: 200,
+          child: Stack(
+            children: [
+              // Positioned(
+              //   right: 0,
+              //   bottom: 0,
+              //   child: SizedBox(
+              //     width: 60,
+              //     child: Image.asset('assets/images/img_cerita.png'),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: SpacingDimens.spacing12,
+                ),
+                child: Stack(
+                  children: [
+                    const SizedBox(width: double.infinity, height: 500),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          // "قيم",
+                          titleArab,
+                          style: TypographyStyle.subtitle1.copyWith(color: PaletteColor.primarybg, fontSize: 78),
+                        ),
+                      ),
                     ),
-                  ),
-                  Text(
-                    // "Nilai",
-                    title,
-                    style: TypographyStyle.subtitle2.copyWith(fontSize: 12),
-                  ),
-                ],
+                    Positioned(
+                      top: 10,
+                      left: 0,
+                      child: Text(
+                        // "Nilai",
+                        title,
+                        style: TypographyStyle.title.copyWith(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: PaletteColor.primarybg,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

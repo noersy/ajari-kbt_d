@@ -21,7 +21,7 @@ class _StoryPageState extends State<StoryPage> {
       body: SilverAppBarBack(
         pinned: true,
         floating: true,
-        barTitle: "Story",
+        barTitle: "Kisah Nabi",
         body: GridView(
           physics: const BouncingScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

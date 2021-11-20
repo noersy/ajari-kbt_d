@@ -84,9 +84,11 @@ class _JadwalKelasState extends State<JadwalKelas> {
                     right: SpacingDimens.spacing16,
                   ),
                   itemBuilder: (BuildContext context, int index) {
-                    return dateCard(
+                    return DateCard(
+                      dateTime: _listRealDate[index],
                       hari: _listDay[index],
                       tgl: _listDate[index],
+                      haveEvent: _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty,
                       color: _index != index
                           ? _indexCurret != index
                               ? PaletteColor.grey80
@@ -129,7 +131,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: SpacingDimens.spacing28),
-                              for (var itm in _absen ?? []) ...[
+                              for (var itm in _absen) ...[
                                 if (item.day == itm.get('datetime').toDate().day) ...[
                                   _listAbsent(context, itm.get('datetime').toDate(), _formatTime.format(itm.get('start_at').toDate()), _formatTime.format(itm.get('end_at').toDate()))
                                 ],

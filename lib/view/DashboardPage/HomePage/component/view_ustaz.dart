@@ -1,5 +1,6 @@
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -13,10 +14,12 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ViewUstaz extends StatefulWidget {
   final PageController pageViewController;
+  final String name;
 
   const ViewUstaz({
     Key? key,
     required this.pageViewController,
+    required this.name,
   }) : super(key: key);
 
   @override
@@ -30,237 +33,199 @@ class _ViewUstazState extends State<ViewUstaz> {
 
     return Column(
       children: [
-        Column(
-          children: [
-            SizedBox(
-              height: 150,
-              child: PageView(
-                physics: const BouncingScrollPhysics(),
-                controller: widget.pageViewController,
+        SizedBox(
+          height: 220,
+          child: PageView(
+            physics: const BouncingScrollPhysics(),
+            controller: widget.pageViewController,
+            children: [
+              Stack(
                 children: [
-                  Container(
-                    height: 130,
-                    alignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.only(
-                        top: SpacingDimens.spacing16,
-                        left: SpacingDimens.spacing16,
-                        right: SpacingDimens.spacing16,
-                        bottom: SpacingDimens.spacing12),
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFF6EEA91), Color(0xFF008165)],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                  Positioned(
+                    top: 46,
+                    left: SpacingDimens.spacing28,
                     child: Stack(
-                      alignment: Alignment.bottomCenter,
                       children: [
-                        Container(
-                          child: Image.asset(
-                            'assets/images/Quran.png',
-                          ),
-                          height: 100,
-                          alignment: Alignment.bottomRight,
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            top: SpacingDimens.spacing16,
-                          ),
-                          height: 130,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: PaletteColor.primarybg,
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Studens",
-                                style: TypographyStyle.subtitle2.merge(
-                                    const TextStyle(
-                                        color: PaletteColor.primarybg)),
-                              ),
-                            ],
+                        Text(
+                          "Assalamualaikum,",
+                          style: TypographyStyle.subtitle1.copyWith(
+                              color: PaletteColor.primarybg,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.only(
-                            left: 50,
-                            top: SpacingDimens.spacing8,
-                          ),
+                        Positioned(
+                          top: 18,
                           child: Text(
-                            "${_kelas.jumlahSantri}",
-                            style: TypographyStyle.title.merge(
-                                const TextStyle(color: PaletteColor.primarybg)),
+                            widget.name,
+                            style: TypographyStyle.subtitle2.copyWith(color: PaletteColor.primarybg),
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.bottomLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            bottom: SpacingDimens.spacing16,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: SpacingDimens.spacing8),
-                            child: Text(
-                              " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(
-                                  const TextStyle(
-                                      color: PaletteColor.primarybg,
-                                      fontWeight: FontWeight.w100)),
+                        Positioned(
+                          top: -10.0,
+                          right: SpacingDimens.spacing28,
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.wysiwyg,
+                              color: PaletteColor.primarybg,
                             ),
+                            color: PaletteColor.primary,
+                            iconSize: 20,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                routeTransition(
+                                  Container(),
+                                ),
+                              );
+                            },
                           ),
                         ),
+                        SizedBox(
+                          height: 40,
+                          width: MediaQuery.of(context).size.width,
+                        )
                       ],
                     ),
                   ),
-                  Container(
-                    height: 130,
-                    alignment: Alignment.bottomRight,
-                    margin: const EdgeInsets.only(
-                        top: SpacingDimens.spacing16,
-                        left: SpacingDimens.spacing16,
-                        right: SpacingDimens.spacing16,
-                        bottom: SpacingDimens.spacing12),
-                    decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                          colors: [
-                            Color(0xFF008165),
-                            Color(0xFF22997B),
-                            Color(0xFF3DAD8A),
-                            Color(0xFF6EEA91),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            'assets/images/Quran.png',
-                          ),
-                          height: 100,
-                          alignment: Alignment.bottomRight,
-                        ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            top: SpacingDimens.spacing16,
-                          ),
-                          height: 130,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.people,
-                                color: PaletteColor.primarybg,
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                "Studens",
-                                style: TypographyStyle.subtitle2.merge(
-                                    const TextStyle(
-                                        color: PaletteColor.primarybg)),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.only(
-                            left: 50,
-                            top: SpacingDimens.spacing8,
-                          ),
-                          child: Text(
-                            "${_kelas.jumlahSantri}",
-                            style: TypographyStyle.title.merge(
-                                const TextStyle(color: PaletteColor.primarybg)),
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.bottomLeft,
-                          margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing12,
-                            bottom: SpacingDimens.spacing16,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: SpacingDimens.spacing8),
-                            child: Text(
-                              " ${_kelas.nama}",
-                              style: TypographyStyle.subtitle2.merge(
-                                  const TextStyle(
-                                      color: PaletteColor.primarybg,
-                                      fontWeight: FontWeight.w100)),
-                            ),
-                          ),
-                        ),
-                      ],
+                  Positioned(
+                    bottom: - 25,
+                    right: 10,
+                    child: SizedBox(
+                      height: 135,
+                      child: Image.asset(
+                        'assets/images/banner.png',
+                      ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    top: 100,
+                    left: 35,
+                    child: Container(
+                      height: 75,
+                      width: 75,
+                      decoration: BoxDecoration(
+                        color: PaletteColor.primarybg.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(50.0),
+                        boxShadow:  [
+                          BoxShadow(
+                            spreadRadius: 5,
+                            color: PaletteColor.primarybg.withOpacity(0.1)
+                          )
+                        ]
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.people,
+                            color: PaletteColor.primarybg,
+                            size: 33,
+                          ),
+                          const SizedBox(width: SpacingDimens.spacing8),
+                          Text(
+                            "${_kelas.jumlahSantri}",
+                            style: TypographyStyle.title.copyWith(color: PaletteColor.primarybg),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomLeft,
+                    margin: const EdgeInsets.only(
+                      left: SpacingDimens.spacing12,
+                      bottom: SpacingDimens.spacing16,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: SpacingDimens.spacing8),
+                      child: Text(
+                        " ${_kelas.nama}",
+                        style: TypographyStyle.subtitle2.copyWith(
+                                color: PaletteColor.primarybg,
+                                fontWeight: FontWeight.w100,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ),
-            SmoothPageIndicator(
-              controller: widget.pageViewController,
-              count: 2,
-              axisDirection: Axis.horizontal,
-              onDotClicked: (i) {
-                widget.pageViewController.animateToPage(
-                  i,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              },
-              effect: const ExpandingDotsEffect(
-                expansionFactor: 3,
-                spacing: 8,
-                radius: 16,
-                dotWidth: 10,
-                dotHeight: 10,
-                dotColor: PaletteColor.grey40,
-                activeDotColor: PaletteColor.primary,
-                paintStyle: PaintingStyle.fill,
-              ),
-            ),
-          ],
+              Container(
+                alignment: Alignment.bottomRight,
+              )
+            ],
+          ),
         ),
-        const SizedBox(height: SpacingDimens.spacing8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Padding(
-              padding: EdgeInsets.only(left: SpacingDimens.spacing4),
-              child: HomeButton(
-                icon: CostumeIcons.holyQuran,
-                titleArab: "قيم",
-                title: "Nilai",
-                target: StudentsPage(),
-              ),
+        Expanded(
+          child: Container(
+            decoration:  BoxDecoration(
+              color: PaletteColor.primarybg2,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(35),
+                  topRight: Radius.circular(35),
+                ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 2,
+                  offset: const Offset(0, -1),
+                  color: PaletteColor.primarybg2.withOpacity(0.5)
+                ),
+              ]
             ),
-            SizedBox(width: SpacingDimens.spacing4),
-            Padding(
-              padding: EdgeInsets.only(left: SpacingDimens.spacing4),
-              child: HomeButton(
-                icon: Icons.collections_bookmark_sharp,
-                iconSize: 28.0,
-                titleArab: "قصة",
-                title: "Story Page",
-                target: StoryPage(),
-              ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SmoothPageIndicator(
+                    controller: widget.pageViewController,
+                    count: 2,
+                    axisDirection: Axis.horizontal,
+                    onDotClicked: (i) {
+                      widget.pageViewController.animateToPage(
+                        i,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                    effect: const ExpandingDotsEffect(
+                      expansionFactor: 3,
+                      spacing: 8,
+                      radius: 16,
+                      dotWidth: 10,
+                      dotHeight: 10,
+                      dotColor: PaletteColor.grey40,
+                      activeDotColor: PaletteColor.primary,
+                      paintStyle: PaintingStyle.fill,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Expanded(
+                        child: HomeButton(
+                          icon: CostumeIcons.holyQuran,
+                          titleArab: "قيم",
+                          title: "Nilai",
+                          target: StudentsPage(),
+                        ),
+                      ),
+                      SizedBox(width: SpacingDimens.spacing4),
+                      Expanded(
+                        child: HomeButton(
+                          icon: Icons.collections_bookmark_sharp,
+                          iconSize: 28.0,
+                          titleArab: "قصة",
+                          title: "Cerita",
+                          target: StoryPage(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ],
     );

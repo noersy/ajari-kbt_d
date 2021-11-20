@@ -41,7 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(CostumeIcons.calendarOutlilne, size: 20),
-            label: 'Class',
+            label: 'Kelas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outlined),
