@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class JadwalKelas extends StatefulWidget {
   const JadwalKelas({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
   final List<String> _listDate = [];
   final List<DateTime> _listRealDate = [];
   final DateTime _dateTime = DateTime.now();
+  final DateFormat _formatTime = DateFormat('hh:mm');
   late PageController _pageController;
   int _index = 0;
   int _indexCurret = 0;
@@ -124,7 +126,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                                 const SizedBox(height: SpacingDimens.spacing28),
                                 for (var itm in _absen ?? [])
                                   if (item.day == itm.get('datetime').toDate().day)
-                                    _listAbsent()
+                                    _listAbsent( _formatTime.format(itm.get('start_at').toDate()), _formatTime.format(itm.get('end_at').toDate()))
                               ],
                             ),
                           ),
@@ -138,7 +140,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
         });
   }
 
-  Widget _listAbsent() {
+  Widget _listAbsent(String startAt, String endAt) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -201,7 +203,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "08:40",
+                          startAt,
                           style: TypographyStyle.button2.merge(
                             const TextStyle(color: PaletteColor.primary),
                           ),
@@ -238,7 +240,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          "08:40",
+                          endAt,
                           style: TypographyStyle.button2.merge(
                             const TextStyle(color: PaletteColor.primary),
                           ),
