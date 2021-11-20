@@ -112,8 +112,7 @@ class AbsenPage extends StatelessWidget {
             },
           ),
         ),
-        onPressed: () => Navigator.of(ctx)
-            .push(routeTransition(AbsenDetailPage(dateTIme: datetime))),
+        onPressed: () => Navigator.of(ctx).push(routeTransition(AbsenDetailPage(dateTIme: datetime))),
         child: Container(
           width: double.infinity,
           height: SpacingDimens.spacing44,
