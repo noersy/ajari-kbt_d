@@ -61,7 +61,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
     return StreamBuilder<QuerySnapshot>(
       stream: Provider.of<KelasProvider>(context).getsAbsents(),
       builder: (context, snapshot) {
-        List<QueryDocumentSnapshot<Object?>>? _absen;
+        List<QueryDocumentSnapshot<Object?>>? _absen = [];
 
         if (snapshot.hasData) {
           _absen = snapshot.data?.docs.toList();
@@ -122,22 +122,31 @@ class _JadwalKelasState extends State<JadwalKelas> {
                     },
                     children: [
                       for (var item in _listRealDate)
+                        _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty ?
                         SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          child: Container(
-                            color: PaletteColor.primarybg2,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: SpacingDimens.spacing28),
-                                for (var itm in _absen ?? [])
-                                  if (item.day == itm.get('datetime').toDate().day) ...[
-                                    _listAbsent(context, itm.get('datetime').toDate(), _formatTime.format(itm.get('start_at').toDate()), _formatTime.format(itm.get('end_at').toDate()))
-                                  ],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: SpacingDimens.spacing28),
+                              for (var itm in _absen ?? []) ...[
+                                if (item.day == itm.get('datetime').toDate().day) ...[
+                                  _listAbsent(context, itm.get('datetime').toDate(), _formatTime.format(itm.get('start_at').toDate()), _formatTime.format(itm.get('end_at').toDate()))
+                                ],
                               ],
-                            ),
+                            ],
                           ),
-                        ),
+                        ) :
+                         Center(
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.center,
+                               children: const [
+                                 Icon(Icons.notification_add_outlined, color: PaletteColor.grey60, size: 30),
+                                 SizedBox(width: SpacingDimens.spacing4),
+                                 Text("Tidak ada jadwal", style: TextStyle(color: PaletteColor.grey60))
+                                ],
+                             ),
+                         ),
                     ],
                   ),
                 ),
@@ -157,7 +166,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
         Padding(
           padding: const EdgeInsets.only(
             bottom: SpacingDimens.spacing12,
-            left: SpacingDimens.spacing16 + 2,
+            left: SpacingDimens.spacing8,
           ),
           child: Stack(
             alignment: Alignment.centerLeft,
@@ -168,6 +177,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: PaletteColor.primarybg,
+                    elevation: 2,
                     padding: const EdgeInsets.all(SpacingDimens.spacing8),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

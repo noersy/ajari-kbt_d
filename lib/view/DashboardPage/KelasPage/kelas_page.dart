@@ -69,7 +69,7 @@ class _ClassPageState extends State<ClassPage> {
                       iconTheme:
                           const IconThemeData(color: PaletteColor.primary),
                       title: const Text(
-                        "Class",
+                        "Kelas",
                         style: TypographyStyle.subtitle1,
                       ),
                       bottom: const PreferredSize(
@@ -78,8 +78,7 @@ class _ClassPageState extends State<ClassPage> {
                       ),
                       pinned: false,
                       floating: false,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       forceElevated: innerBoxIsScrolled,
                     ),
                   ];
