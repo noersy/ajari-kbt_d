@@ -123,7 +123,7 @@ class ViewSantri extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                             boxShadow: [
                               BoxShadow(
-                                color: PaletteColor.primarybg.withOpacity(0.2),
+                                color: PaletteColor.primarybg.withOpacity(0.1),
                                 spreadRadius: 5
                               )
                             ]

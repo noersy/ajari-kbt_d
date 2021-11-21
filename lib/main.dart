@@ -1,6 +1,7 @@
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
+import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         color: PaletteColor.primary,
         debugShowCheckedModeBanner: false,
         title: 'Ajari',
-        home: SplashScreenPage(),
+        // home: SplashScreenPage(),
+        home: RegisterPage(),
       ),
     );
   }

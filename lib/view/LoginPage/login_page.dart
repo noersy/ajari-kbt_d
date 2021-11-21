@@ -86,10 +86,11 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       ButtonLogin(
                         onPressedFunction: onPressedFunction,
-                        title: "Login",
+                        title: "Sign In",
                       ),
                       ButtonLoginGoogle(
                         onPressedFunction: onPressedFunction,
+                        label: "Sign In with Google",
                       ),
                       const SizedBox(height: SpacingDimens.spacing8),
                       const Divider(),
@@ -147,8 +148,7 @@ class _LoginPageState extends State<LoginPage> {
       if (profile == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) =>
-                RegisterPage(user: FirebaseAuth.instance.currentUser!),
+            builder: (context) => SelectionPage(user: FirebaseAuth.instance.currentUser!),
           ),
         );
         return;
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
       if (profile.role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
+            builder: (context) => SelectionPage(user: FirebaseAuth.instance.currentUser!),
           ),
         );
         return;

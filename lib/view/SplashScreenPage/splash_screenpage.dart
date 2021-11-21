@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
       if (prf == null) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: user),
+            builder: (context) => SelectionPage(user: user),
           ),
         );
       }
@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreenPage> {
       if(prf!.role == "-"){
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: user),
+            builder: (context) => SelectionPage(user: user),
           ),
         );
       }

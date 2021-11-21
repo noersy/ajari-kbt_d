@@ -10,17 +10,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RegisterPage extends StatefulWidget {
+class SelectionPage extends StatefulWidget {
   final User user;
 
-  const RegisterPage({Key? key, required this.user}) : super(key: key);
+  const SelectionPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _RegisterPage createState() => _RegisterPage();
 }
 
 
-class _RegisterPage extends State<RegisterPage> {
+class _RegisterPage extends State<SelectionPage> {
   bool isLoading = false;
   String _selected = "";
   final PageController _pageController = PageController();

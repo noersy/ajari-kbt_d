@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 
 class ButtonLoginGoogle extends StatelessWidget {
   final VoidCallback onPressedFunction;
+  final String label;
 
-  const ButtonLoginGoogle({Key? key, required this.onPressedFunction}) : super(key: key);
+  const ButtonLoginGoogle({Key? key, required this.onPressedFunction, required this.label}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class ButtonLoginGoogle extends StatelessWidget {
               children: [
                 Image.asset('assets/images/googlelogo.png'),
                 Text(
-                  "Log In with Google",
+                  label,
                   style: TypographyStyle.button1.copyWith(
                       color: PaletteColor.grey60,
                   ),
