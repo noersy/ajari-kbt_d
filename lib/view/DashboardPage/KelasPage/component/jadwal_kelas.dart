@@ -61,7 +61,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
   @override
   Widget build(BuildContext context) {
-    String _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
 
     return StreamBuilder<QuerySnapshot>(
       stream: Provider.of<KelasProvider>(context).getsAbsents(),
@@ -141,7 +140,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
                                       if (item.day == itm.get('datetime').toDate().day) ...[
                                         ListAbsent(
                                           present: itm.reference,
-                                          uid: _uid,
                                           date: itm.get('datetime').toDate(),
                                           startAt: _formatTime.format(itm.get('start_at').toDate()), endAt: _formatTime.format(itm.get('end_at').toDate()),
                                         )
@@ -199,13 +197,12 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
 class ListAbsent extends StatefulWidget {
   final DocumentReference<Object?> present;
-  final String uid, startAt, endAt;
+  final String startAt, endAt;
   final DateTime date;
 
   const ListAbsent({
     Key? key,
     required this.present,
-    required this.uid,
     required this.startAt,
     required this.endAt,
     required this.date,
@@ -217,10 +214,12 @@ class ListAbsent extends StatefulWidget {
 
 class _ListAbsentState extends State<ListAbsent> {
   bool isPresent = true;
+  int _absentCount = 0;
+  String _uid = "-";
 
   Future<bool> present() async {
     try {
-      DocumentSnapshot _absent = await widget.present.collection('santri').doc(widget.uid).get();
+      DocumentSnapshot _absent = await widget.present.collection('santri').doc(_uid).get();
       if (mounted) {
         setState(() {
           isPresent = _absent.get('kehadiran');
@@ -238,13 +237,15 @@ class _ListAbsentState extends State<ListAbsent> {
 
   Future<bool> presentCount() async {
     try {
-      DocumentSnapshot _absent = await widget.present.collection('santri').doc(widget.uid).get();
+      QuerySnapshot _absent = await widget.present.collection('santri').get();
       if (mounted) {
         setState(() {
-          isPresent = _absent.get('kehadiran');
+          _absentCount = _absent.docs.where((element) {
+            return element.get("kehadiran");
+          }).length;
+          print(_absent.docs.length);
         });
       }
-      return _absent.get('kehadiran');
     }catch(e){
       if (kDebugMode) {
         print(e.runtimeType);
@@ -255,14 +256,9 @@ class _ListAbsentState extends State<ListAbsent> {
   }
 
   @override
-  void initState() {
-    present();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     String _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
+    _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -291,10 +287,14 @@ class _ListAbsentState extends State<ListAbsent> {
                     ),
                   ),
                   onPressed: () {
-                    Provider.of<KelasProvider>(context, listen: false).absent(date: widget.date, uid: widget.uid);
+                    if(_role == "Pengajar"){
+                      Navigator.of(context).push(routeTransition(AbsenDetailPage(dateTIme: widget.date)));
+                    }else if(_role == "Santri"){
+                      Provider.of<KelasProvider>(context, listen: false).absent(date: widget.date, uid: _uid);
+                    }
                   },
                   child: FutureBuilder<bool>(
-                    future: present(),
+                    future: _role != "Santri" ? presentCount() : present(),
                     builder: (context, snapshot) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -350,10 +350,10 @@ class _ListAbsentState extends State<ListAbsent> {
                                   bottom: SpacingDimens.spacing4,
                                 ),
                                 child: Row(
-                                  children: const [
-                                    Text("0", style: TypographyStyle.button2),
-                                    SizedBox(width: SpacingDimens.spacing4),
-                                    Icon(
+                                  children: [
+                                    Text("$_absentCount", style: TypographyStyle.button2),
+                                    const SizedBox(width: SpacingDimens.spacing4),
+                                    const Icon(
                                       Icons.people,
                                       color: PaletteColor.grey,
                                       size: 18,

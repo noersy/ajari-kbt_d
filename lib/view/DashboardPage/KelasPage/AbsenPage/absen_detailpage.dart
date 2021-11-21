@@ -92,7 +92,7 @@ class _AbsenDetailPageState extends State<AbsenDetailPage> {
               color: kehadiran ? PaletteColor.primary : Colors.red,
               borderRadius: BorderRadius.circular(7),
             ),
-            child:  Text("Tidak Hadir",
+            child:  Text(kehadiran ? "Hadir": "Tidak Hadir",
                 style: TypographyStyle.caption2.copyWith(
                   color: PaletteColor.primarybg,
                 ),
