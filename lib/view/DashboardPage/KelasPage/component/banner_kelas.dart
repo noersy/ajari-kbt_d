@@ -7,6 +7,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_page.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/MeetingPage/meeting_page.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/student_listpage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -230,6 +231,28 @@ class BannerKelas extends StatelessWidget {
                         },
                         child: Text(
                           "Absen",
+                          style: TypographyStyle.button2.copyWith(
+                            color: PaletteColor.primarybg2,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: PaletteColor.primarybg,
+                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(routeTransition(const MeetingPage()));
+                        },
+                        child: Text(
+                          "Pertemuan",
                           style: TypographyStyle.button2.copyWith(
                             color: PaletteColor.primarybg2,
                           ),

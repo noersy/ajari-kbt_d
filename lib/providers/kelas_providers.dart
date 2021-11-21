@@ -73,7 +73,8 @@ class KelasProvider extends ChangeNotifier {
       var dataKelas = await FirebaseReference.kelas.doc(codeKelas).get();
       if (!dataKelas.exists) throw Exception("Error");
 
-      await FirebaseReference.getUserInKelas(codeKelas, user.uid).set(newUserInKelas);
+      await FirebaseReference.getUserInKelas(codeKelas, user.uid)
+          .set(newUserInKelas);
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
       await FirebaseReference.getUser(user.uid).update(newDataUser);
 
@@ -179,7 +180,7 @@ class KelasProvider extends ChangeNotifier {
     required String codeKelas,
     required String nomorJilid,
   }) {
-    if(codeKelas == "-") return const Stream.empty();
+    if (codeKelas == "-") return const Stream.empty();
     return FirebaseReference.getUserInKelas(codeKelas, uid)
         .collection("jilid" + nomorJilid)
         .snapshots();
@@ -208,7 +209,10 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createAbsen({ required DateTime date, required DateTime startAt, required DateTime  endAt}) async {
+  Future<int> createAbsen(
+      {required DateTime date,
+      required DateTime startAt,
+      required DateTime endAt}) async {
     try {
       Map<String, dynamic> data = {
         "datetime": date,
@@ -216,22 +220,27 @@ class KelasProvider extends ChangeNotifier {
         "end_at": endAt,
       };
       await FirebaseReference.getAbsen(_dataKelas.kelasId, date).set(data);
-      QuerySnapshot santri = await FirebaseReference.kelas.doc(_dataKelas.kelasId).collection("santri").get();
+      QuerySnapshot santri = await FirebaseReference.kelas
+          .doc(_dataKelas.kelasId)
+          .collection("santri")
+          .get();
 
-      final allData = santri.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      final allData =
+          santri.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
 
       for (Map<String, dynamic> element in allData) {
-
-        Map<String, dynamic> _newData ={
-          "name" : element["name"],
-          "uid" : element["uid"],
-          "photo" : element["photo"],
-          "kehadiran" : false
+        Map<String, dynamic> _newData = {
+          "name": element["name"],
+          "uid": element["uid"],
+          "photo": element["photo"],
+          "kehadiran": false
         };
 
-        await FirebaseReference.getAbsen(_dataKelas.kelasId, date).collection("santri").doc(element["uid"]).set(_newData);
+        await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
+            .collection("santri")
+            .doc(element["uid"])
+            .set(_newData);
       }
-
     } catch (e) {
       if (kDebugMode) {
         print("createAbsen: ${e.runtimeType}");
@@ -242,15 +251,15 @@ class KelasProvider extends ChangeNotifier {
     }
     return 200;
   }
-  Future<int> absent({ required DateTime date, required String uid}) async {
+
+  Future<int> absent({required DateTime date, required String uid}) async {
     try {
+      Map<String, dynamic> _newData = {"kehadiran": true};
 
-      Map<String, dynamic> _newData ={
-        "kehadiran" : true
-      };
-
-      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).collection("santri").doc(uid).update(_newData);
-
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
+          .collection("santri")
+          .doc(uid)
+          .update(_newData);
     } catch (e) {
       if (kDebugMode) {
         print("absent Error: ${e.runtimeType}");
@@ -290,6 +299,55 @@ class KelasProvider extends ChangeNotifier {
         .doc("$date")
         .collection("santri")
         .orderBy("name", descending: false)
+        .snapshots();
+  }
+
+  Future<int> createMeet({
+    required DateTime date,
+    required String subject,
+  }) async {
+    try {
+      String codeMeet = FirebaseReference.getRandomString(12);
+      String serverURL = "https://meet.jit.si/" + codeMeet;
+
+      Map<String, dynamic> data = {
+        "datetime": date,
+        "subject": subject,
+        "serverURL": serverURL,
+        "codeMeet": codeMeet,
+      };
+
+      await FirebaseReference.getMeeting(_dataKelas.kelasId, date).set(data);
+    } catch (e) {
+      if (kDebugMode) {
+        print("createMeet: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
+    return 200;
+  }
+
+  Future<int> deleteMeet({required DateTime date}) async {
+    try {
+      await FirebaseReference.getMeeting(_dataKelas.kelasId, date).delete();
+    } catch (e) {
+      if (kDebugMode) {
+        print("deleteMeet: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
+    return 200;
+  }
+
+  Stream<QuerySnapshot> getsMeetings() {
+    return FirebaseReference.kelas
+        .doc(_dataKelas.kelasId)
+        .collection("meet")
+        .orderBy("datetime", descending: false)
         .snapshots();
   }
 }
