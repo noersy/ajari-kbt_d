@@ -33,10 +33,8 @@ class ButtonLogin extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
-                style: TypographyStyle.button1.merge(
-                  const TextStyle(
+                style: TypographyStyle.button1.copyWith(
                     color: PaletteColor.primarybg,
-                  ),
                 ),
               ),
             ),

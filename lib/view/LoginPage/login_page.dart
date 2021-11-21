@@ -12,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'RegisterPage/register_page.dart';
+import 'selection_role.dart';
 import 'component/auth_login.dart';
 import 'component/button_login.dart';
 import 'component/main_forms.dart';
@@ -136,29 +136,40 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await AuthLogin.signInWithGoogle(context: context);
-      await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
-      await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: _profile?.codeKelas ?? "");
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return DialogFailed(
-            content: "Whups something wrong \n$e",
-            onPressedFunction: () {
-              Navigator.of(context).pop();
-            },
-          );
-        },
+      final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
+
+
+      if (FirebaseAuth.instance.currentUser == null) {
+        throw Exception("Login Failed");
+      }
+
+      if (profile == null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) =>
+                RegisterPage(user: FirebaseAuth.instance.currentUser!),
+          ),
+        );
+        return;
+      }
+
+      if (profile.role == "-") {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
+          ),
+        );
+        return;
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const DashboardPage(),
+        ),
       );
-    }
 
-    setState(() {
-      isLoading = false;
-    });
-
-    if (FirebaseAuth.instance.currentUser == null) {
+    } catch (e) {
       showDialog(
         context: context,
         builder: (context) {
@@ -169,31 +180,8 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
-
-    if (_profile == null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              RegisterPage(user: FirebaseAuth.instance.currentUser!),
-        ),
-      );
-      return;
-    }
-
-    if (_profile!.role == "-") {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              RegisterPage(user: FirebaseAuth.instance.currentUser!),
-        ),
-      );
-      return;
-    }
-
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const DashboardPage(),
-      ),
-    );
+    setState(() {
+      isLoading = false;
+    });
   }
 }

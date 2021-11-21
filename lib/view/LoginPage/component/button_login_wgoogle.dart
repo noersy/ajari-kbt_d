@@ -15,10 +15,10 @@ class ButtonLoginGoogle extends StatelessWidget {
       margin: const EdgeInsets.only(top: SpacingDimens.spacing12),
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: TextButton(
-          style: TextButton.styleFrom(
-            backgroundColor: PaletteColor.primarybg,
-            primary: PaletteColor.primary80,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: PaletteColor.primarybg,
+            elevation: 1,
             padding: const EdgeInsets.all(0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(3.0),
@@ -36,10 +36,8 @@ class ButtonLoginGoogle extends StatelessWidget {
                 Image.asset('assets/images/googlelogo.png'),
                 Text(
                   "Log In with Google",
-                  style: TypographyStyle.button1.merge(
-                    const TextStyle(
+                  style: TypographyStyle.button1.copyWith(
                       color: PaletteColor.grey60,
-                    ),
                   ),
                 ),
               ],
