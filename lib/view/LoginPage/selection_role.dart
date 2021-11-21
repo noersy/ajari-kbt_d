@@ -54,10 +54,10 @@ class _RegisterPage extends State<RegisterPage> {
                               setState(() {
                                 _selected = "Santri";
                               });
-                              _pageController.animateToPage(0, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn);
+                              _pageController.animateToPage(0, duration: const Duration(milliseconds: 600), curve: Curves.fastOutSlowIn);
                             }),
                             _elevatedButton("Pengajar", () {
-                              _pageController.animateToPage(1, duration: const Duration(milliseconds: 800), curve: Curves.fastOutSlowIn);
+                              _pageController.animateToPage(1, duration: const Duration(milliseconds: 600), curve: Curves.fastOutSlowIn);
                               setState(() {
                                 _selected = "Pengajar";
                               });

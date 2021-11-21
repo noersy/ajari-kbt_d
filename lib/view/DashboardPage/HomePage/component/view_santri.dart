@@ -90,7 +90,7 @@ class ViewSantri extends StatelessWidget {
                   ),
                   Positioned(
                     left: 30,
-                    top: 105,
+                    top: 95,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -110,36 +110,59 @@ class ViewSantri extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "Jilid",
-                              style: TypographyStyle.subtitle1.merge(
-                                  const TextStyle(color: PaletteColor.primarybg)),
-                            ),
-                            Text(
-                              " ١",
-                              style: TypographyStyle.title.merge(
-                                  const TextStyle(color: PaletteColor.primarybg)),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Halaman",
-                              style: TypographyStyle.subtitle2.merge(
-                                  const TextStyle(
-                                      color: PaletteColor.primarybg,
-                                      fontWeight: FontWeight.w100)),
-                            ),
-                            Text(
-                              " 1",
-                              style: TypographyStyle.subtitle2.merge(
-                                const TextStyle(color: PaletteColor.primarybg),
+                        Container(
+                          margin: const EdgeInsets.only(top: SpacingDimens.spacing12),
+                          padding: const EdgeInsets.only(
+                            left: SpacingDimens.spacing12,
+                            right: SpacingDimens.spacing12,
+                              top : SpacingDimens.spacing4,
+                            bottom: SpacingDimens.spacing8,
+                          ),
+                          decoration : BoxDecoration(
+                            color: PaletteColor.primarybg.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(4.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: PaletteColor.primarybg.withOpacity(0.2),
+                                spreadRadius: 5
+                              )
+                            ]
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Jilid",
+                                    style: TypographyStyle.subtitle1.merge(
+                                        const TextStyle(color: PaletteColor.primarybg)),
+                                  ),
+                                  Text(
+                                    " ١",
+                                    style: TypographyStyle.title.merge(
+                                        const TextStyle(color: PaletteColor.primarybg)),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                              Row(
+                                children: [
+                                  Text(
+                                    "Halaman",
+                                    style: TypographyStyle.subtitle2.merge(
+                                        const TextStyle(
+                                            color: PaletteColor.primarybg,
+                                            fontWeight: FontWeight.w100)),
+                                  ),
+                                  Text(
+                                    " 1",
+                                    style: TypographyStyle.subtitle2.merge(
+                                      const TextStyle(color: PaletteColor.primarybg),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
