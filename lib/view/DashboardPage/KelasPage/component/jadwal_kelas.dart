@@ -71,107 +71,244 @@ class _JadwalKelasState extends State<JadwalKelas> {
           _absen = snapshot.data?.docs.toList();
         }
 
-        return Expanded(
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
-                height: 60,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemExtent: 50,
-                  itemCount: 7,
-                  padding: const EdgeInsets.only(
-                    top: SpacingDimens.spacing8,
-                    left: SpacingDimens.spacing16,
-                    right: SpacingDimens.spacing16,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return DateCard(
-                      dateTime: _listRealDate[index],
-                      hari: _listDay[index],
-                      tgl: _listDate[index],
-                      haveEvent: _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty,
-                      color: _index != index
-                          ? _indexCurret != index
-                              ? PaletteColor.grey80
-                              : PaletteColor.primary.withOpacity(0.6)
-                          : PaletteColor.primary,
-                      onTap: () {
-                        setState(() {
-                          _index = index;
-                          _pageController.animateToPage(
-                            index,
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                          );
-                        });
+        return StreamBuilder<QuerySnapshot>(
+          stream: Provider.of<KelasProvider>(context).getsMeetings(),
+          builder: (context, snapshot) {
+
+            List<QueryDocumentSnapshot<Object?>>? _meet = [];
+
+            if (snapshot.hasData) {
+              _meet = snapshot.data?.docs.toList();
+            }
+
+            return Expanded(
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
+                    height: 60,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemExtent: 50,
+                      itemCount: 7,
+                      padding: const EdgeInsets.only(
+                        top: SpacingDimens.spacing8,
+                        left: SpacingDimens.spacing16,
+                        right: SpacingDimens.spacing16,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return DateCard(
+                          dateTime: _listRealDate[index],
+                          hari: _listDay[index],
+                          tgl: _listDate[index],
+                          haveEvent: _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty || _meet!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day,).isNotEmpty,
+                          color: _index != index
+                              ? _indexCurret != index
+                                  ? PaletteColor.grey80
+                                  : PaletteColor.primary.withOpacity(0.6)
+                              : PaletteColor.primary,
+                          onTap: () {
+                            setState(() {
+                              _index = index;
+                              _pageController.animateToPage(
+                                index,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease,
+                              );
+                            });
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: SpacingDimens.spacing16,
-                    right: SpacingDimens.spacing16,
+                    ),
                   ),
-                  child: PageView(
-                    physics: const BouncingScrollPhysics(),
-                    controller: _pageController,
-                    onPageChanged: (value) {
-                      setState(() {
-                        _index = value;
-                      });
-                    },
-                    children: [
-                      for (var item in _listRealDate)
-                        _absen!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
-                            ? SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                        height: SpacingDimens.spacing28),
-                                    for (var itm in _absen) ...[
-                                      if (item.day == itm.get('datetime').toDate().day) ...[
-                                        ListAbsent(
-                                          present: itm.reference,
-                                          date: itm.get('datetime').toDate(),
-                                          startAt: _formatTime.format(itm.get('start_at').toDate()), endAt: _formatTime.format(itm.get('end_at').toDate()),
-                                        )
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: SpacingDimens.spacing16,
+                        right: SpacingDimens.spacing16,
+                      ),
+                      child: PageView(
+                        physics: const BouncingScrollPhysics(),
+                        controller: _pageController,
+                        onPageChanged: (value) {
+                          setState(() {
+                            _index = value;
+                          });
+                        },
+                        children: [
+                          for (var item in _listRealDate)
+                            _absen!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
+                            || _meet!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
+                                ? SingleChildScrollView(
+                                    physics: const BouncingScrollPhysics(),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: SpacingDimens.spacing28),
+                                        for (var itm in _absen) ...[
+                                          if (item.day == itm.get('datetime').toDate().day) ...[
+                                            ListAbsent(
+                                              present: itm.reference,
+                                              date: itm.get('datetime').toDate(),
+                                              startAt: _formatTime.format(itm.get('start_at').toDate()), endAt: _formatTime.format(itm.get('end_at').toDate()),
+                                            )
+                                          ],
+                                        ],
+                                        for (var itm in _meet!) ...[
+                                          if (item.day == itm.get('datetime').toDate().day) ...[
+                                             MeetList(meet: itm.reference, date: itm.get('datetime').toDate(),),
+                                          ],
+                                        ],
                                       ],
-                                    ],
-                                  ],
-                                ),
-                              )
-                            : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Icon(Icons.notification_add_outlined,
-                                        color: PaletteColor.grey60, size: 30),
-                                    SizedBox(width: SpacingDimens.spacing4),
-                                    Text("Tidak ada jadwal",
-                                        style: TextStyle(color: PaletteColor.grey60))
-                                  ],
-                                ),
-                              ),
-                    ],
+                                    ),
+                                  )
+                                : Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.notification_add_outlined,
+                                            color: PaletteColor.grey60, size: 30),
+                                        SizedBox(width: SpacingDimens.spacing4),
+                                        Text("Tidak ada jadwal", style: TextStyle(color: PaletteColor.grey60))
+                                      ],
+                                    ),
+                                  ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          }
         );
       },
     );
   }
 
-  _joinMeeting() async {
+}
+
+class MeetList extends StatefulWidget {
+  final DocumentReference<Object?> meet;
+  final DateTime date;
+
+  const MeetList({Key? key, required this.meet, required this.date}) : super(key: key);
+
+  @override
+  State<MeetList> createState() => _MeetListState();
+}
+
+class _MeetListState extends State<MeetList> {
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: widget.meet.get(),
+      builder: (context, snapshot) {
+
+        String _subject = snapshot.data?.get("subject") ?? "-";
+        String _serverURL = snapshot.data?.get("serverURL") ?? "-";
+        String _codeMeet = snapshot.data?.get("codeMeet") ?? "-";
+
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: SpacingDimens.spacing12,
+                left: SpacingDimens.spacing8,
+              ),
+              child: Stack(
+                alignment: Alignment.centerLeft,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 40.0),
+                    width: MediaQuery.of(context).size.width - 145,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: PaletteColor.primarybg,
+                        elevation: 2,
+                        padding: const EdgeInsets.all(SpacingDimens.spacing8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () => _joinMeeting(codeRoom: _codeMeet, urlServer: _serverURL, subject: _subject),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Center(child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(_subject, style: TypographyStyle.paragraph),
+                          ))),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: PaletteColor.primary,
+                                borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            padding: const EdgeInsets.only(
+                              left: SpacingDimens.spacing8,
+                              right: SpacingDimens.spacing8,
+                              top: SpacingDimens.spacing4,
+                              bottom: SpacingDimens.spacing4,
+                            ),
+                            child: Text("Gabung", style: TypographyStyle.button1.copyWith(color: PaletteColor.primarybg)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 3.5,
+                        decoration: BoxDecoration(
+                          color: PaletteColor.grey60,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        margin: const EdgeInsets.only(
+                            left: SpacingDimens.spacing16 + 1.8),
+                      ),
+                      Container(
+                        height: 8,
+                        width: 8,
+                        margin: const EdgeInsets.only(
+                          top: 2,
+                          bottom: 2,
+                          left: SpacingDimens.spacing16 - 0.5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: PaletteColor.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      Container(
+                        height: 20,
+                        width: 3.5,
+                        decoration: BoxDecoration(
+                          color: PaletteColor.grey60,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        margin: const EdgeInsets.only(left: SpacingDimens.spacing16 + 1.8),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  _joinMeeting({required subject, required urlServer, required codeRoom}) async {
     try {
       var user = FirebaseAuth.instance.currentUser;
       FeatureFlag featureFlag = FeatureFlag();
@@ -179,11 +316,11 @@ class _JadwalKelasState extends State<JadwalKelas> {
       featureFlag.resolution = FeatureFlagVideoResolution
           .MD_RESOLUTION; // Limit video resolution to 360p
 
-      var options = JitsiMeetingOptions(room: 'myroom')
-        ..serverURL = "https://meet.jit.si/myroom"
-        ..subject = "Meeting Test"
+      var options = JitsiMeetingOptions(room: codeRoom)
+        ..serverURL = urlServer
+        ..subject = subject
         ..userDisplayName = user?.displayName ?? ""
-        ..userEmail = "myemail@email.com"
+        ..userEmail = user?.email ?? ""
         ..userAvatarURL = user?.photoURL ?? "" // or .png
         ..audioMuted = true
         ..videoMuted = true;
@@ -194,6 +331,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
     }
   }
 }
+
 
 class ListAbsent extends StatefulWidget {
   final DocumentReference<Object?> present;
@@ -243,7 +381,6 @@ class _ListAbsentState extends State<ListAbsent> {
           _absentCount = _absent.docs.where((element) {
             return element.get("kehadiran");
           }).length;
-          print(_absent.docs.length);
         });
       }
     }catch(e){
@@ -299,10 +436,6 @@ class _ListAbsentState extends State<ListAbsent> {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          // const Text(
-                          //   "Kehadiran",
-                          //   style: TypographyStyle.button1,
-                          // ),
                           Container(
                             decoration: BoxDecoration(
                                 color: PaletteColor.grey40,
