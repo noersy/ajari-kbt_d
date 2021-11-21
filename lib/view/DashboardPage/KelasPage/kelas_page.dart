@@ -61,24 +61,30 @@ class _ClassPageState extends State<ClassPage> {
                     JadwalKelas(),
                   ],
                 ),
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
+                headerSliverBuilder: (BuildContext _, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
                       backgroundColor: PaletteColor.primarybg,
-                      iconTheme:
-                          const IconThemeData(color: PaletteColor.primary),
+                      iconTheme: const IconThemeData(color: PaletteColor.primary),
                       title: const Text(
                         "Kelas",
                         style: TypographyStyle.subtitle1,
                       ),
+                      pinned: false,
+                      floating: true,
+                      forceElevated: innerBoxIsScrolled,
+                    ),
+                    SliverAppBar(
+                      backgroundColor: PaletteColor.primarybg,
                       bottom: const PreferredSize(
-                        preferredSize: Size(0, 178),
+                        preferredSize: Size(0, 115),
                         child: BannerKelas(),
                       ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
+                      ),
                       pinned: false,
-                      floating: false,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      floating: true,
                       forceElevated: innerBoxIsScrolled,
                     ),
                   ];

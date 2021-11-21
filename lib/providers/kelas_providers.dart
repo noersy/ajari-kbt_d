@@ -242,6 +242,24 @@ class KelasProvider extends ChangeNotifier {
     }
     return 200;
   }
+  Future<int> absent({ required DateTime date, required String uid}) async {
+    try {
+
+      Map<String, dynamic> _newData ={
+        "kehadiran" : true
+      };
+
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).collection("santri").doc(uid).update(_newData);
+
+    } catch (e) {
+      if (kDebugMode) {
+        print("absent Error: ${e.runtimeType}");
+        print(e);
+      }
+      return 400;
+    }
+    return 200;
+  }
 
   Future<int> deleteAbsen({
     required DateTime date,

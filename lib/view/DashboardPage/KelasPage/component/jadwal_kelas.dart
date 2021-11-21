@@ -1,4 +1,6 @@
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -7,6 +9,7 @@ import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.da
 import 'package:ajari/view/DashboardPage/KelasPage/component/component.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
@@ -58,6 +61,8 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
   @override
   Widget build(BuildContext context) {
+    String _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
+
     return StreamBuilder<QuerySnapshot>(
       stream: Provider.of<KelasProvider>(context).getsAbsents(),
       builder: (context, snapshot) {
@@ -124,31 +129,39 @@ class _JadwalKelasState extends State<JadwalKelas> {
                     },
                     children: [
                       for (var item in _listRealDate)
-                        _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty ?
-                        SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: SpacingDimens.spacing28),
-                              for (var itm in _absen) ...[
-                                if (item.day == itm.get('datetime').toDate().day) ...[
-                                  _listAbsent(context, itm.get('datetime').toDate(), _formatTime.format(itm.get('start_at').toDate()), _formatTime.format(itm.get('end_at').toDate()))
-                                ],
-                              ],
-                            ],
-                          ),
-                        ) :
-                         Center(
-                             child: Column(
-                               mainAxisAlignment: MainAxisAlignment.center,
-                               children: const [
-                                 Icon(Icons.notification_add_outlined, color: PaletteColor.grey60, size: 30),
-                                 SizedBox(width: SpacingDimens.spacing4),
-                                 Text("Tidak ada jadwal", style: TextStyle(color: PaletteColor.grey60))
-                                ],
-                             ),
-                         ),
+                        _absen!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
+                            ? SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(
+                                        height: SpacingDimens.spacing28),
+                                    for (var itm in _absen) ...[
+                                      if (item.day == itm.get('datetime').toDate().day) ...[
+                                        ListAbsent(
+                                          present: itm.reference,
+                                          uid: _uid,
+                                          date: itm.get('datetime').toDate(),
+                                          startAt: _formatTime.format(itm.get('start_at').toDate()), endAt: _formatTime.format(itm.get('end_at').toDate()),
+                                        )
+                                      ],
+                                    ],
+                                  ],
+                                ),
+                              )
+                            : Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.notification_add_outlined,
+                                        color: PaletteColor.grey60, size: 30),
+                                    SizedBox(width: SpacingDimens.spacing4),
+                                    Text("Tidak ada jadwal",
+                                        style: TextStyle(color: PaletteColor.grey60))
+                                  ],
+                                ),
+                              ),
                     ],
                   ),
                 ),
@@ -160,7 +173,97 @@ class _JadwalKelasState extends State<JadwalKelas> {
     );
   }
 
-  Widget _listAbsent(BuildContext ctx, DateTime date, String startAt, String endAt, ) {
+  _joinMeeting() async {
+    try {
+      var user = FirebaseAuth.instance.currentUser;
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution
+          .MD_RESOLUTION; // Limit video resolution to 360p
+
+      var options = JitsiMeetingOptions(room: 'myroom')
+        ..serverURL = "https://meet.jit.si/myroom"
+        ..subject = "Meeting Test"
+        ..userDisplayName = user?.displayName ?? ""
+        ..userEmail = "myemail@email.com"
+        ..userAvatarURL = user?.photoURL ?? "" // or .png
+        ..audioMuted = true
+        ..videoMuted = true;
+
+      await JitsiMeet.joinMeeting(options);
+    } catch (error) {
+      debugPrint("erhttps://nhentai.net/g/355004/33/ror: $error");
+    }
+  }
+}
+
+class ListAbsent extends StatefulWidget {
+  final DocumentReference<Object?> present;
+  final String uid, startAt, endAt;
+  final DateTime date;
+
+  const ListAbsent({
+    Key? key,
+    required this.present,
+    required this.uid,
+    required this.startAt,
+    required this.endAt,
+    required this.date,
+  }) : super(key: key);
+
+  @override
+  _ListAbsentState createState() => _ListAbsentState();
+}
+
+class _ListAbsentState extends State<ListAbsent> {
+  bool isPresent = true;
+
+  Future<bool> present() async {
+    try {
+      DocumentSnapshot _absent = await widget.present.collection('santri').doc(widget.uid).get();
+      if (mounted) {
+        setState(() {
+          isPresent = _absent.get('kehadiran');
+        });
+      }
+      return _absent.get('kehadiran');
+    }catch(e){
+      if (kDebugMode) {
+        print(e.runtimeType);
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  Future<bool> presentCount() async {
+    try {
+      DocumentSnapshot _absent = await widget.present.collection('santri').doc(widget.uid).get();
+      if (mounted) {
+        setState(() {
+          isPresent = _absent.get('kehadiran');
+        });
+      }
+      return _absent.get('kehadiran');
+    }catch(e){
+      if (kDebugMode) {
+        print(e.runtimeType);
+        print(e);
+      }
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    present();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,8 +276,10 @@ class _JadwalKelasState extends State<JadwalKelas> {
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
-              Container(
-                width: 240.0,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.ease,
+                width: isPresent ? 240.0 : 290.0,
                 margin: const EdgeInsets.only(left: 40.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -185,61 +290,119 @@ class _JadwalKelasState extends State<JadwalKelas> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () => Navigator.of(ctx).push(routeTransition(AbsenDetailPage(dateTIme: date))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children:  [
-                      // const Text(
-                      //   "Kehadiran",
-                      //   style: TypographyStyle.button1,
-                      // ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: PaletteColor.grey40,
-                            borderRadius: BorderRadius.circular(4.0)
-                        ),
-                        padding: const EdgeInsets.only(
-                          left: SpacingDimens.spacing8,
-                          right: SpacingDimens.spacing8,
-                          top: SpacingDimens.spacing4,
-                          bottom: SpacingDimens.spacing4,
-                        ),
-                        child: Row(
-                          children:  [
-                            const Icon(Icons.access_time, color: PaletteColor.grey, size: 18,),
-                            const SizedBox(width: SpacingDimens.spacing8),
-                            Text(startAt, style: TypographyStyle.button1,),
-                            const SizedBox(width: SpacingDimens.spacing4),
-                            const Text("-", style: TypographyStyle.button1,),
-                            const SizedBox(width: SpacingDimens.spacing4),
-                            Text(endAt, style: TypographyStyle.button1,),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: PaletteColor.grey40,
-                          borderRadius: BorderRadius.circular(4.0)
-                        ),
-                        padding: const EdgeInsets.only(
-                          left: SpacingDimens.spacing8,
-                          right: SpacingDimens.spacing8,
-                          top: SpacingDimens.spacing4,
-                          bottom: SpacingDimens.spacing4,
-                        ),
-                        child: Row(
-                          children: const [
-                            Text("0", style: TypographyStyle.button2),
-                            SizedBox(width: SpacingDimens.spacing4),
-                            Icon(
-                              Icons.people,
-                              color: PaletteColor.grey,
-                              size: 18,
+                  onPressed: () {
+                    Provider.of<KelasProvider>(context, listen: false).absent(date: widget.date, uid: widget.uid);
+                  },
+                  child: FutureBuilder<bool>(
+                    future: present(),
+                    builder: (context, snapshot) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // const Text(
+                          //   "Kehadiran",
+                          //   style: TypographyStyle.button1,
+                          // ),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: PaletteColor.grey40,
+                                borderRadius: BorderRadius.circular(4.0)),
+                            padding: const EdgeInsets.only(
+                              left: SpacingDimens.spacing8,
+                              right: SpacingDimens.spacing8,
+                              top: SpacingDimens.spacing4,
+                              bottom: SpacingDimens.spacing4,
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.access_time,
+                                  color: PaletteColor.grey,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: SpacingDimens.spacing8),
+                                Text(
+                                  widget.startAt,
+                                  style: TypographyStyle.button1,
+                                ),
+                                const SizedBox(width: SpacingDimens.spacing4),
+                                const Text(
+                                  "-",
+                                  style: TypographyStyle.button1,
+                                ),
+                                const SizedBox(width: SpacingDimens.spacing4),
+                                Text(
+                                  widget.endAt,
+                                  style: TypographyStyle.button1,
+                                ),
+                              ],
+                            ),
+                          ),
+                          _role != "Santri"
+                              ? Container(
+                                decoration: BoxDecoration(
+                                    color: PaletteColor.grey40,
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                padding: const EdgeInsets.only(
+                                  left: SpacingDimens.spacing8,
+                                  right: SpacingDimens.spacing8,
+                                  top: SpacingDimens.spacing4,
+                                  bottom: SpacingDimens.spacing4,
+                                ),
+                                child: Row(
+                                  children: const [
+                                    Text("0", style: TypographyStyle.button2),
+                                    SizedBox(width: SpacingDimens.spacing4),
+                                    Icon(
+                                      Icons.people,
+                                      color: PaletteColor.grey,
+                                      size: 18,
+                                    ),
+                                  ],
+                                ),
+                              )
+                              : AnimatedContainer(
+                            duration: const Duration(milliseconds: 500),
+                            curve: Curves.ease,
+                            width: isPresent ? 70 : 112,
+                            height: isPresent ? 26 : 26,
+                            decoration: BoxDecoration(
+                                color:
+                                    isPresent ? PaletteColor.primary : Colors.red,
+                                borderRadius: BorderRadius.circular(4.0)),
+                            padding: const EdgeInsets.only(
+                              left: SpacingDimens.spacing8,
+                              right: SpacingDimens.spacing8,
+                              top: SpacingDimens.spacing4,
+                              bottom: SpacingDimens.spacing4,
+                            ),
+                            child: Stack(
+                              children: [
+                                AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 1000),
+                                  opacity: isPresent ? 0 : 1,
+                                  child: Text(
+                                    "Belum Present",
+                                    style: TypographyStyle.button2
+                                        .copyWith(color: PaletteColor.primarybg),
+                                  ),
+                                ),
+                                AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 1000),
+                                  opacity: isPresent ? 1 : 0,
+                                  child: Text(
+                                    "Present",
+                                    style: TypographyStyle.button2.copyWith(
+                                      color: PaletteColor.primarybg,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }
                   ),
                 ),
               ),
@@ -286,28 +449,5 @@ class _JadwalKelasState extends State<JadwalKelas> {
         ),
       ],
     );
-  }
-
-  _joinMeeting() async {
-    try {
-      var user = FirebaseAuth.instance.currentUser;
-      FeatureFlag featureFlag = FeatureFlag();
-      featureFlag.welcomePageEnabled = false;
-      featureFlag.resolution = FeatureFlagVideoResolution
-          .MD_RESOLUTION; // Limit video resolution to 360p
-
-      var options = JitsiMeetingOptions(room: 'myroom')
-        ..serverURL = "https://meet.jit.si/myroom"
-        ..subject = "Meeting Test"
-        ..userDisplayName = user?.displayName ?? ""
-        ..userEmail = "myemail@email.com"
-        ..userAvatarURL = user?.photoURL ?? "" // or .png
-        ..audioMuted = true
-        ..videoMuted = true;
-
-      await JitsiMeet.joinMeeting(options);
-    } catch (error) {
-      debugPrint("erhttps://nhentai.net/g/355004/33/ror: $error");
-    }
   }
 }

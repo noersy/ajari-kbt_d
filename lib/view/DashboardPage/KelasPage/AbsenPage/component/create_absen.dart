@@ -73,6 +73,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
   Widget build(BuildContext context) {
     if(widget.date != null) {
       _stringDate = formattedDate.format(widget.date!);
+      selectedDate = widget.date!;
     }
 
     return AlertDialog(
@@ -147,8 +148,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                 child: Center(
                   child: Text(
                     _stringTimeStartAt,
-                    style: TypographyStyle.button2
-                        .copyWith(color: PaletteColor.grey80),
+                    style: TypographyStyle.button2.copyWith(color: PaletteColor.grey80),
                   ),
                 ),
               ),
@@ -207,7 +207,6 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
                         startAt: selectedTimeStart,
                         endAt: selectedTimeEnd,
                       );
-
                       Navigator.of(context).pop("Success create absent.");
                     },
                     child: Text(

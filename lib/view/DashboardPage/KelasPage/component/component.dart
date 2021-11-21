@@ -1,6 +1,8 @@
+import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DateCard extends StatefulWidget {
   final hari, tgl, color, onTap, haveEvent;
@@ -25,32 +27,41 @@ class _DateCardState extends State<DateCard> {
 
   @override
   Widget build(BuildContext context) {
-    return dateCard(widget.hari, widget.tgl, widget.color, widget.onTap, widget.haveEvent, widget.dateTime);
-  }
+    var profile = Provider.of<ProfileProvider>(context).profile;
 
-  Widget dateCard(hari, tgl, color, onTap, haveEvent, DateTime date) {
     return Padding(
       padding: const EdgeInsets.only(left: 2, right: 2),
       child: ElevatedButton(
-        onPressed: onTap,
-        onLongPress: () async {
-          setState(() {
-            if(!_selected) _selected = true;
-          });
-          var result = await showDialog(
-            context: context,
-            builder: (context) => DialogCreateAbsen(date: date),
-          );
-          setState(() {
-            if(_selected) _selected = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
-        },
+        onPressed: widget.onTap,
+        onLongPress: profile.role == "Santri"
+            ? null
+            : () async {
+                // try {
+                setState(() {
+                  if (!_selected) _selected = true;
+                });
+                var result = await showDialog(
+                      context: context,
+                      builder: (context) =>
+                          DialogCreateAbsen(date: widget.dateTime),
+                    ) ??
+                    "Cancel";
+                setState(() {
+                  if (_selected) _selected = false;
+                });
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(result)));
+                // } catch (e) {
+                // e.runtimeType;
+                // }
+              },
         style: TextButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: PaletteColor.primary,
-          backgroundColor: _selected ? PaletteColor.primary : PaletteColor.primarybg,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+          backgroundColor:
+              _selected ? PaletteColor.primary : PaletteColor.primarybg,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
         ),
         child: SizedBox.expand(
           child: Column(
@@ -58,21 +69,31 @@ class _DateCardState extends State<DateCard> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                hari,
-                style: TextStyle(color: _selected ? PaletteColor.primarybg : color, fontWeight: FontWeight.w400, fontSize: 12),
+                widget.hari,
+                style: TextStyle(
+                    color: _selected ? PaletteColor.primarybg : widget.color,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 12),
               ),
-              const SizedBox(height: 2),
-              Text(tgl,
-                  style: TextStyle(
-                      color: _selected ? PaletteColor.primarybg : color,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 18)),
+              const SizedBox(height: 2.0),
+              Text(
+                widget.tgl,
+                style: TextStyle(
+                  color: _selected ? PaletteColor.primarybg : widget.color,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                ),
+              ),
               const SizedBox(height: 1),
               Container(
                 height: 1.6,
                 width: 24,
                 decoration: BoxDecoration(
-                  color: haveEvent ? PaletteColor.primary.withOpacity(0.6) : _selected ? PaletteColor.primarybg : color,
+                  color: widget.haveEvent
+                      ? PaletteColor.primary.withOpacity(0.6)
+                      : _selected
+                          ? PaletteColor.primarybg
+                          : widget.color,
                 ),
               ),
             ],

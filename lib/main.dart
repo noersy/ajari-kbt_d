@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Ajari',
         // home: SplashScreenPage(),
-        home: RegisterPage(),
+        home: SplashScreenPage(),
       ),
     );
   }

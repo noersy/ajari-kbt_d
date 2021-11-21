@@ -20,7 +20,11 @@ class BannerKelas extends StatelessWidget {
     final Kelas kelas = context.watch<KelasProvider>().kelas;
 
     return Padding(
-      padding: const EdgeInsets.all(SpacingDimens.spacing12),
+      padding: const EdgeInsets.only(
+          left: SpacingDimens.spacing12,
+          right: SpacingDimens.spacing12,
+          bottom: SpacingDimens.spacing16,
+      ),
       child: Stack(
         children: [
           Container(
