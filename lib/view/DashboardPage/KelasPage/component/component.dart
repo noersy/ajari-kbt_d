@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 class DateCard extends StatefulWidget {
   final hari, tgl, color, onTap, haveEvent;
   final DateTime dateTime;
+  final VoidCallback callback;
 
   const DateCard({
     Key? key,
@@ -16,6 +17,7 @@ class DateCard extends StatefulWidget {
     this.color,
     this.onTap,
     this.haveEvent,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -36,32 +38,25 @@ class _DateCardState extends State<DateCard> {
         onLongPress: profile.role == "Santri"
             ? null
             : () async {
-                // try {
-                setState(() {
-                  if (!_selected) _selected = true;
-                });
+                setState(() => !_selected ? _selected = true : false);
+
                 var result = await showDialog(
                       context: context,
-                      builder: (context) =>
-                          DialogCreateAbsen(date: widget.dateTime),
-                    ) ??
-                    "Cancel";
-                setState(() {
-                  if (_selected) _selected = false;
-                });
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(result)));
-                // } catch (e) {
-                // e.runtimeType;
-                // }
+                      builder: (context) => DialogCreateAbsen(date: widget.dateTime),
+                    ) ?? "Cancel";
+
+
+                widget.callback();
+
+                setState(() => _selected ? _selected = false : true);
+
+                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
               },
         style: TextButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: PaletteColor.primary,
-          backgroundColor:
-              _selected ? PaletteColor.primary : PaletteColor.primarybg,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+          backgroundColor: _selected ? PaletteColor.primary : PaletteColor.primarybg,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
         ),
         child: SizedBox.expand(
           child: Column(

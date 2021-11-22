@@ -6,6 +6,7 @@ Widget indicatorLoad() {
 
   return SpinKitThreeBounce(
     size: 45,
+    duration: const Duration(seconds: 1, milliseconds: 700),
     itemBuilder: (BuildContext context, int index) {
       return const DecoratedBox(
         decoration: BoxDecoration(

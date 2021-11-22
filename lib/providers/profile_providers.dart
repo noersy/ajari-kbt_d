@@ -65,7 +65,7 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  Future<Profile?> getProfile({required userUid}) async {
+  Future<Profile> getProfile({required userUid}) async {
     try {
       if (userUid == "") throw Exception("Error");
 
@@ -82,6 +82,7 @@ class ProfileProvider extends ChangeNotifier {
         print("$r");
       }
     }
+    return Profile.blankProfile();
   }
 
   Future<String> chekRole({required userUid}) async {

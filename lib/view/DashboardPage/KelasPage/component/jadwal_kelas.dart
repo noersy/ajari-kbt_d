@@ -1,19 +1,12 @@
-import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
-import 'package:ajari/providers/profile_providers.dart';
-import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
-import 'package:ajari/theme/typography_style.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/absent_cardlist.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/component.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/meet_cardlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jitsi_meet/feature_flag/feature_flag.dart';
-import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
 class JadwalKelas extends StatefulWidget {
@@ -61,7 +54,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder<QuerySnapshot>(
       stream: Provider.of<KelasProvider>(context).getsAbsents(),
       builder: (context, snapshot) {
@@ -74,7 +66,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
         return StreamBuilder<QuerySnapshot>(
           stream: Provider.of<KelasProvider>(context).getsMeetings(),
           builder: (context, snapshot) {
-
             List<QueryDocumentSnapshot<Object?>>? _meet = [];
 
             if (snapshot.hasData) {
@@ -82,505 +73,128 @@ class _JadwalKelasState extends State<JadwalKelas> {
             }
 
             return Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
-                    height: 60,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemExtent: 50,
-                      itemCount: 7,
-                      padding: const EdgeInsets.only(
-                        top: SpacingDimens.spacing8,
-                        left: SpacingDimens.spacing16,
-                        right: SpacingDimens.spacing16,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        return DateCard(
-                          dateTime: _listRealDate[index],
-                          hari: _listDay[index],
-                          tgl: _listDate[index],
-                          haveEvent: _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty || _meet!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day,).isNotEmpty,
-                          color: _index != index
-                              ? _indexCurret != index
-                                  ? PaletteColor.grey80
-                                  : PaletteColor.primary.withOpacity(0.6)
-                              : PaletteColor.primary,
-                          onTap: () {
-                            setState(() {
-                              _index = index;
-                              _pageController.animateToPage(
-                                index,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease,
-                              );
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: SpacingDimens.spacing16,
-                        right: SpacingDimens.spacing16,
-                      ),
-                      child: PageView(
-                        physics: const BouncingScrollPhysics(),
-                        controller: _pageController,
-                        onPageChanged: (value) {
-                          setState(() {
-                            _index = value;
-                          });
-                        },
-                        children: [
-                          for (var item in _listRealDate)
-                            _absen!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
-                            || _meet!.where((element) => element.get("datetime").toDate().day == item.day,).isNotEmpty
-                                ? SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const SizedBox(height: SpacingDimens.spacing28),
-                                        for (var itm in _absen) ...[
-                                          if (item.day == itm.get('datetime').toDate().day) ...[
-                                            ListAbsent(
-                                              present: itm.reference,
-                                              date: itm.get('datetime').toDate(),
-                                              startAt: _formatTime.format(itm.get('start_at').toDate()), endAt: _formatTime.format(itm.get('end_at').toDate()),
-                                            )
-                                          ],
-                                        ],
-                                        for (var itm in _meet!) ...[
-                                          if (item.day == itm.get('datetime').toDate().day) ...[
-                                             MeetList(meet: itm.reference, date: itm.get('datetime').toDate(),),
-                                          ],
-                                        ],
-                                      ],
-                                    ),
-                                  )
-                                : Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(Icons.notification_add_outlined,
-                                            color: PaletteColor.grey60, size: 30),
-                                        SizedBox(width: SpacingDimens.spacing4),
-                                        Text("Tidak ada jadwal", style: TextStyle(color: PaletteColor.grey60))
-                                      ],
-                                    ),
-                                  ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              child: Scaffold(
+                floatingActionButton: null, //@todo this will be button for create absen and meet
+                body: Column(
+                  children: [
+                    _tanggal(_absen, _meet),
+                    _jadwal(_absen, _meet),
+                  ],
+                ),
               ),
             );
-          }
+          },
         );
       },
     );
   }
 
-}
+  Widget _tanggal(_absen, _meet) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
+      height: 60,
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemExtent: 50,
+        itemCount: 7,
+        padding: const EdgeInsets.only(
+          top: SpacingDimens.spacing8,
+          left: SpacingDimens.spacing16,
+          right: SpacingDimens.spacing16,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          bool _isAbsent = _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty;
+          bool _isMeet = _meet!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty;
 
-class MeetList extends StatefulWidget {
-  final DocumentReference<Object?> meet;
-  final DateTime date;
-
-  const MeetList({Key? key, required this.meet, required this.date}) : super(key: key);
-
-  @override
-  State<MeetList> createState() => _MeetListState();
-}
-
-class _MeetListState extends State<MeetList> {
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    return FutureBuilder<DocumentSnapshot>(
-      future: widget.meet.get(),
-      builder: (context, snapshot) {
-
-        String _subject = snapshot.data?.get("subject") ?? "-";
-        String _serverURL = snapshot.data?.get("serverURL") ?? "-";
-        String _codeMeet = snapshot.data?.get("codeMeet") ?? "-";
-
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                bottom: SpacingDimens.spacing12,
-                left: SpacingDimens.spacing8,
-              ),
-              child: Stack(
-                alignment: Alignment.centerLeft,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(left: 40.0),
-                    width: MediaQuery.of(context).size.width - 145,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: PaletteColor.primarybg,
-                        elevation: 2,
-                        padding: const EdgeInsets.all(SpacingDimens.spacing8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      onPressed: () => _joinMeeting(codeRoom: _codeMeet, urlServer: _serverURL, subject: _subject),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: Center(child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(_subject, style: TypographyStyle.paragraph),
-                          ))),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: PaletteColor.primary,
-                                borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            padding: const EdgeInsets.only(
-                              left: SpacingDimens.spacing8,
-                              right: SpacingDimens.spacing8,
-                              top: SpacingDimens.spacing4,
-                              bottom: SpacingDimens.spacing4,
-                            ),
-                            child: Text("Gabung", style: TypographyStyle.button1.copyWith(color: PaletteColor.primarybg)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 20,
-                        width: 3.5,
-                        decoration: BoxDecoration(
-                          color: PaletteColor.grey60,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing16 + 1.8),
-                      ),
-                      Container(
-                        height: 8,
-                        width: 8,
-                        margin: const EdgeInsets.only(
-                          top: 2,
-                          bottom: 2,
-                          left: SpacingDimens.spacing16 - 0.5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: PaletteColor.primary,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      Container(
-                        height: 20,
-                        width: 3.5,
-                        decoration: BoxDecoration(
-                          color: PaletteColor.grey60,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        margin: const EdgeInsets.only(left: SpacingDimens.spacing16 + 1.8),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      }
+          return DateCard(
+            callback: (){
+              //@todo make create both meet and absent
+            },
+            dateTime: _listRealDate[index],
+            hari: _listDay[index],
+            tgl: _listDate[index],
+            haveEvent: _isAbsent || _isMeet,
+            color: _index != index
+                ? _indexCurret != index
+                    ? PaletteColor.grey80
+                    : PaletteColor.primary.withOpacity(0.6)
+                : PaletteColor.primary,
+            onTap: () {
+              setState(() {
+                _index = index;
+                _pageController.animateToPage(
+                  index,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              });
+            },
+          );
+        },
+      ),
     );
   }
 
-  _joinMeeting({required subject, required urlServer, required codeRoom}) async {
-    try {
-      var user = FirebaseAuth.instance.currentUser;
-      FeatureFlag featureFlag = FeatureFlag();
-      featureFlag.welcomePageEnabled = false;
-      featureFlag.resolution = FeatureFlagVideoResolution
-          .MD_RESOLUTION; // Limit video resolution to 360p
-
-      var options = JitsiMeetingOptions(room: codeRoom)
-        ..serverURL = urlServer
-        ..subject = subject
-        ..userDisplayName = user?.displayName ?? ""
-        ..userEmail = user?.email ?? ""
-        ..userAvatarURL = user?.photoURL ?? "" // or .png
-        ..audioMuted = true
-        ..videoMuted = true;
-
-      await JitsiMeet.joinMeeting(options);
-    } catch (error) {
-      debugPrint("erhttps://nhentai.net/g/355004/33/ror: $error");
-    }
-  }
-}
-
-
-class ListAbsent extends StatefulWidget {
-  final DocumentReference<Object?> present;
-  final String startAt, endAt;
-  final DateTime date;
-
-  const ListAbsent({
-    Key? key,
-    required this.present,
-    required this.startAt,
-    required this.endAt,
-    required this.date,
-  }) : super(key: key);
-
-  @override
-  _ListAbsentState createState() => _ListAbsentState();
-}
-
-class _ListAbsentState extends State<ListAbsent> {
-  bool isPresent = true;
-  int _absentCount = 0;
-  String _uid = "-";
-
-  Future<bool> present() async {
-    try {
-      DocumentSnapshot _absent = await widget.present.collection('santri').doc(_uid).get();
-      if (mounted) {
-        setState(() {
-          isPresent = _absent.get('kehadiran');
-        });
-      }
-      return _absent.get('kehadiran');
-    }catch(e){
-      if (kDebugMode) {
-        print(e.runtimeType);
-        print(e);
-      }
-    }
-    return false;
-  }
-
-  Future<bool> presentCount() async {
-    try {
-      QuerySnapshot _absent = await widget.present.collection('santri').get();
-      if (mounted) {
-        setState(() {
-          _absentCount = _absent.docs.where((element) {
-            return element.get("kehadiran");
-          }).length;
-        });
-      }
-    }catch(e){
-      if (kDebugMode) {
-        print(e.runtimeType);
-        print(e);
-      }
-    }
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
-    _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            bottom: SpacingDimens.spacing12,
-            left: SpacingDimens.spacing8,
-          ),
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 800),
-                curve: Curves.ease,
-                width: isPresent ? 240.0 : 290.0,
-                margin: const EdgeInsets.only(left: 40.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: PaletteColor.primarybg,
-                    elevation: 2,
-                    padding: const EdgeInsets.all(SpacingDimens.spacing8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    if(_role == "Pengajar"){
-                      Navigator.of(context).push(routeTransition(AbsenDetailPage(dateTIme: widget.date)));
-                    }else if(_role == "Santri"){
-                      Provider.of<KelasProvider>(context, listen: false).absent(date: widget.date, uid: _uid);
-                    }
-                  },
-                  child: FutureBuilder<bool>(
-                    future: _role != "Santri" ? presentCount() : present(),
-                    builder: (context, snapshot) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                color: PaletteColor.grey40,
-                                borderRadius: BorderRadius.circular(4.0)),
-                            padding: const EdgeInsets.only(
-                              left: SpacingDimens.spacing8,
-                              right: SpacingDimens.spacing8,
-                              top: SpacingDimens.spacing4,
-                              bottom: SpacingDimens.spacing4,
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.access_time,
-                                  color: PaletteColor.grey,
-                                  size: 18,
-                                ),
-                                const SizedBox(width: SpacingDimens.spacing8),
-                                Text(
-                                  widget.startAt,
-                                  style: TypographyStyle.button1,
-                                ),
-                                const SizedBox(width: SpacingDimens.spacing4),
-                                const Text(
-                                  "-",
-                                  style: TypographyStyle.button1,
-                                ),
-                                const SizedBox(width: SpacingDimens.spacing4),
-                                Text(
-                                  widget.endAt,
-                                  style: TypographyStyle.button1,
-                                ),
-                              ],
-                            ),
-                          ),
-                          _role != "Santri"
-                              ? Container(
-                                decoration: BoxDecoration(
-                                    color: PaletteColor.grey40,
-                                    borderRadius: BorderRadius.circular(4.0)),
-                                padding: const EdgeInsets.only(
-                                  left: SpacingDimens.spacing8,
-                                  right: SpacingDimens.spacing8,
-                                  top: SpacingDimens.spacing4,
-                                  bottom: SpacingDimens.spacing4,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text("$_absentCount", style: TypographyStyle.button2),
-                                    const SizedBox(width: SpacingDimens.spacing4),
-                                    const Icon(
-                                      Icons.people,
-                                      color: PaletteColor.grey,
-                                      size: 18,
-                                    ),
-                                  ],
-                                ),
-                              )
-                              : AnimatedContainer(
-                            duration: const Duration(milliseconds: 500),
-                            curve: Curves.ease,
-                            width: isPresent ? 70 : 112,
-                            height: isPresent ? 26 : 26,
-                            decoration: BoxDecoration(
-                                color:
-                                    isPresent ? PaletteColor.primary : Colors.red,
-                                borderRadius: BorderRadius.circular(4.0)),
-                            padding: const EdgeInsets.only(
-                              left: SpacingDimens.spacing8,
-                              right: SpacingDimens.spacing8,
-                              top: SpacingDimens.spacing4,
-                              bottom: SpacingDimens.spacing4,
-                            ),
-                            child: Stack(
-                              children: [
-                                AnimatedOpacity(
-                                  duration: const Duration(milliseconds: 1000),
-                                  opacity: isPresent ? 0 : 1,
-                                  child: Text(
-                                    "Belum Present",
-                                    style: TypographyStyle.button2
-                                        .copyWith(color: PaletteColor.primarybg),
-                                  ),
-                                ),
-                                AnimatedOpacity(
-                                  duration: const Duration(milliseconds: 1000),
-                                  opacity: isPresent ? 1 : 0,
-                                  child: Text(
-                                    "Present",
-                                    style: TypographyStyle.button2.copyWith(
-                                      color: PaletteColor.primarybg,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                  ),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 20,
-                    width: 3.5,
-                    decoration: BoxDecoration(
-                      color: PaletteColor.grey60,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: const EdgeInsets.only(
-                        left: SpacingDimens.spacing16 + 1.8),
-                  ),
-                  Container(
-                    height: 8,
-                    width: 8,
-                    margin: const EdgeInsets.only(
-                      top: 2,
-                      bottom: 2,
-                      left: SpacingDimens.spacing16 - 0.5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: PaletteColor.primary,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  Container(
-                    height: 20,
-                    width: 3.5,
-                    decoration: BoxDecoration(
-                      color: PaletteColor.grey60,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    margin: const EdgeInsets.only(
-                        left: SpacingDimens.spacing16 + 1.8),
-                  ),
-                ],
-              ),
-            ],
-          ),
+  Widget _jadwal(_absen, _meet) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: SpacingDimens.spacing16,
+          right: SpacingDimens.spacing16,
         ),
-      ],
+        child: PageView(
+          physics: const BouncingScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: (value) {
+            setState(() {
+              _index = value;
+            });
+          },
+          children: [
+            for (var item in _listRealDate) ...[
+              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+                  || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+                  ? SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: SpacingDimens.spacing28),
+                          for (var itemAbsen in _absen) ...[
+                            if (item.day == itemAbsen.get('datetime').toDate().day) ...[
+                              ListAbsent(
+                                present: itemAbsen.reference,
+                                date: itemAbsen.get('datetime').toDate(),
+                                startAt: _formatTime.format(itemAbsen.get('start_at').toDate()),
+                                endAt: _formatTime.format(itemAbsen.get('end_at').toDate()),
+                              ),
+                            ],
+                          ],
+                          for (var itemMeet in _meet!) ...[
+                            if (item.day == itemMeet.get('datetime').toDate().day) ...[
+                              MeetList(meet: itemMeet.reference, date: itemMeet.get('datetime').toDate()),
+                            ],
+                          ],
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.notification_add_outlined,
+                              color: PaletteColor.grey60, size: 30),
+                          SizedBox(width: SpacingDimens.spacing4),
+                          Text("Tidak ada jadwal",
+                              style: TextStyle(color: PaletteColor.grey60))
+                        ],
+                      ),
+                    ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
