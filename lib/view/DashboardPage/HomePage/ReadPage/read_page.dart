@@ -108,7 +108,7 @@ class _ReadPageState extends State<ReadPage> {
                           pathAudio: PathIqro.mainAudioPath +
                               "/jilid${widget.nomor}" +
                               "/halaman${index + 1}" +
-                              ".png",
+                              ".mp3",
                         ),
                       ),
                     );

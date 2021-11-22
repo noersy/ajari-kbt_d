@@ -159,6 +159,14 @@ Future<String?> downloadFile(filePath, nomorHalaman) async {
   }
 }
 
+Future<String?> deleteFile({required nomorHalaman}) async {
+  try {
+    await FirebaseStorage.instance.ref('uploads/audio_$nomorHalaman.m4a').delete();
+  } on FirebaseException catch (e) {
+    return "Not found $e";
+  }
+}
+
 Future<String> getFilePath() async {
   Directory appDocDir = await getApplicationDocumentsDirectory();
   String appDocPath = appDocDir.path;

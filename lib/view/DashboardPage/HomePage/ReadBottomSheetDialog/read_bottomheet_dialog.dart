@@ -23,13 +23,11 @@ class ReadBottomSheetDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) {
-        return Container(
-          height: 280.0,
+    return Container(
           padding: const EdgeInsets.symmetric(
             horizontal: SpacingDimens.spacing24,
           ),
+          height: 490,
           color: PaletteColor.primarybg,
           child: Column(
             children: [
@@ -42,52 +40,47 @@ class ReadBottomSheetDialog extends StatelessWidget {
                   color: PaletteColor.grey60,
                 ),
               ),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                        top: SpacingDimens.spacing28,
-                        left: SpacingDimens.spacing12,
-                        right: SpacingDimens.spacing12,
-                      ),
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Pilih Jilid",
-                        style: TypographyStyle.button1,
-                      ),
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(
+                      top: SpacingDimens.spacing28,
+                      left: SpacingDimens.spacing12,
+                      right: SpacingDimens.spacing12,
                     ),
-                    const Divider(),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: 6,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _jilidContainer(
-                          jilid: _page[index].arab,
-                          text: _page[index].text,
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ReadPage(
-                                  nomor: "${index + 1}",
-                                  uid: FirebaseAuth.instance.currentUser?.uid ?? "-",
-                                ),
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      "Pilih Jilid",
+                      style: TypographyStyle.button1,
+                    ),
+                  ),
+                  const Divider(),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 6,
+                    itemBuilder: (BuildContext context, int index) {
+                      return _jilidContainer(
+                        jilid: _page[index].arab,
+                        text: _page[index].text,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ReadPage(
+                                nomor: "${index + 1}",
+                                uid: FirebaseAuth.instance.currentUser?.uid ?? "-",
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ],
-                ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
         );
-      },
-    );
   }
 
 

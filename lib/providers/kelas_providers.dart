@@ -8,11 +8,18 @@ import 'package:flutter/foundation.dart';
 
 class KelasProvider extends ChangeNotifier {
   Kelas _dataKelas = Kelas.blankKelas();
+  int jumlahSantri = 0;
 
   Kelas get kelas => _dataKelas;
 
   void setKelas(Kelas kelas) async {
     _dataKelas = kelas;
+    jumlahSantri = kelas.jumlahSantri;
+    notifyListeners();
+  }
+
+  void setJumlahSantri(int jumlah) async {
+    jumlahSantri = jumlah;
     notifyListeners();
   }
 
@@ -209,17 +216,22 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createAbsen(
-      {required DateTime date,
-      required DateTime startAt,
-      required DateTime endAt}) async {
+  Future<int> createAbsen({
+    required DateTime date,
+    required DateTime startAt,
+    required DateTime endAt,
+      }) async {
     try {
+
+      String random = FirebaseReference.getRandomString(21);
+
       Map<String, dynamic> data = {
+        "id" : random,
         "datetime": date,
         "start_at": startAt,
         "end_at": endAt,
       };
-      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).set(data);
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, random).set(data);
       QuerySnapshot santri = await FirebaseReference.kelas
           .doc(_dataKelas.kelasId)
           .collection("santri")
@@ -236,7 +248,7 @@ class KelasProvider extends ChangeNotifier {
           "kehadiran": false
         };
 
-        await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
+        await FirebaseReference.getAbsen(_dataKelas.kelasId, random)
             .collection("santri")
             .doc(element["uid"])
             .set(_newData);
@@ -252,11 +264,11 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> absent({required DateTime date, required String uid}) async {
+  Future<int> absent({required String id, required String uid}) async {
     try {
       Map<String, dynamic> _newData = {"kehadiran": true};
 
-      await FirebaseReference.getAbsen(_dataKelas.kelasId, date)
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, id)
           .collection("santri")
           .doc(uid)
           .update(_newData);
@@ -270,11 +282,36 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> deleteAbsen({
+  Future<int> updateAbsen({
+    required String id,
     required DateTime date,
+    required DateTime startAt,
+    required DateTime endAt,
   }) async {
     try {
-      await FirebaseReference.getAbsen(_dataKelas.kelasId, date).delete();
+
+      Map<String, dynamic> newData = {
+        "datetime": date,
+        "start_at": startAt,
+        "end_at": endAt,
+      };
+
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, id).update(newData);
+    } catch (e, r) {
+      if (kDebugMode) {
+        print("updateAbsen: ${e.runtimeType}");
+        print("$e,\n$r");
+      }
+      return 400;
+    }
+    return 200;
+  }
+
+  Future<int> deleteAbsen({
+    required String id,
+  }) async {
+    try {
+      await FirebaseReference.getAbsen(_dataKelas.kelasId, id).delete();
     } catch (e) {
       if (kDebugMode) {
         print("deleteAbsen: Error");
@@ -292,11 +329,11 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getsAbsenStudents(DateTime date) {
+  Stream<QuerySnapshot> getsAbsenStudents(String id) {
     return FirebaseReference.kelas
         .doc(_dataKelas.kelasId)
         .collection("absen")
-        .doc("$date")
+        .doc(id)
         .collection("santri")
         .orderBy("name", descending: false)
         .snapshots();

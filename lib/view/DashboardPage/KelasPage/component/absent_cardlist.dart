@@ -10,11 +10,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ListAbsent extends StatefulWidget {
   final DocumentReference<Object?> present;
-  final String startAt, endAt;
+  final DateTime startAt, endAt;
   final DateTime date;
+  final String id;
 
   const ListAbsent({
     Key? key,
@@ -22,6 +24,7 @@ class ListAbsent extends StatefulWidget {
     required this.startAt,
     required this.endAt,
     required this.date,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class ListAbsent extends StatefulWidget {
 }
 
 class _ListAbsentState extends State<ListAbsent> {
+  DateFormat formattedDate = DateFormat('hh:mm');
   bool isPresent = true;
   int _absentCount = 0;
   String _uid = "-";
@@ -106,10 +110,9 @@ class _ListAbsentState extends State<ListAbsent> {
                   onPressed: () {
                     if (_role == "Pengajar") {
                       Navigator.of(context).push(routeTransition(
-                          AbsenDetailPage(dateTIme: widget.date)));
+                          AbsenDetailPage(dateTIme: widget.date, startAt: widget.startAt, endAt: widget.endAt, id: widget.id,)));
                     } else if (_role == "Santri") {
-                      Provider.of<KelasProvider>(context, listen: false)
-                          .absent(date: widget.date, uid: _uid);
+                      Provider.of<KelasProvider>(context, listen: false).absent(uid: _uid, id: widget.id);
                     }
                   },
                   child: FutureBuilder<bool>(
@@ -137,7 +140,7 @@ class _ListAbsentState extends State<ListAbsent> {
                                   ),
                                   const SizedBox(width: SpacingDimens.spacing8),
                                   Text(
-                                    widget.startAt,
+                                    formattedDate.format(widget.startAt),
                                     style: TypographyStyle.button1,
                                   ),
                                   const SizedBox(width: SpacingDimens.spacing4),
@@ -147,7 +150,7 @@ class _ListAbsentState extends State<ListAbsent> {
                                   ),
                                   const SizedBox(width: SpacingDimens.spacing4),
                                   Text(
-                                    widget.endAt,
+                                    formattedDate.format(widget.endAt),
                                     style: TypographyStyle.button1,
                                   ),
                                 ],

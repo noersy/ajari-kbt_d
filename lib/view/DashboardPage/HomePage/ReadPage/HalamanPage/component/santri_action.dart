@@ -81,7 +81,7 @@ class _SantriActionState extends State<SantriAction> {
                 ),
                 decoration: BoxDecoration(
                     color: _path != null
-                        ? PaletteColor.primary
+                        ? _downloadAudio ? Colors.red : PaletteColor.primary
                         : PaletteColor.primarybg,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
@@ -101,14 +101,18 @@ class _SantriActionState extends State<SantriAction> {
                         context: context,
                         builder: (context) => DialogDelete(
                           content: "Ini akan menghapus record audio.",
-                          onPressedFunction: () {},
+                          onPressedFunction: () {
+                            deleteFile(nomorHalaman: widget.nomorHalaman);
+                            setState(() {
+                              _path = null;
+                              _downloadAudio = false;
+                            });
+                            Navigator.of(context).pop();
+                          },
                         ),
                       );
                     } else if (_path != null) {
                       _sendFile();
-                      setState(() {
-                        _downloadAudio = true;
-                      });
                     }
                   },
                   child: Icon(
@@ -286,6 +290,9 @@ class _SantriActionState extends State<SantriAction> {
           content: "Ini akan mengirim record ke ustaz",
           onPressedFunction: () {
             _sendRecored(_path);
+            setState(() {
+              _downloadAudio = true;
+            });
             Navigator.of(context).pop();
           },
         );

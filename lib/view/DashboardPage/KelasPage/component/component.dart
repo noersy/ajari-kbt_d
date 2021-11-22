@@ -1,6 +1,6 @@
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absen.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

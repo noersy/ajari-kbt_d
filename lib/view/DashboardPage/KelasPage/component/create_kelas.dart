@@ -128,7 +128,7 @@ class _CreateKelasState extends State<CreateKelas> {
                 controller: _editingController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Code kelas',
+                  labelText: 'Name Kelas',
                 ),
               ),
             ),

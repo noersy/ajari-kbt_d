@@ -135,13 +135,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   )
                 ],
               ),
-              child: ListView(
+              child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
-                children: [
-                  containerData(
-                      title: "Name", body: '${widget.user.displayName}'),
-                  containerData(title: "Email", body: '${widget.user.email}'),
-                ],
+                child: Column(
+                  children: [
+                    containerData(title: "Name", body: '${widget.user.displayName}'),
+                    containerData(title: "Email", body: '${widget.user.email}'),
+                  ],
+                ),
               ),
             ),
           ),

@@ -22,30 +22,30 @@ class SplashScreenPage extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStateMixin {
 
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 3),
-    vsync: this,
-  )..repeat(reverse: true);
+  // late final AnimationController _controller = AnimationController(
+  //   duration: const Duration(seconds: 3),
+  //   vsync: this,
+  // );
+  //
+  // final Tween<double> turnsTween = Tween<double>(
+  //   begin: 3,
+  //   end: 3.2,
+  // );
+  //
+  // final Tween<double> turnsTween2 = Tween<double>(
+  //   begin: 2.2,
+  //   end: 2,
+  // );
+  //
+  // final Tween<double> turnsTween3 = Tween<double>(
+  //   begin: 1.3,
+  //   end: 1.4,
+  // );
 
-  final Tween<double> turnsTween = Tween<double>(
-    begin: 3,
-    end: 3.2,
-  );
-
-  final Tween<double> turnsTween2 = Tween<double>(
-    begin: 2.2,
-    end: 2,
-  );
-
-  final Tween<double> turnsTween3 = Tween<double>(
-    begin: 1.3,
-    end: 1.4,
-  );
-
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.ease,
-  );
+  // late final Animation<double> _animation = CurvedAnimation(
+  //   parent: _controller,
+  //   curve: Curves.ease,
+  // );
 
 
   startTime() async {
@@ -105,7 +105,7 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -137,51 +137,51 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
                     ],
                   ),
                 ),
-                Positioned(
-                  bottom: 5.0,
-                  left: -135.0,
-                  child: RotationTransition(
-                    turns: turnsTween.animate(_animation),
-                    child: Container(
-                      height: 190,
-                      width: 190,
-                      decoration: BoxDecoration(
-                          color: PaletteColor.primary,
-                          borderRadius: BorderRadius.circular(80.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: -65.0,
-                  left: -65.0,
-                  child: RotationTransition(
-                    turns: turnsTween2.animate(_animation),
-                    child: Container(
-                      height: 190,
-                      width: 190,
-                      decoration: BoxDecoration(
-                          color: PaletteColor.primary,
-                          borderRadius: BorderRadius.circular(80.0),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: -135.0,
-                  left: 25.0,
-                  child: RotationTransition(
-                    turns: turnsTween3.animate(_animation),
-                    child: Container(
-                      height: 190,
-                      width: 190,
-                      decoration: BoxDecoration(
-                          color: PaletteColor.primary,
-                          borderRadius: BorderRadius.circular(80.0),
-                      ),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   bottom: 5.0,
+                //   left: -135.0,
+                //   child: RotationTransition(
+                //     turns: turnsTween.animate(_animation),
+                //     child: Container(
+                //       height: 190,
+                //       width: 190,
+                //       decoration: BoxDecoration(
+                //           color: PaletteColor.primary,
+                //           borderRadius: BorderRadius.circular(85.0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Positioned(
+                //   bottom: -65.0,
+                //   left: -65.0,
+                //   child: RotationTransition(
+                //     turns: turnsTween2.animate(_animation),
+                //     child: Container(
+                //       height: 190,
+                //       width: 190,
+                //       decoration: BoxDecoration(
+                //           color: PaletteColor.primary,
+                //           borderRadius: BorderRadius.circular(85.0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Positioned(
+                //   bottom: -135.0,
+                //   left: 25.0,
+                //   child: RotationTransition(
+                //     turns: turnsTween3.animate(_animation),
+                //     child: Container(
+                //       height: 190,
+                //       width: 190,
+                //       decoration: BoxDecoration(
+                //           color: PaletteColor.primary,
+                //           borderRadius: BorderRadius.circular(85.0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                 ),

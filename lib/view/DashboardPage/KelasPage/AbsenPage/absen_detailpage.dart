@@ -3,28 +3,66 @@ import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/update_absent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class AbsenDetailPage extends StatefulWidget {
   final DateTime dateTIme;
+  final DateTime startAt;
+  final DateTime endAt;
+  final String id;
 
-  const AbsenDetailPage({Key? key, required this.dateTIme}) : super(key: key);
+
+  const AbsenDetailPage({Key? key, required this.dateTIme, required this.startAt, required this.endAt, required this.id}) : super(key: key);
 
   @override
   _AbsenDetailPageState createState() => _AbsenDetailPageState();
 }
 
 class _AbsenDetailPageState extends State<AbsenDetailPage> {
+
   @override
   Widget build(BuildContext context) {
+    final _text = DateFormat("yyyy-MM-dd").format(widget.dateTIme);
+
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      appBar: AppBarBack(ctx: context, title: "List Santri"),
+      appBar: AppBarBack(
+          ctx: context,
+          title: _text,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  primary: PaletteColor.grey,
+                ),
+                onPressed: () async {
+                  var result = await showDialog(
+                    context: context,
+                    builder: (context) => DialogUpdateAbsen(id: widget.id,date: widget.dateTIme, endAt: widget.endAt, startAt: widget.startAt,),
+                  ) ?? "Cancel";
+
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.mode_edit_outlined,
+                  color: PaletteColor.text,
+                ),
+                label: const Text(
+                  "Edit",
+                  style: TypographyStyle.button1,
+                ),
+              ),
+            )
+          ]
+      ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: Provider.of<KelasProvider>(context)
-            .getsAbsenStudents(widget.dateTIme),
+        stream: Provider.of<KelasProvider>(context).getsAbsenStudents(widget.id),
         builder: (BuildContext context, snapshot) {
           if(!snapshot.hasData || snapshot.data!.size <= 0){
             return const Center(child: Text("No has data."));

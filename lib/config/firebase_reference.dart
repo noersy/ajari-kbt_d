@@ -46,16 +46,16 @@ class FirebaseReference {
 
   static DocumentReference getAbsen(
     String kelasId,
-    DateTime date,
+    String id,
   ) {
-    return kelas.doc(kelasId).collection("absen").doc("$date");
+    return kelas.doc(kelasId).collection("absen").doc(id);
   }
 
   static DocumentReference getMeeting(
     String kelasId,
-    DateTime date,
+    DateTime id,
   ) {
-    return kelas.doc(kelasId).collection("meet").doc("$date");
+    return kelas.doc(kelasId).collection("meet").doc("$id");
   }
 
   static String getRandomString(int length) {

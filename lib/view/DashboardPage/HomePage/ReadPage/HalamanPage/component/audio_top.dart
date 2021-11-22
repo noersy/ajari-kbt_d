@@ -2,6 +2,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 
 import 'component.dart';
@@ -37,6 +38,15 @@ class _AudioTopState extends State<AudioTop> {
     super.dispose();
   }
 
+  Stream<List> mergedStream() {
+    final s1 = assetsAudioPlayer.currentPosition;
+    final s2 = assetsAudioPlayer.onReadyToPlay;
+    return StreamZip([s1, s2]);
+  }
+
+  Duration _duration = const Duration(seconds: 0);
+  Duration _duration2 = const Duration(seconds: 0);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,93 +66,102 @@ class _AudioTopState extends State<AudioTop> {
               offset: const Offset(0, 1), // changes position of shadow
             ),
           ]),
-      child: StreamBuilder(
-          stream: assetsAudioPlayer.currentPosition,
-          builder: (context, AsyncSnapshot<Duration> snapshot) {
-            final _data = snapshot.data ?? const Duration(seconds: 0);
-            String _time =
-                "${twoDigits(_data.inMinutes.remainder(60))}:${twoDigits(_data.inSeconds.remainder(60))}";
-
-            return Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    top: SpacingDimens.spacing4,
-                    bottom: SpacingDimens.spacing4,
-                    left: SpacingDimens.spacing8,
-                    right: SpacingDimens.spacing4,
-                  ),
-                  width: 34,
-                  height: 34,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50)),
-                      padding: const EdgeInsets.all(0),
-                      backgroundColor: PaletteColor.grey,
+      child: FutureBuilder(
+        future: assetsAudioPlayer.onReadyToPlay.first,
+        builder: (BuildContext context, AsyncSnapshot<PlayingAudio?> snapshot) {
+          _duration2 = snapshot.data?.duration ?? const Duration(seconds: 0);
+          return StreamBuilder<Duration>(
+            stream: assetsAudioPlayer.currentPosition,
+            builder: (context, snapshot) {
+              _duration = snapshot.data ?? const Duration(seconds: 0);
+              String _time = "${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}";
+              return Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(
+                      top: SpacingDimens.spacing4,
+                      bottom: SpacingDimens.spacing4,
+                      left: SpacingDimens.spacing8,
+                      right: SpacingDimens.spacing4,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        if (_play) {
-                          assetsAudioPlayer.play();
-                          _play = false;
-                        } else {
-                          assetsAudioPlayer.pause();
-                          _play = true;
-                        }
-                      });
-                    },
-                    child: Icon(
-                      _play ? Icons.play_arrow_outlined : Icons.pause_outlined,
-                      color: PaletteColor.primarybg,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _time,
-                    style: TypographyStyle.subtitle2,
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      const SizedBox(height: 26),
-                      Container(
-                        height: 3,
-                        margin: const EdgeInsets.symmetric(vertical: 15),
-                        decoration: BoxDecoration(
-                          color: PaletteColor.grey60,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    width: 34,
+                    height: 34,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
+                        padding: const EdgeInsets.all(0),
+                        backgroundColor: PaletteColor.grey,
                       ),
-                      Positioned(
-                        left: _data.inSeconds.toDouble(),
-                        child: Container(
-                          width: 26,
-                          height: 26,
-                          margin: const EdgeInsets.symmetric(vertical: 3),
+                      onPressed: () {
+                        setState(() {
+                          if (_play) {
+                            assetsAudioPlayer.play();
+                            _play = false;
+                          } else {
+                            assetsAudioPlayer.pause();
+                            _play = true;
+                          }
+                        });
+                      },
+                      child: Icon(
+                        _play
+                            ? Icons.play_arrow_outlined
+                            : Icons.pause_outlined,
+                        color: PaletteColor.primarybg,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _time,
+                      style: TypographyStyle.subtitle2,
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        const SizedBox(height: 26),
+                        Container(
+                          height: 3,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 4),
                           decoration: BoxDecoration(
-                            color: PaletteColor.primary,
+                            color: PaletteColor.grey60,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
-                            Icons.pause_outlined,
-                            size: 18,
-                            color: PaletteColor.primarybg,
+                        ),
+                        AnimatedPositioned(
+                          left: _play ? 0 : 218,
+                          duration: _duration2,
+                          child: Container(
+                            width: 26,
+                            height: 26,
+                            margin: const EdgeInsets.symmetric(vertical: 3),
+                            decoration: BoxDecoration(
+                              color: PaletteColor.primary,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.pause_outlined,
+                              size: 18,
+                              color: PaletteColor.primarybg,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: SpacingDimens.spacing8,
-                ),
-              ],
-            );
-          }),
+                  const SizedBox(
+                    width: SpacingDimens.spacing8,
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

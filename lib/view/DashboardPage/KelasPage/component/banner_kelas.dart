@@ -9,6 +9,7 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_page.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/MeetingPage/meeting_page.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/student_listpage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +23,9 @@ class BannerKelas extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(
-          left: SpacingDimens.spacing12,
-          right: SpacingDimens.spacing12,
-          bottom: SpacingDimens.spacing16,
+        left: SpacingDimens.spacing12,
+        right: SpacingDimens.spacing12,
+        bottom: SpacingDimens.spacing16,
       ),
       child: Stack(
         children: [
@@ -110,14 +111,23 @@ class BannerKelas extends StatelessWidget {
                       size: 18,
                       color: PaletteColor.primarybg2,
                     ),
-                    Text(
-                      " ${kelas.jumlahSantri}",
-                      style: TypographyStyle.button1.merge(
-                        const TextStyle(
-                          fontSize: 13,
-                          color: PaletteColor.primarybg2,
-                        ),
-                      ),
+                    StreamBuilder<QuerySnapshot>(
+                        stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: profile.codeKelas),
+                        builder: (context, snapshot) {
+                          int data = 0;
+                          if (snapshot.hasData) {
+                            data = snapshot.data!.docs.length;
+                          }
+                          return Text(
+                            " $data",
+                            style: TypographyStyle.button1.merge(
+                              const TextStyle(
+                                fontSize: 13,
+                                color: PaletteColor.primarybg2,
+                              ),
+                            ),
+                          );
+                        },
                     ),
                   ],
                 ),
@@ -192,7 +202,8 @@ class BannerKelas extends StatelessWidget {
                       TextButton(
                         style: TextButton.styleFrom(
                           primary: PaletteColor.primarybg,
-                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          backgroundColor:
+                              PaletteColor.primarybg.withOpacity(0.1),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),
@@ -217,7 +228,8 @@ class BannerKelas extends StatelessWidget {
                       TextButton(
                         style: TextButton.styleFrom(
                           primary: PaletteColor.primarybg,
-                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          backgroundColor:
+                              PaletteColor.primarybg.withOpacity(0.1),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),
@@ -239,7 +251,8 @@ class BannerKelas extends StatelessWidget {
                       TextButton(
                         style: TextButton.styleFrom(
                           primary: PaletteColor.primarybg,
-                          backgroundColor: PaletteColor.primarybg.withOpacity(0.1),
+                          backgroundColor:
+                              PaletteColor.primarybg.withOpacity(0.1),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),

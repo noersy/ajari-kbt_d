@@ -4,6 +4,7 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/absent_cardlist.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/component.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/meet_cardlist.dart';
+import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -52,38 +53,36 @@ class _JadwalKelasState extends State<JadwalKelas> {
     super.initState();
   }
 
+  Stream<List<QuerySnapshot>> mergedStream() {
+    final s1 = Provider.of<KelasProvider>(context).getsAbsents();
+    final s2 = Provider.of<KelasProvider>(context).getsMeetings();
+    return StreamZip([s2, s1]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Provider.of<KelasProvider>(context).getsAbsents(),
+    return StreamBuilder<List<QuerySnapshot>>(
+      stream: mergedStream(),
       builder: (context, snapshot) {
         List<QueryDocumentSnapshot<Object?>>? _absen = [];
+        List<QueryDocumentSnapshot<Object?>>? _meet = [];
 
         if (snapshot.hasData) {
-          _absen = snapshot.data?.docs.toList();
+          _meet = snapshot.data?[0].docs.toList();
+          _absen = snapshot.data?[1].docs.toList();
         }
 
-        return StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context).getsMeetings(),
-          builder: (context, snapshot) {
-            List<QueryDocumentSnapshot<Object?>>? _meet = [];
-
-            if (snapshot.hasData) {
-              _meet = snapshot.data?.docs.toList();
-            }
-
-            return Expanded(
-              child: Scaffold(
-                floatingActionButton: null, //@todo this will be button for create absen and meet
-                body: Column(
-                  children: [
-                    _tanggal(_absen, _meet),
-                    _jadwal(_absen, _meet),
-                  ],
-                ),
-              ),
-            );
-          },
+        return Expanded(
+          child: Scaffold(
+            floatingActionButton: null,
+            //@todo this will be button for create absen and meet
+            body: Column(
+              children: [
+                _tanggal(_absen, _meet),
+                _jadwal(_absen, _meet),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -104,11 +103,19 @@ class _JadwalKelasState extends State<JadwalKelas> {
           right: SpacingDimens.spacing16,
         ),
         itemBuilder: (BuildContext context, int index) {
-          bool _isAbsent = _absen!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty;
-          bool _isMeet = _meet!.where((element) => element.get("datetime").toDate().day == _listRealDate[index].day).isNotEmpty;
+          bool _isAbsent = _absen!
+              .where((element) =>
+                  element.get("datetime").toDate().day ==
+                  _listRealDate[index].day)
+              .isNotEmpty;
+          bool _isMeet = _meet!
+              .where((element) =>
+                  element.get("datetime").toDate().day ==
+                  _listRealDate[index].day)
+              .isNotEmpty;
 
           return DateCard(
-            callback: (){
+            callback: () {
               //@todo make create both meet and absent
             },
             dateTime: _listRealDate[index],
@@ -153,8 +160,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
           },
           children: [
             for (var item in _listRealDate) ...[
-              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
-                  || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
                   ? SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -162,18 +168,23 @@ class _JadwalKelasState extends State<JadwalKelas> {
                         children: [
                           const SizedBox(height: SpacingDimens.spacing28),
                           for (var itemAbsen in _absen) ...[
-                            if (item.day == itemAbsen.get('datetime').toDate().day) ...[
+                            if (item.day ==
+                                itemAbsen.get('datetime').toDate().day) ...[
                               ListAbsent(
                                 present: itemAbsen.reference,
+                                id: itemAbsen.get('id'),
                                 date: itemAbsen.get('datetime').toDate(),
-                                startAt: _formatTime.format(itemAbsen.get('start_at').toDate()),
-                                endAt: _formatTime.format(itemAbsen.get('end_at').toDate()),
+                                startAt: itemAbsen.get('start_at').toDate(),
+                                endAt: itemAbsen.get('end_at').toDate(),
                               ),
                             ],
                           ],
                           for (var itemMeet in _meet!) ...[
-                            if (item.day == itemMeet.get('datetime').toDate().day) ...[
-                              MeetList(meet: itemMeet.reference, date: itemMeet.get('datetime').toDate()),
+                            if (item.day ==
+                                itemMeet.get('datetime').toDate().day) ...[
+                              MeetList(
+                                  meet: itemMeet.reference,
+                                  date: itemMeet.get('datetime').toDate()),
                             ],
                           ],
                         ],

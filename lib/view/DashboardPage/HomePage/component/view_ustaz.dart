@@ -8,6 +8,7 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StudensPage/studens_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/home_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -120,9 +121,19 @@ class _ViewUstazState extends State<ViewUstaz> {
                             size: 33,
                           ),
                           const SizedBox(width: SpacingDimens.spacing8),
-                          Text(
-                            "${_kelas.jumlahSantri}",
-                            style: TypographyStyle.title.copyWith(color: PaletteColor.primarybg),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: _kelas.kelasId),
+                            builder: (context, snapshot) {
+                              int data = 0;
+                              if (snapshot.hasData) {
+                                data = snapshot.data!.docs.length;
+                              }
+
+                              return Text(
+                                "$data",
+                                style: TypographyStyle.title.copyWith(color: PaletteColor.primarybg),
+                              );
+                            }
                           ),
                         ],
                       ),

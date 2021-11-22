@@ -6,7 +6,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.dart';
-import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absen.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -71,7 +71,8 @@ class AbsenPage extends StatelessWidget {
                     var datetime = (data["datetime"] as Timestamp).toDate();
                     var startAt = (data["start_at"] as Timestamp).toDate();
                     var endAt = (data["end_at"] as Timestamp).toDate();
-                    return _absenList(context, datetime, startAt, endAt);
+                    var id = data["id"];
+                    return _absenList(context, id, datetime, startAt, endAt);
                   }).toList(),
                 ),
               );
@@ -85,15 +86,15 @@ class AbsenPage extends StatelessWidget {
           var result = await showDialog(
             context: context,
             builder: (context) => const DialogCreateAbsen(),
-          );
+          ) ?? "Cancel";
 
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result), duration: const Duration(milliseconds: 500),));
         },
       ),
     );
   }
 
-  Widget _absenList(ctx, DateTime datetime, DateTime startAt, DateTime endAt) {
+  Widget _absenList(ctx, String id, DateTime datetime, DateTime startAt, DateTime endAt) {
     final _text = DateFormat("yyyy-MM-dd").format(datetime);
     return Padding(
       padding: const EdgeInsets.only(
@@ -107,12 +108,12 @@ class AbsenPage extends StatelessWidget {
           builder: (context) => DialogDelete(
             content: "This will delete the selected item.",
             onPressedFunction: () {
-              Provider.of<KelasProvider>(context, listen: false).deleteAbsen(date: datetime);
+              Provider.of<KelasProvider>(context, listen: false).deleteAbsen(id: id);
               Navigator.of(context).pop();
             },
           ),
         ),
-        onPressed: () => Navigator.of(ctx).push(routeTransition(AbsenDetailPage(dateTIme: datetime))),
+        onPressed: () => Navigator.of(ctx).push(routeTransition(AbsenDetailPage(dateTIme: datetime, startAt: startAt, endAt: endAt, id: id,))),
         child: Container(
           width: double.infinity,
           height: SpacingDimens.spacing44,
