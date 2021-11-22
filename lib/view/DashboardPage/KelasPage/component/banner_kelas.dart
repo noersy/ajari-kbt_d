@@ -11,6 +11,7 @@ import 'package:ajari/view/DashboardPage/KelasPage/MeetingPage/meeting_page.dart
 import 'package:ajari/view/DashboardPage/KelasPage/StudentListPage/student_listpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BannerKelas extends StatelessWidget {
@@ -153,6 +154,7 @@ class BannerKelas extends StatelessWidget {
                 height: 30,
                 child: GestureDetector(
                   onTap: () {
+                    Clipboard.setData( ClipboardData(text: kelas.kelasId));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Copy code kelas."),
