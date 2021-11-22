@@ -196,7 +196,8 @@ class _JadwalKelasState extends State<JadwalKelas> {
                           for (var itemMeet in _diskusi!) ...[
                             if (item.day == itemMeet.get('datetime').toDate().day) ...[
                               DiskusiList(
-                                meet: itemMeet.reference,
+                                id: itemMeet.get('id'),
+                                diskusi: itemMeet.reference,
                                 date: itemMeet.get('datetime').toDate(),
                               ),
                             ],

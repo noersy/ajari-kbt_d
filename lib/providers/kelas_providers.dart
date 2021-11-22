@@ -399,6 +399,15 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getsMessagesInDiskusi({required id}) {
+    return FirebaseReference.kelas
+        .doc(_dataKelas.kelasId)
+        .collection("diskusi").doc(id)
+        .collection('message')
+        .orderBy("datetime", descending: false)
+        .snapshots();
+  }
+
   Future<int> createDiskusi({
     required DateTime date,
     required String subject,
@@ -413,6 +422,39 @@ class KelasProvider extends ChangeNotifier {
       };
 
       await FirebaseReference.getDiskusi(_dataKelas.kelasId, id).set(data);
+    } catch (e) {
+      if (kDebugMode) {
+        print("createMeet: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
+    return 200;
+  }
+
+  Future<int> sendMessageDiskusi({
+    required String idDiskusi,
+    required String message,
+    required String role,
+  }) async {
+    try {
+      String id = FirebaseReference.getRandomString(23);
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if(user == null) throw Exception("Error");
+
+      Map<String, dynamic> data = {
+        "id": id,
+        "uid" : user.uid,
+        "name" : user.displayName,
+        "role" : role,
+        "datetime": DateTime.now(),
+        "message" : message,
+      };
+
+      await FirebaseReference.getDiskusi(_dataKelas.kelasId, idDiskusi).collection("message").doc(id).set(data);
     } catch (e) {
       if (kDebugMode) {
         print("createMeet: ${e.runtimeType}");

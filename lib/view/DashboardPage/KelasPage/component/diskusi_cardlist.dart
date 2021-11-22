@@ -1,8 +1,10 @@
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/profile_providers.dart';
+import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/DiskusiPage/diskusi_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +13,14 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
 class DiskusiList extends StatefulWidget {
-  final DocumentReference<Object?> meet;
+  final DocumentReference<Object?> diskusi;
   final DateTime date;
+  final String id;
 
   const DiskusiList({
     Key? key,
-    required this.meet,
-    required this.date,
+    required this.diskusi,
+    required this.date, required this.id,
   }) : super(key: key);
 
   @override
@@ -27,10 +30,9 @@ class DiskusiList extends StatefulWidget {
 class _DiskusiListState extends State<DiskusiList> {
   @override
   Widget build(BuildContext context) {
-    final Profile _profile = Provider.of<ProfileProvider>(context).profile;
 
     return FutureBuilder<DocumentSnapshot>(
-      future: widget.meet.get(),
+      future: widget.diskusi.get(),
       builder: (context, snapshot) {
         String _subject = snapshot.data?.get("subject") ?? "-";
 
@@ -58,7 +60,9 @@ class _DiskusiListState extends State<DiskusiList> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: (){},
+                      onPressed: (){
+                        Navigator.of(context).push(routeTransition(DiskusiPage(subject: _subject, id: widget.id)));
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -133,7 +137,8 @@ class _DiskusiListState extends State<DiskusiList> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         margin: const EdgeInsets.only(
-                            left: SpacingDimens.spacing16 + 1.8),
+                            left: SpacingDimens.spacing16 + 1.8,
+                        ),
                       ),
                     ],
                   ),
