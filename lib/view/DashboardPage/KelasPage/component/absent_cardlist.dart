@@ -12,13 +12,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
-class ListAbsent extends StatefulWidget {
+class AbsentList extends StatefulWidget {
   final DocumentReference<Object?> present;
   final DateTime startAt, endAt;
   final DateTime date;
   final String id;
 
-  const ListAbsent({
+  const AbsentList({
     Key? key,
     required this.present,
     required this.startAt,
@@ -28,10 +28,10 @@ class ListAbsent extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ListAbsentState createState() => _ListAbsentState();
+  _AbsentListState createState() => _AbsentListState();
 }
 
-class _ListAbsentState extends State<ListAbsent> {
+class _AbsentListState extends State<AbsentList> {
   DateFormat formattedDate = DateFormat('hh:mm');
   bool isPresent = true;
   int _absentCount = 0;

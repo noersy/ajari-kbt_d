@@ -10,21 +10,21 @@ import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
-class MeetList extends StatefulWidget {
+class DiskusiList extends StatefulWidget {
   final DocumentReference<Object?> meet;
   final DateTime date;
 
-  const MeetList({
+  const DiskusiList({
     Key? key,
     required this.meet,
     required this.date,
   }) : super(key: key);
 
   @override
-  State<MeetList> createState() => _MeetListState();
+  State<DiskusiList> createState() => _DiskusiListState();
 }
 
-class _MeetListState extends State<MeetList> {
+class _DiskusiListState extends State<DiskusiList> {
   @override
   Widget build(BuildContext context) {
     final Profile _profile = Provider.of<ProfileProvider>(context).profile;
@@ -33,8 +33,6 @@ class _MeetListState extends State<MeetList> {
       future: widget.meet.get(),
       builder: (context, snapshot) {
         String _subject = snapshot.data?.get("subject") ?? "-";
-        String _serverURL = snapshot.data?.get("serverURL") ?? "-";
-        String _codeMeet = snapshot.data?.get("codeMeet") ?? "-";
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -60,12 +58,7 @@ class _MeetListState extends State<MeetList> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: () => _joinMeeting(
-                        profile: _profile,
-                        codeRoom: _codeMeet,
-                        urlServer: _serverURL,
-                        subject: _subject,
-                      ),
+                      onPressed: (){},
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -73,7 +66,10 @@ class _MeetListState extends State<MeetList> {
                             child: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: Text(_subject, style: TypographyStyle.paragraph,),
+                                child: Text(
+                                  _subject,
+                                  style: TypographyStyle.paragraph,
+                                ),
                               ),
                             ),
                           ),
@@ -95,7 +91,7 @@ class _MeetListState extends State<MeetList> {
                                   style: TypographyStyle.button2.copyWith(color: PaletteColor.primarybg),
                                 ),
                                 const SizedBox(width: 2),
-                                const Icon(Icons.meeting_room_outlined, size: 20,)
+                                const Icon(Icons.chat, size: 18)
                               ],
                             ),
                           ),

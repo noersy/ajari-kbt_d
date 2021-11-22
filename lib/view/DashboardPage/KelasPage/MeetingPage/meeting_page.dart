@@ -153,7 +153,7 @@ class MeetCardList extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(
-                      Icons.date_range,
+                      Icons.meeting_room_sharp,
                       color: PaletteColor.text,
                       size: 18,
                     ),

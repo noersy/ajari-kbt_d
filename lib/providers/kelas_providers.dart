@@ -391,6 +391,14 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getsDiskusies() {
+    return FirebaseReference.kelas
+        .doc(_dataKelas.kelasId)
+        .collection("diskusi")
+        .orderBy("datetime", descending: false)
+        .snapshots();
+  }
+
   Future<int> createDiskusi({
     required DateTime date,
     required String subject,

@@ -3,6 +3,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/absent_cardlist.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/component.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/diskusi_cardlist.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/meet_cardlist.dart';
 import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,7 +57,8 @@ class _JadwalKelasState extends State<JadwalKelas> {
   Stream<List<QuerySnapshot>> mergedStream() {
     final s1 = Provider.of<KelasProvider>(context).getsAbsents();
     final s2 = Provider.of<KelasProvider>(context).getsMeetings();
-    return StreamZip([s2, s1]);
+    final s3 = Provider.of<KelasProvider>(context).getsDiskusies();
+    return StreamZip([s1, s2, s3]);
   }
 
   @override
@@ -66,24 +68,25 @@ class _JadwalKelasState extends State<JadwalKelas> {
       builder: (context, snapshot) {
         List<QueryDocumentSnapshot<Object?>>? _absen = [];
         List<QueryDocumentSnapshot<Object?>>? _meet = [];
+        List<QueryDocumentSnapshot<Object?>>? _diskusi = [];
 
         if (snapshot.hasData) {
-          _meet = snapshot.data?[0].docs.toList();
-          _absen = snapshot.data?[1].docs.toList();
+          _diskusi = snapshot.data![2].docs.toList();
+          _meet = snapshot.data![1].docs.toList();
+          _absen = snapshot.data![0].docs.toList();
         }
-
         return Expanded(
-          child: Scaffold(
-            floatingActionButton: null,
-            //@todo this will be button for create absen and meet
-            body: Column(
-              children: [
-                _tanggal(_absen, _meet),
-                _jadwal(_absen, _meet),
-              ],
-            ),
-          ),
-        );
+              child: Scaffold(
+                floatingActionButton: null,
+                //@todo this will be button for create absen and meet
+                body: Column(
+                  children: [
+                    _tanggal(_absen, _meet),
+                    _jadwal(_absen, _meet, _diskusi),
+                  ],
+                ),
+              ),
+            );
       },
     );
   }
@@ -143,7 +146,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
     );
   }
 
-  Widget _jadwal(_absen, _meet) {
+  Widget _jadwal(_absen, _meet, _diskusi) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -160,7 +163,9 @@ class _JadwalKelasState extends State<JadwalKelas> {
           },
           children: [
             for (var item in _listRealDate) ...[
-              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+                  || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+                  || _diskusi!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
                   ? SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -170,7 +175,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                           for (var itemAbsen in _absen) ...[
                             if (item.day ==
                                 itemAbsen.get('datetime').toDate().day) ...[
-                              ListAbsent(
+                              AbsentList(
                                 present: itemAbsen.reference,
                                 id: itemAbsen.get('id'),
                                 date: itemAbsen.get('datetime').toDate(),
@@ -184,7 +189,16 @@ class _JadwalKelasState extends State<JadwalKelas> {
                                 itemMeet.get('datetime').toDate().day) ...[
                               MeetList(
                                   meet: itemMeet.reference,
-                                  date: itemMeet.get('datetime').toDate()),
+                                  date: itemMeet.get('datetime').toDate(),
+                              ),
+                            ],
+                          ],
+                          for (var itemMeet in _diskusi!) ...[
+                            if (item.day == itemMeet.get('datetime').toDate().day) ...[
+                              DiskusiList(
+                                meet: itemMeet.reference,
+                                date: itemMeet.get('datetime').toDate(),
+                              ),
                             ],
                           ],
                         ],
