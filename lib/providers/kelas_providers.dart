@@ -264,7 +264,10 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> absent({required String id, required String uid}) async {
+  Future<int> absent({
+    required String id,
+    required String uid,
+  }) async {
     try {
       Map<String, dynamic> _newData = {"kehadiran": true};
 
@@ -387,4 +390,30 @@ class KelasProvider extends ChangeNotifier {
         .orderBy("datetime", descending: false)
         .snapshots();
   }
+
+  Future<int> createDiskusi({
+    required DateTime date,
+    required String subject,
+  }) async {
+    try {
+      String id = FirebaseReference.getRandomString(23);
+
+      Map<String, dynamic> data = {
+        "id": id,
+        "datetime": date,
+        "subject": subject,
+      };
+
+      await FirebaseReference.getDiskusi(_dataKelas.kelasId, id).set(data);
+    } catch (e) {
+      if (kDebugMode) {
+        print("createMeet: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
+    return 200;
+  }
+
 }

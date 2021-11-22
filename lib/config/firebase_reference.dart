@@ -58,6 +58,13 @@ class FirebaseReference {
     return kelas.doc(kelasId).collection("meet").doc("$id");
   }
 
+  static DocumentReference getDiskusi(
+    String kelasId,
+    String id,
+  ) {
+    return kelas.doc(kelasId).collection("diskusi").doc(id);
+  }
+
   static String getRandomString(int length) {
     return String.fromCharCodes(
       Iterable.generate(

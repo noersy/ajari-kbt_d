@@ -1,6 +1,7 @@
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/component/create_absent.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/dialog_create.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,18 +41,22 @@ class _DateCardState extends State<DateCard> {
             : () async {
                 setState(() => !_selected ? _selected = true : false);
 
-                var result = await showDialog(
+                // var result = await showDialog(
+                //       context: context,
+                //       builder: (context) => DialogCreateAbsen(date: widget.dateTime),
+                //     ) ?? "Cancel";
+
+
+                await showDialog(
                       context: context,
-                      builder: (context) => DialogCreateAbsen(date: widget.dateTime),
-                    ) ?? "Cancel";
+                      builder: (context) => DialogCreate(dateTime: widget.dateTime,),
+                    );
 
 
-                widget.callback();
+                // widget.callback();
 
                 setState(() => _selected ? _selected = false : true);
-
-                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result)));
-              },
+        },
         style: TextButton.styleFrom(
           padding: const EdgeInsets.all(0),
           primary: PaletteColor.primary,

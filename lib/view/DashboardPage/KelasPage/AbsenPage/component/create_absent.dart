@@ -99,7 +99,7 @@ class _DialogCreateAbsenState extends State<DialogCreateAbsen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Create",
+              "Buat Absent",
               style: TypographyStyle.subtitle1.merge(
                 const TextStyle(
                   color: PaletteColor.black,

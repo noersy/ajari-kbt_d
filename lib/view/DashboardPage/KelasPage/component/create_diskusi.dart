@@ -6,36 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class DialogCreateMeet extends StatefulWidget {
+class DialogCreateDiskusi extends StatefulWidget {
   final DateTime? date;
 
-  const DialogCreateMeet({Key? key, this.date}) : super(key: key);
+  const DialogCreateDiskusi({Key? key, this.date}) : super(key: key);
 
   @override
-  _DialogCreateMeetState createState() => _DialogCreateMeetState();
+  _DialogCreateDiskusiState createState() => _DialogCreateDiskusiState();
 }
 
-class _DialogCreateMeetState extends State<DialogCreateMeet> {
+class _DialogCreateDiskusiState extends State<DialogCreateDiskusi> {
   DateTime selectedDate = DateTime.now();
   final TimeOfDay _ofDay = TimeOfDay.now();
   final TextEditingController _editingController = TextEditingController();
   DateFormat formattedDate = DateFormat('yyyy-MM-dd');
   String _stringDate = "Select Date";
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _stringDate = formattedDate.format(picked);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +53,7 @@ class _DialogCreateMeetState extends State<DialogCreateMeet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Buat Room",
+              "Buat Diskusi",
               style: TypographyStyle.subtitle1.merge(
                 const TextStyle(
                   color: PaletteColor.black,
@@ -87,7 +73,7 @@ class _DialogCreateMeetState extends State<DialogCreateMeet> {
                   ),
                 ),
               ),
-              onPressed: widget.date == null ? () => _selectDate(context) : null,
+              onPressed: null,
               child: SizedBox(
                 width: double.infinity,
                 height: SpacingDimens.spacing44,
@@ -115,7 +101,7 @@ class _DialogCreateMeetState extends State<DialogCreateMeet> {
                     borderSide: BorderSide(color: PaletteColor.primary.withOpacity(0.5))
                 ),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: PaletteColor.primary.withOpacity(0.5))
+                    borderSide: BorderSide(color: PaletteColor.primary.withOpacity(0.5))
                 ),
                 focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: PaletteColor.primary)
@@ -149,13 +135,11 @@ class _DialogCreateMeetState extends State<DialogCreateMeet> {
                         return;
                       }
 
-                      Provider.of<KelasProvider>(context, listen: false)
-                          .createMeet(
+                      Provider.of<KelasProvider>(context, listen: false).createDiskusi(
                         subject: _editingController.text,
-                        date: DateTime(selectedDate.year, selectedDate.month,
-                            selectedDate.day, _ofDay.hour, _ofDay.minute),
+                        date: DateTime(selectedDate.year, selectedDate.month, selectedDate.day, _ofDay.hour, _ofDay.minute),
                       );
-                      Navigator.of(context).pop("Success create meet room.");
+                      Navigator.of(context).pop("Success create discussion room.");
                     },
                     child: Text(
                       'Submit',
