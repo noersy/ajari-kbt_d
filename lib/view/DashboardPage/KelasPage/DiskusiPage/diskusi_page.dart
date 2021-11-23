@@ -94,6 +94,8 @@ class _DiskusiPageState extends State<DiskusiPage> {
                                   role: profile.role,
                                   idDiskusi: widget.id,
                                   message: _editingController.text);
+                              _editingController.clear();
+                              FocusScope.of(context).unfocus();
                             },
                             icon: const Icon(Icons.send),
                           ),
@@ -123,137 +125,143 @@ class _DiskusiPageState extends State<DiskusiPage> {
         if (snapshot.data!.docChanges.isEmpty) {
           return const Center(child: Text("Tidak ada komentar."));
         }
-        return ListView(
+        return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          children: snapshot.data!.docs.map((e) {
-            String _role = e.get('role');
-            DateTime date = e.get('datetime').toDate();
-            DateTime dateTime = DateTime(date.year, date.month, date.day);
-            if (_first) {
-              _dateTime = DateTime(date.year, date.month, date.day);
-              _first = false;
-            }
-            if (_dateTime != dateTime) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(2),
-                    child: Center(
-                      child: Text(
-                        DateFormat('yyyy-MM-dd').format(dateTime),
-                        style: TypographyStyle.mini,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: snapshot.data!.docs.map((e) {
+              String _role = e.get('role');
+              DateTime date = e.get('datetime').toDate();
+              DateTime dateTime = DateTime(date.year, date.month, date.day);
+              if (_first) {
+                _dateTime = DateTime(date.year, date.month, date.day);
+                _first = false;
+              }
+              if (_dateTime != dateTime) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(2),
+                      child: Center(
+                        child: Text(
+                          DateFormat('yyyy-MM-dd').format(dateTime),
+                          style: TypographyStyle.mini,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                      left: SpacingDimens.spacing16,
-                      right: SpacingDimens.spacing16,
-                      bottom: SpacingDimens.spacing8,
+                    Container(
+                      margin: const EdgeInsets.only(
+                        left: SpacingDimens.spacing16,
+                        right: SpacingDimens.spacing16,
+                        bottom: SpacingDimens.spacing8,
+                      ),
+                      alignment: _role == role
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        padding: const EdgeInsets.all(SpacingDimens.spacing4),
+                        decoration: BoxDecoration(
+                            color: _role == role
+                                ? PaletteColor.primary.withOpacity(0.5)
+                                : PaletteColor.grey60.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Stack(
+                          alignment: _role == role
+                              ? Alignment.bottomRight
+                              : Alignment.bottomLeft,
+                          children: [
+
+                            Container(
+                              height: 20,
+                              padding: _role == role
+                                  ? const EdgeInsets.only(right: 40, left: 4)
+                                  : const EdgeInsets.only(left: 40, right: 4),
+                              child: Text(
+                                e.get('message'),
+                              ),
+                            ),
+                            Container(
+                              alignment: _role == role
+                                  ? Alignment.bottomRight
+                                  : Alignment.bottomLeft,
+                              height: 20,
+                              width: 50,
+                              child: Text(
+                                DateFormat('kk:mm')
+                                    .format(e.get('dateTime').toDate()),
+                                style: TypographyStyle.mini,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  ],
+                );
+              }
+              _dateTime = DateTime(date.year, date.month, date.day);
+              return Column(
+                children: [
+                  _first
+                      ? Padding(
+                          padding: const EdgeInsets.all(2),
+                          child: Center(
+                              child: Text(
+                            DateFormat('yyyy-MM-dd').format(dateTime),
+                            style: TypographyStyle.mini,
+                          )),
+                        )
+                      : const SizedBox.shrink(),
+                  Container(
                     alignment: _role == role
                         ? Alignment.centerRight
                         : Alignment.centerLeft,
                     child: Container(
+                      margin: const EdgeInsets.only(
+                        left: SpacingDimens.spacing16,
+                        right: SpacingDimens.spacing16,
+                        bottom: SpacingDimens.spacing8,
+                      ),
                       padding: const EdgeInsets.all(SpacingDimens.spacing4),
                       decoration: BoxDecoration(
                           color: _role == role
                               ? PaletteColor.primary.withOpacity(0.5)
                               : PaletteColor.grey60.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(5)),
+                          borderRadius: BorderRadius.circular(5),
+                      ),
                       child: Stack(
                         alignment: _role == role
                             ? Alignment.bottomRight
                             : Alignment.bottomLeft,
                         children: [
+                          Positioned(
+                            top: 0,
+                            child: Text(e.get('name'), style: TypographyStyle.caption1),
+                          ),
                           Container(
-                            height: 20,
+                            margin: const EdgeInsets.only(bottom: 2),
                             padding: _role == role
                                 ? const EdgeInsets.only(right: 40, left: 4)
                                 : const EdgeInsets.only(left: 40, right: 4),
-                            child: Text(
-                              e.get('message'),
-                            ),
+                            child: Text(e.get('message')),
                           ),
-                          Container(
-                            alignment: _role == role
-                                ? Alignment.bottomRight
-                                : Alignment.bottomLeft,
-                            height: 20,
-                            width: 50,
-                            child: Text(
-                              DateFormat('kk:mm')
-                                  .format(e.get('dateTime').toDate()),
+                          Positioned(
+                            // alignment: _role == role
+                            //     ? Alignment.bottomRight
+                            //     : Alignment.bottomLeft,
+                            child: Text(DateFormat('kk:mm').format(e.get('datetime').toDate()),
                               style: TypographyStyle.mini,
                             ),
                           ),
+                          const SizedBox(height: 35, width: 80,)
                         ],
                       ),
                     ),
                   ),
                 ],
               );
-            }
-            _dateTime = DateTime(date.year, date.month, date.day);
-            return Column(
-              children: [
-                _first
-                    ? Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: Center(
-                            child: Text(
-                          DateFormat('yyyy-MM-dd').format(dateTime),
-                          style: TypographyStyle.mini,
-                        )),
-                      )
-                    : const SizedBox.shrink(),
-                Container(
-                  margin: const EdgeInsets.only(
-                    left: SpacingDimens.spacing16,
-                    right: SpacingDimens.spacing16,
-                    bottom: SpacingDimens.spacing8,
-                  ),
-                  alignment: _role == role
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    padding: const EdgeInsets.all(SpacingDimens.spacing4),
-                    decoration: BoxDecoration(
-                        color: _role == role
-                            ? PaletteColor.primary.withOpacity(0.5)
-                            : PaletteColor.grey60.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Stack(
-                      alignment: _role == role
-                          ? Alignment.bottomRight
-                          : Alignment.bottomLeft,
-                      children: [
-                        Container(
-                          height: 20,
-                          padding: _role == role
-                              ? const EdgeInsets.only(right: 40, left: 4)
-                              : const EdgeInsets.only(left: 40, right: 4),
-                          child: Text(e.get('message')),
-                        ),
-                        Container(
-                          alignment: _role == role
-                              ? Alignment.bottomRight
-                              : Alignment.bottomLeft,
-                          height: 20,
-                          width: 50,
-                          child: Text(
-                            DateFormat('kk:mm')
-                                .format(e.get('datetime').toDate()),
-                            style: TypographyStyle.mini,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
+            }).toList()..toList(),
+          ),
         );
       },
     );
