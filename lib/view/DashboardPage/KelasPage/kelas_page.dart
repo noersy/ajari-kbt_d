@@ -24,82 +24,65 @@ class _ClassPageState extends State<ClassPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg2,
-      // appBar: AppBar(
-      //   backgroundColor: PaletteColor.primarybg,
-      //   elevation: 0,
-      //   title: const Text(
-      //     "Class",
-      //     style: TypographyStyle.subtitle1,
-      //   ),
-      // ),
 
       body: AnimatedBuilder(
         animation: Provider.of<KelasProvider>(context),
         builder: (BuildContext context, Widget? child) {
           Kelas _kelas = Provider.of<KelasProvider>(context).kelas;
           Profile _profile = Provider.of<ProfileProvider>(context).profile;
-
           return SafeArea(
-            child: _kelas.kelasId == "-"
-                ? _profile.role != "Pengajar"
-                    ? const JoinKelas()
-                    : const CreateKelas()
-                : NestedScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    body: Column(
-                      children: const [
-                        JadwalKelas(),
-                      ],
-                    ),
-                    headerSliverBuilder:
-                        (BuildContext _, bool innerBoxIsScrolled) {
-                      return <Widget>[
-                        SliverAppBar(
-                          backgroundColor: PaletteColor.primarybg,
-                          iconTheme:
-                              const IconThemeData(color: PaletteColor.primary),
-                          title: const Text(
-                            "Kelas",
-                            style: TypographyStyle.subtitle1,
-                          ),
-                          pinned: false,
-                          floating: true,
-                          forceElevated: innerBoxIsScrolled,
-                        ),
-                        SliverAppBar(
-                          backgroundColor: PaletteColor.primarybg,
-                          bottom: const PreferredSize(
-                            preferredSize: Size(0, 115),
-                            child: BannerKelas(),
-                          ),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              switchInCurve: Curves.easeIn,
+              switchOutCurve: Curves.easeInOut,
+              child: _kelas.kelasId == "-"
+                  ? _profile.role != "Pengajar"
+                      ? const JoinKelas()
+                      : const CreateKelas()
+                  : NestedScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      body: Column(
+                        children: const [
+                          JadwalKelas(),
+                        ],
+                      ),
+                      headerSliverBuilder:
+                          (BuildContext _, bool innerBoxIsScrolled) {
+                        return <Widget>[
+                          SliverAppBar(
+                            backgroundColor: PaletteColor.primarybg,
+                            iconTheme: const IconThemeData(color: PaletteColor.primary),
+                            title: const Text(
+                              "Kelas",
+                              style: TypographyStyle.subtitle1,
                             ),
+                            pinned: false,
+                            floating: true,
+                            forceElevated: innerBoxIsScrolled,
                           ),
-                          pinned: false,
-                          floating: true,
-                          forceElevated: innerBoxIsScrolled,
-                        ),
-                      ];
-                    },
-                  ),
+                          SliverAppBar(
+                            backgroundColor: PaletteColor.primarybg,
+                            bottom: const PreferredSize(
+                              preferredSize: Size(0, 115),
+                              child: BannerKelas(),
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                            ),
+                            pinned: false,
+                            floating: true,
+                            forceElevated: innerBoxIsScrolled,
+                          ),
+                        ];
+                      },
+                    ),
+            ),
           );
         },
       ),
-
-      // //
-      // _kelas.kelasId == "-"
-      //     ? _profile.role != "Pengajar"
-      //     ? const JoinKelas()
-      //     : CreateKelas(ctx: context)
-      //     : Column(
-      //   children: const [
-      //     BannerKelas(),
-      //     JadwalKelas(),
-      //   ],
-      // ),
     );
   }
 }
