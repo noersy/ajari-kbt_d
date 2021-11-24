@@ -17,27 +17,32 @@ class Kelas {
     required this.pengajar,
   });
 
-  final String pengajarId;
-  final String nama;
-  final int jumlahSantri;
-  final String kelasId;
-  final String pengajar;
+  String pengajarId;
+  String nama;
+  int jumlahSantri;
+  String kelasId;
+  String pengajar;
+
+  void setJumlahSantri(int jumlah) {
+    jumlahSantri = jumlah;
+  }
 
   factory Kelas.fromJson(Map<String, dynamic> json) => Kelas(
-    pengajarId: json["pengajar_id"],
-    nama: json["nama"],
-    jumlahSantri: json["jumlah_santri"],
-    kelasId: json["kelas_id"],
-    pengajar: json["pengajar"],
-  );
+        pengajarId: json["pengajar_id"],
+        nama: json["nama"],
+        jumlahSantri: json["jumlah_santri"],
+        kelasId: json["kelas_id"],
+        pengajar: json["pengajar"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "pengajar_id": pengajarId,
-    "nama": nama,
-    "jumlah_santri": jumlahSantri,
-    "kelas_id": kelasId,
-    "pengajar": pengajar,
-  };
+        "pengajar_id": pengajarId,
+        "nama": nama,
+        "jumlah_santri": jumlahSantri,
+        "kelas_id": kelasId,
+        "pengajar": pengajar,
+      };
 
-  static blankKelas() => Kelas(pengajarId: "-", nama: "-", jumlahSantri: 0, kelasId: "-", pengajar: "-");
+  static blankKelas() => Kelas(
+      pengajarId: "-", nama: "-", jumlahSantri: 0, kelasId: "-", pengajar: "-");
 }

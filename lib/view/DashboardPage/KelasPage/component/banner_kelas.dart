@@ -112,15 +112,13 @@ class BannerKelas extends StatelessWidget {
                       size: 18,
                       color: PaletteColor.primarybg2,
                     ),
-                    StreamBuilder<QuerySnapshot>(
-                        stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: profile.codeKelas),
+                    AnimatedBuilder(
+                        animation: Provider.of<KelasProvider>(context),
                         builder: (context, snapshot) {
-                          int data = 0;
-                          if (snapshot.hasData) {
-                            data = snapshot.data!.docs.length;
-                          }
+                          var _listSantri = Provider.of<KelasProvider>(context).listSantri;
+
                           return Text(
-                            " $data",
+                            " ${_listSantri.length}",
                             style: TypographyStyle.button1.merge(
                               const TextStyle(
                                 fontSize: 13,

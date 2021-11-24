@@ -1,5 +1,4 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -11,9 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class JoinKelas extends StatefulWidget {
-  final Function(Kelas) freshState;
 
-  const JoinKelas({Key? key, required this.freshState}) : super(key: key);
+  const JoinKelas({Key? key}) : super(key: key);
 
   @override
   _JoinKelasState createState() => _JoinKelasState();
@@ -22,7 +20,6 @@ class JoinKelas extends StatefulWidget {
 class _JoinKelasState extends State<JoinKelas> {
   final _user = FirebaseAuth.instance.currentUser;
   TextEditingController santriInput = TextEditingController();
-  String _codeKelas = '';
   bool _loading = false;
 
   void joinkelas(santriInput) async {
@@ -33,22 +30,13 @@ class _JoinKelasState extends State<JoinKelas> {
 
       if (_user == null) throw Exception("Not login yet.");
 
-      await Provider.of<KelasProvider>(context, listen: false)
-          .joinKelas(codeKelas: santriInput.text, user: _user!)
-          .then((value) {
-        _codeKelas = value;
-      });
+      int hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, user: _user!);
 
-      await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(userUid: _user!.uid);
-      var value = await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: _codeKelas);
 
-      if (value == null) throw Exception("Join failed");
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
 
-      Provider.of<KelasProvider>(context, listen: false).setKelas(value);
+      if (hasil  == 400) throw Exception("Join failed");
 
-      widget.freshState(value);
       setState(() {
         _loading = false;
       });
@@ -204,6 +192,5 @@ class _JoinKelasState extends State<JoinKelas> {
         ),
       );
     }
-    ;
   }
 }

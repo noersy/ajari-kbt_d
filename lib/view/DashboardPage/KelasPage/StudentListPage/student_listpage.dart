@@ -27,33 +27,34 @@ class StudenListPage extends StatelessWidget {
         barTitle: "Santri",
         pinned: true,
         floating: true,
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: codeKelas),
+        body: AnimatedBuilder(
+          animation: Provider.of<KelasProvider>(context),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            var _listSantri = Provider.of<KelasProvider>(context).listSantri;
+
+            if (_listSantri.isEmpty) {
               return const Center(child: Text("There is no expense"));
             }
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
-                children: snapshot.data!.docChanges
-                    .map(
-                      (e) => santriContainer(
-                        name: e.doc.get('name'),
-                        imageUrl: e.doc.get('photo'),
-                        inTo: () => Navigator.of(context).push(
-                          routeTransition(
-                            SantriDetail(
-                              role: "Santri",
-                              name: e.doc.get('name'),
-                              email: e.doc.get('email'),
-                              photoURL: e.doc.get('photo'),
-                            ),
+                children: [
+                  for(var val in _listSantri)
+                    santriContainer(
+                      name: val['name'],
+                      imageUrl: val['photo'],
+                      inTo: () => Navigator.of(context).push(
+                        routeTransition(
+                          SantriDetail(
+                            role: "Santri",
+                            name: val['name'],
+                            email: val['email'],
+                            photoURL: val['photo'],
                           ),
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
+                ]
               ),
             );
           },

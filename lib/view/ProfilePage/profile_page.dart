@@ -29,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _delete() async {
     await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.user.uid);
     await AuthLogin.signOut(context: context);
-    context.read<KelasProvider>().setKelas(Kelas.blankKelas());
+    context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
     context.read<ProfileProvider>().setProfile(Profile.blankProfile());
 
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginPage()));

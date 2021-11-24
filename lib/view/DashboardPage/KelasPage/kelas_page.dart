@@ -20,22 +20,6 @@ class ClassPage extends StatefulWidget {
 }
 
 class _ClassPageState extends State<ClassPage> {
-  Kelas? _kelas;
-  Profile? _profile;
-
-  void freshWitget(kelas) {
-    setState(() {
-      _kelas = kelas;
-    });
-  }
-
-  @override
-  void initState() {
-    _kelas = context.read<KelasProvider>().kelas;
-    _profile = context.read<ProfileProvider>().profile;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,47 +33,60 @@ class _ClassPageState extends State<ClassPage> {
       //   ),
       // ),
 
-      body: SafeArea(
-        child: _kelas!.kelasId == "-"
-            ? _profile!.role != "Pengajar"
-                ? JoinKelas(freshState: freshWitget)
-                : CreateKelas(freshState: freshWitget)
-            : NestedScrollView(
-                physics: const BouncingScrollPhysics(),
-                body: Column(
-                  children: const [
-                    JadwalKelas(),
-                  ],
-                ),
-                headerSliverBuilder: (BuildContext _, bool innerBoxIsScrolled) {
-                  return <Widget>[
-                    SliverAppBar(
-                      backgroundColor: PaletteColor.primarybg,
-                      iconTheme: const IconThemeData(color: PaletteColor.primary),
-                      title: const Text(
-                        "Kelas",
-                        style: TypographyStyle.subtitle1,
-                      ),
-                      pinned: false,
-                      floating: true,
-                      forceElevated: innerBoxIsScrolled,
+      body: AnimatedBuilder(
+        animation: Provider.of<KelasProvider>(context),
+        builder: (BuildContext context, Widget? child) {
+          Kelas _kelas = context.read<KelasProvider>().kelas;
+          Profile _profile = context.read<ProfileProvider>().profile;
+
+          return SafeArea(
+            child: _kelas.kelasId == "-"
+                ? _profile.role != "Pengajar"
+                    ? const JoinKelas()
+                    : const CreateKelas()
+                : NestedScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    body: Column(
+                      children: const [
+                        JadwalKelas(),
+                      ],
                     ),
-                    SliverAppBar(
-                      backgroundColor: PaletteColor.primarybg,
-                      bottom: const PreferredSize(
-                        preferredSize: Size(0, 115),
-                        child: BannerKelas(),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10))
-                      ),
-                      pinned: false,
-                      floating: true,
-                      forceElevated: innerBoxIsScrolled,
-                    ),
-                  ];
-                },
-              ),
+                    headerSliverBuilder:
+                        (BuildContext _, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverAppBar(
+                          backgroundColor: PaletteColor.primarybg,
+                          iconTheme:
+                              const IconThemeData(color: PaletteColor.primary),
+                          title: const Text(
+                            "Kelas",
+                            style: TypographyStyle.subtitle1,
+                          ),
+                          pinned: false,
+                          floating: true,
+                          forceElevated: innerBoxIsScrolled,
+                        ),
+                        SliverAppBar(
+                          backgroundColor: PaletteColor.primarybg,
+                          bottom: const PreferredSize(
+                            preferredSize: Size(0, 115),
+                            child: BannerKelas(),
+                          ),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          pinned: false,
+                          floating: true,
+                          forceElevated: innerBoxIsScrolled,
+                        ),
+                      ];
+                    },
+                  ),
+          );
+        },
       ),
 
       // //

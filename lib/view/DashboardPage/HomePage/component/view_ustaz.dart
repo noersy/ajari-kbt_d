@@ -29,6 +29,11 @@ class ViewUstaz extends StatefulWidget {
 
 class _ViewUstazState extends State<ViewUstaz> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Kelas _kelas = context.read<KelasProvider>().kelas;
 
@@ -121,16 +126,13 @@ class _ViewUstazState extends State<ViewUstaz> {
                             size: 33,
                           ),
                           const SizedBox(width: SpacingDimens.spacing8),
-                          StreamBuilder<QuerySnapshot>(
-                            stream: Provider.of<KelasProvider>(context).getSantri(codeKelas: _kelas.kelasId),
+                          AnimatedBuilder(
+                            animation: Provider.of<KelasProvider>(context),
                             builder: (context, snapshot) {
-                              int data = 0;
-                              if (snapshot.hasData) {
-                                data = snapshot.data!.docs.length;
-                              }
+                              var _listSantri = Provider.of<KelasProvider>(context).listSantri;
 
                               return Text(
-                                "$data",
+                                "${_listSantri.length}",
                                 style: TypographyStyle.title.copyWith(color: PaletteColor.primarybg),
                               );
                             }

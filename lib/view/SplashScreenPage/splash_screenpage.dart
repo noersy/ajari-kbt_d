@@ -69,6 +69,10 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
         return;
       }
 
+      if(prf.role == "Pengajar") {
+        await Provider.of<KelasProvider>(context, listen: false).getSantri(codeKelas: prf.codeKelas);
+      }
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const DashboardPage(),

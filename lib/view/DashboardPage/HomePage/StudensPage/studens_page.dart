@@ -1,4 +1,5 @@
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
+import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -17,9 +18,9 @@ class StudentsPage extends StatefulWidget {
 }
 
 class _StudentsPageState extends State<StudentsPage> {
+
   @override
   Widget build(BuildContext context) {
-    final String _codeKelas = context.read<KelasProvider>().kelas.kelasId;
 
     return Scaffold(
       backgroundColor: PaletteColor.primarybg2,
@@ -28,11 +29,12 @@ class _StudentsPageState extends State<StudentsPage> {
         barTitle: 'Santri',
         pinned: true,
         floating: true,
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context)
-              .getSantri(codeKelas: _codeKelas),
+        body: AnimatedBuilder(
+          animation: Provider.of<KelasProvider>(context),
           builder: (context, snapshot) {
-            if (!snapshot.hasData) {
+            var _listSantri = Provider.of<KelasProvider>(context).listSantri;
+            Kelas _kelas = Provider.of<KelasProvider>(context).kelas;
+            if (_listSantri.isEmpty) {
               return Stack(
                 children: [
                   Column(
@@ -42,7 +44,7 @@ class _StudentsPageState extends State<StudentsPage> {
                         padding: const EdgeInsets.symmetric(horizontal: SpacingDimens.spacing28),
                         child: Image.asset("assets/images/not_found.png"),
                       ),
-                      Text("Belum ada santri disini."),
+                      const Text("Belum ada santri disini."),
                     ],
                   ),
                   Container(
@@ -56,51 +58,28 @@ class _StudentsPageState extends State<StudentsPage> {
               );
             }
 
-            if (snapshot.data!.size <= 0) {
-              return Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: SpacingDimens.spacing28),
-                          child: Image.asset("assets/images/not_found.png"),
-                      ),
-                      Text("Belum ada santri disini."),
-                    ],
-                  ),
-                  Container(
-                    color: PaletteColor.primarybg.withOpacity(0.25),
-                    child: const SizedBox(
-                      height: double.infinity,
-                      width: double.infinity,
-                    ),
-                  ),
-                ],
-              );
-            }
-
-            return ListView(
+            return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              children: snapshot.data!.docChanges
-                  .map(
-                    (e) => _santriContainer(
-                      name: "${e.doc.get('name')}",
-                      imageUrl: e.doc.get('photo'),
+              child: Column(
+                children: [
+                  for (var item in _listSantri)
+                    _santriContainer(
+                      name: item['name'],
+                      imageUrl: item['photo'],
                       inTo: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => JilidPage(
                               role: 'santri',
-                              uid: e.doc.get('uid'),
-                              codeKelas: _codeKelas,
+                              uid: item['uid'],
+                              codeKelas: _kelas.kelasId,
                             ),
                           ),
                         );
                       },
                     ),
-                  )
-                  .toList(),
+                ],
+              ),
             );
           },
         ),

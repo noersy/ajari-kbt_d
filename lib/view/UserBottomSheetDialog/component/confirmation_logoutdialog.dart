@@ -132,7 +132,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
 
   void logOut(BuildContext context) async {
     await AuthLogin.signOut(context: context);
-    context.read<KelasProvider>().setKelas(Kelas.blankKelas());
+    context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
     context.read<ProfileProvider>().setProfile(Profile.blankProfile());
 
     Navigator.of(context).pushReplacement(

@@ -1,5 +1,4 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
-import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -11,10 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CreateKelas extends StatefulWidget {
-
-  final Function(Kelas) freshState;
-
-  const CreateKelas({Key? key, required this.freshState}) : super(key: key);
+  const CreateKelas({Key? key}) : super(key: key);
 
   @override
   State<CreateKelas> createState() => _CreateKelasState();
@@ -78,7 +74,9 @@ class _CreateKelasState extends State<CreateKelas> {
                     style: TypographyStyle.paragraph),
                 const SizedBox(height: SpacingDimens.spacing52),
                 SizedBox(
-                  height: 250, child: Image.asset('assets/images/teach.png'),),
+                  height: 250,
+                  child: Image.asset('assets/images/teach.png'),
+                ),
               ],
             ),
           ),
@@ -86,7 +84,6 @@ class _CreateKelasState extends State<CreateKelas> {
       );
     }
   }
-
 
   AlertDialog createKelas() {
     return AlertDialog(
@@ -97,13 +94,8 @@ class _CreateKelasState extends State<CreateKelas> {
       ),
       elevation: 5,
       content: Container(
-        width: MediaQuery
-            .of(context)
-            .size.width,
-        height: MediaQuery
-            .of(context)
-            .size
-            .width - 150,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width - 150,
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: PaletteColor.primarybg,
@@ -175,37 +167,20 @@ class _CreateKelasState extends State<CreateKelas> {
     );
   }
 
-  Future<Kelas> _createKelas(ctx) async {
+  void _createKelas(ctx) async {
     try {
-      setState(() {
-        _loading = true;
-      });
+      _loading = true;
 
+      var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
 
-      String _codeKelas = await Provider.of<KelasProvider>(
-          context, listen: false).createKelas(
-          namaKelas: _editingController.text, user: user);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(
-          userUid: user?.uid ?? "");
-      Kelas? value = await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: _codeKelas);
-
-
-      if (value == null) throw Exception("Create Kelas failed");
-
-      widget.freshState(value);
-      Provider.of<KelasProvider>(context, listen: false).setKelas(value);
-
-      return value;
+      if (data == 400) throw Exception("Create Kelas failed");
     } catch (e) {
       if (kDebugMode) {
         print("$e");
       }
     }
 
-    setState(() {
-      _loading = false;
-    });
-    return Kelas.blankKelas();
+    _loading = false;
   }
 }
