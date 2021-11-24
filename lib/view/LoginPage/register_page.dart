@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 
 import 'component/auth_login.dart';
 import 'component/button_login.dart';
-import 'component/main_forms.dart';
 import 'selection_role.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -249,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
         throw Exception("Login Failed");
       }
 
-      if (profile == null) {
+      if (profile.role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) =>

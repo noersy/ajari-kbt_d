@@ -36,8 +36,8 @@ class _ClassPageState extends State<ClassPage> {
       body: AnimatedBuilder(
         animation: Provider.of<KelasProvider>(context),
         builder: (BuildContext context, Widget? child) {
-          Kelas _kelas = context.read<KelasProvider>().kelas;
-          Profile _profile = context.read<ProfileProvider>().profile;
+          Kelas _kelas = Provider.of<KelasProvider>(context).kelas;
+          Profile _profile = Provider.of<ProfileProvider>(context).profile;
 
           return SafeArea(
             child: _kelas.kelasId == "-"

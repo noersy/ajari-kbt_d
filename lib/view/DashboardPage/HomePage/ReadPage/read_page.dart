@@ -34,7 +34,6 @@ class _ReadPageState extends State<ReadPage> {
   Widget build(BuildContext context) {
      _profile =  Provider.of<ProfileProvider>(context, listen: false).profile;
 
-    print(_profile.codeKelas);
 
 
     return Scaffold(

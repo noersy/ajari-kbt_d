@@ -8,7 +8,6 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StudensPage/studens_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/home_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

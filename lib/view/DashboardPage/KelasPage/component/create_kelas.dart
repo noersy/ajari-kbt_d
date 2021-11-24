@@ -23,6 +23,28 @@ class _CreateKelasState extends State<CreateKelas> {
 
   bool _loading = false;
 
+  void _createKelas(ctx) async {
+    try {
+      setState(() {
+        _loading = true;
+      });
+
+      var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
+
+      if (data == 400) throw Exception("Create Kelas failed");
+    } catch (e) {
+      if (kDebugMode) {
+        print("$e");
+      }
+    }
+
+    if (!mounted) return;
+    setState(() {
+      _loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -165,22 +187,5 @@ class _CreateKelasState extends State<CreateKelas> {
         ),
       ),
     );
-  }
-
-  void _createKelas(ctx) async {
-    try {
-      _loading = true;
-
-      var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
-
-      if (data == 400) throw Exception("Create Kelas failed");
-    } catch (e) {
-      if (kDebugMode) {
-        print("$e");
-      }
-    }
-
-    _loading = false;
   }
 }

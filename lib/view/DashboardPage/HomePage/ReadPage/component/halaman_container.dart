@@ -2,7 +2,6 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/message_dialog.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 class HalamanContainer extends StatefulWidget {
@@ -152,18 +151,18 @@ class _HalamanContainerState extends State<HalamanContainer> {
     );
   }
 
-  _chekRecored() async {
-    try {
-      await FirebaseStorage.instance
-          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
-          .getDownloadURL().then((value) {
-        isRecordedExist = value.isNotEmpty;
-      },
-      );
-    }catch (e){
-      // print(e);
-    }
-  }
+  // _chekRecored() async {
+  //   try {
+  //     await FirebaseStorage.instance
+  //         .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+  //         .getDownloadURL().then((value) {
+  //       isRecordedExist = value.isNotEmpty;
+  //     },
+  //     );
+  //   }catch (e){
+  //     // print(e);
+  //   }
+  // }
 
   Widget _container({
     required Function() onPressed,

@@ -1,5 +1,3 @@
-import 'package:ajari/component/appbar/appbar_notification.dart';
-import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/view_ustaz.dart';
 import 'package:flutter/material.dart';
 

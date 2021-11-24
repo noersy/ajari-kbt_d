@@ -29,22 +29,22 @@ class _JoinKelasState extends State<JoinKelas> {
       });
 
       if (_user == null) throw Exception("Not login yet.");
-
-      int hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, user: _user!);
-
-
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
+      var hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, user: _user!);
 
       if (hasil  == 400) throw Exception("Join failed");
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
 
-      setState(() {
-        _loading = false;
-      });
+      if (!mounted) return;
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print("$e");
       }
     }
+
+    if (!mounted) return;
+    setState(() {
+      _loading = false;
+    });
   }
 
   Widget _joinKelas() {

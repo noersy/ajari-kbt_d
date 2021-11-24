@@ -38,18 +38,21 @@ class _AbsentListState extends State<AbsentList> {
     var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
 
     if(data == null) return;
-    setState(() {
-      _absentCount = data.docs.where((element) => element["kehadiran"] == true).length;
-    });
+    if (!mounted) return;
+      setState(() {
+        _absentCount = data.docs.where((element) => element["kehadiran"] == true).length;
+      });
+
   }
 
   void getKehadiran(uid) async {
     var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
     if(data == null) return;
-    var santri = data.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
-    setState(() {
-      _isPresent = santri["kehadiran"];
-    });
+    if (!mounted) return;
+      var santri = data.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
+      setState(() {
+        _isPresent = santri["kehadiran"];
+      });
   }
 
   @override
@@ -98,6 +101,7 @@ class _AbsentListState extends State<AbsentList> {
                           AbsenDetailPage(dateTIme: widget.date, startAt: widget.startAt, endAt: widget.endAt, id: widget.id,)));
                     } else if (_role == "Santri") {
                       Provider.of<KelasProvider>(context, listen: false).absent(uid: _uid, id: widget.id);
+                      getKehadiran(_uid);
                     }
                   },
                   child: AnimatedBuilder(

@@ -34,7 +34,6 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   permission_handler: ^8.1.6
   cached_network_image: ^3.1.0+1
-  flutter_cache_manager: ^3.1.3
   path_provider: ^2.0.6
   jitsi_meet: ^4.0.0
   record: ^3.0.0
@@ -65,7 +64,6 @@ flutter:
     - assets/audio/jilid3/
     - assets/audio/jilid1/
     - assets/images/
-    - assets/images/iqro/
     - assets/images/iqro/jilid1/
     - assets/images/iqro/jilid2/
     - assets/images/iqro/jilid3/

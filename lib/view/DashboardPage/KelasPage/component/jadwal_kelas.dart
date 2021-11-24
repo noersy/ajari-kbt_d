@@ -5,10 +5,7 @@ import 'package:ajari/view/DashboardPage/KelasPage/component/absent_cardlist.dar
 import 'package:ajari/view/DashboardPage/KelasPage/component/component.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/diskusi_cardlist.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/meet_cardlist.dart';
-import 'package:async/async.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class JadwalKelas extends StatefulWidget {
@@ -22,7 +19,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
   final List<String> _listDate = [];
   final List<DateTime> _listRealDate = [];
   final DateTime _dateTime = DateTime.now();
-  final DateFormat _formatTime = DateFormat('hh:mm');
   late PageController _pageController;
   int _index = 0;
   int _indexCurret = 0;

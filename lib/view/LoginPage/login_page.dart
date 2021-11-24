@@ -145,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception("Login Failed");
       }
 
-      if (profile == null) {
+      if (profile.role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => SelectionPage(user: FirebaseAuth.instance.currentUser!),

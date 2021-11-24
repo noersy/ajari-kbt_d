@@ -106,20 +106,22 @@ class KelasProvider extends ChangeNotifier {
       };
 
       var dataKelas = await FirebaseReference.kelas.doc(codeKelas).get();
-      
+
       if (!dataKelas.exists) throw Exception("Error");
+      var data = dataKelas.data();
+
 
       await FirebaseReference.getUserInKelas(codeKelas, user.uid).set(newUserInKelas);
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
       await FirebaseReference.getUser(user.uid).update(newDataUser);
 
       //TODO:update data user
-      updateKelas(kelasFromJson(jsonEncode(dataKelas)));
+      updateKelas(kelasFromJson(jsonEncode(data)));
 
       return 200;
-    } catch (e) {
+    } catch (e, r) {
       if (kDebugMode) {
-        print("joinKelas: ${e.runtimeType}");
+        print("joinKelas: $e -- $r");
       }
       return 400;
     }
