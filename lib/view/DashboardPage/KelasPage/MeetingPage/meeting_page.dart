@@ -27,29 +27,11 @@ class _MeetingPageState extends State<MeetingPage> {
         barTitle: 'List Pertemuan',
         floating: true,
         pinned: true,
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context).getsMeetings(),
+        body: AnimatedBuilder(
+          animation: Provider.of<KelasProvider>(context),
           builder: (context, snapshot) {
-
-            if(!snapshot.hasData){
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.create_new_folder_outlined,
-                      size:80,
-                      color: PaletteColor.grey40,
-                    ),
-                    Text("Belum ada data disini.", style: TextStyle(
-                        color: PaletteColor.grey60
-                    ),)
-                  ],
-                ),
-              );
-            }
-
-            if(snapshot.data!.size <= 0  ){
+            var _listMeet = Provider.of<KelasProvider>(context).listMeet;
+            if(_listMeet.isEmpty){
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -70,12 +52,13 @@ class _MeetingPageState extends State<MeetingPage> {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
-                children: snapshot.data!.docs.map((e) {
-                  var data = e.data() as Map<String, dynamic>;
-                  var datetime = (data["datetime"] as Timestamp).toDate();
-                  String subject = data["subject"];
-                  return MeetCardList(datetime : datetime, subject : subject);
-                }).toList(),
+                children: [
+                  for(var item in _listMeet)
+                    MeetCardList(
+                      datetime : (item["datetime"] as Timestamp).toDate(),
+                      subject : item["subject"],
+                    ),
+                ]
               ),
             );
           }

@@ -38,6 +38,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
   @override
   void initState() {
+    getDatas();
     var weekDay = _dateTime.weekday;
     for (int i = 0; i < 7; i++) {
       final _date = _dateTime.subtract(Duration(days: weekDay - i - 1));
@@ -54,27 +55,21 @@ class _JadwalKelasState extends State<JadwalKelas> {
     super.initState();
   }
 
-  Stream<List<QuerySnapshot>> mergedStream() {
-    final s1 = Provider.of<KelasProvider>(context).getsAbsents();
-    final s2 = Provider.of<KelasProvider>(context).getsMeetings();
-    final s3 = Provider.of<KelasProvider>(context).getsDiskusies();
-    return StreamZip([s1, s2, s3]);
+  void getDatas() async {
+     await Provider.of<KelasProvider>(context, listen: false).getAbsents();
+     await Provider.of<KelasProvider>(context,  listen: false).getsMeetings();
+     await Provider.of<KelasProvider>(context, listen: false).getsDiskusies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<QuerySnapshot>>(
-      stream: mergedStream(),
+    return AnimatedBuilder(
+      animation: Provider.of<KelasProvider>(context),
       builder: (context, snapshot) {
-        List<QueryDocumentSnapshot<Object?>>? _absen = [];
-        List<QueryDocumentSnapshot<Object?>>? _meet = [];
-        List<QueryDocumentSnapshot<Object?>>? _diskusi = [];
+        var _diskusi = Provider.of<KelasProvider>(context).listDiskusi;
+        var _meet = Provider.of<KelasProvider>(context).listMeet;
+        var _absen = Provider.of<KelasProvider>(context).listAbsen;
 
-        if (snapshot.hasData) {
-          _diskusi = snapshot.data![2].docs.toList();
-          _meet = snapshot.data![1].docs.toList();
-          _absen = snapshot.data![0].docs.toList();
-        }
         return Expanded(
               child: Scaffold(
                 floatingActionButton: null,
@@ -91,7 +86,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
     );
   }
 
-  Widget _tanggal(_absen, _meet) {
+  Widget _tanggal(List<Map<String, dynamic>> _absen, List<Map<String, dynamic>> _meet) {
     return Container(
       margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
       height: 60,
@@ -106,14 +101,14 @@ class _JadwalKelasState extends State<JadwalKelas> {
           right: SpacingDimens.spacing16,
         ),
         itemBuilder: (BuildContext context, int index) {
-          bool _isAbsent = _absen!
+          bool _isAbsent = _absen
               .where((element) =>
-                  element.get("datetime").toDate().day ==
+                  element["datetime"].toDate().day ==
                   _listRealDate[index].day)
               .isNotEmpty;
-          bool _isMeet = _meet!
+          bool _isMeet = _meet
               .where((element) =>
-                  element.get("datetime").toDate().day ==
+                  element["datetime"].toDate().day ==
                   _listRealDate[index].day)
               .isNotEmpty;
 
@@ -163,9 +158,9 @@ class _JadwalKelasState extends State<JadwalKelas> {
           },
           children: [
             for (var item in _listRealDate) ...[
-              _absen!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
-                  || _meet!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
-                  || _diskusi!.where((element) => element.get("datetime").toDate().day == item.day).isNotEmpty
+              _absen!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
+                  || _meet!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
+                  || _diskusi!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
                   ? SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -174,31 +169,31 @@ class _JadwalKelasState extends State<JadwalKelas> {
                           const SizedBox(height: SpacingDimens.spacing28),
                           for (var itemAbsen in _absen) ...[
                             if (item.day ==
-                                itemAbsen.get('datetime').toDate().day) ...[
+                                itemAbsen['datetime'].toDate().day) ...[
                               AbsentList(
-                                present: itemAbsen.reference,
-                                id: itemAbsen.get('id'),
-                                date: itemAbsen.get('datetime').toDate(),
-                                startAt: itemAbsen.get('start_at').toDate(),
-                                endAt: itemAbsen.get('end_at').toDate(),
+                                present: itemAbsen,
+                                id: itemAbsen['id'],
+                                date: itemAbsen['datetime'].toDate(),
+                                startAt: itemAbsen['start_at'].toDate(),
+                                endAt: itemAbsen['end_at'].toDate(),
                               ),
                             ],
                           ],
                           for (var itemMeet in _meet!) ...[
                             if (item.day ==
-                                itemMeet.get('datetime').toDate().day) ...[
+                                itemMeet['datetime'].toDate().day) ...[
                               MeetList(
-                                  meet: itemMeet.reference,
-                                  date: itemMeet.get('datetime').toDate(),
+                                  meet: itemMeet,
+                                  date: itemMeet['datetime'].toDate(),
                               ),
                             ],
                           ],
-                          for (var itemMeet in _diskusi!) ...[
-                            if (item.day == itemMeet.get('datetime').toDate().day) ...[
+                          for (var itemDiskusi in _diskusi!) ...[
+                            if (item.day == itemDiskusi['datetime'].toDate().day) ...[
                               DiskusiList(
-                                id: itemMeet.get('id'),
-                                diskusi: itemMeet.reference,
-                                date: itemMeet.get('datetime').toDate(),
+                                id: itemDiskusi['id'],
+                                diskusi: itemDiskusi,
+                                date: itemDiskusi['datetime'].toDate(),
                               ),
                             ],
                           ],

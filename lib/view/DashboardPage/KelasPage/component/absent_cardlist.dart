@@ -5,15 +5,13 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class AbsentList extends StatefulWidget {
-  final DocumentReference<Object?> present;
+  final Map<String, dynamic> present;
   final DateTime startAt, endAt;
   final DateTime date;
   final String id;
@@ -36,51 +34,27 @@ class _AbsentListState extends State<AbsentList> {
   bool isPresent = true;
   int _absentCount = 0;
   String _uid = "-";
+  String _role = "-";
 
-  Future<bool> present() async {
-    try {
-      DocumentSnapshot _absent =
-          await widget.present.collection('santri').doc(_uid).get();
-      if (mounted) {
-        setState(() {
-          isPresent = _absent.get('kehadiran');
-        });
-      }
-      return _absent.get('kehadiran');
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.runtimeType);
-        print(e);
-      }
-    }
-    return false;
+  void getCountAbsent() async {
+    var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
+
+    if(data == null) return;
+    setState(() {
+      _absentCount = data.docs.where((element) => element["kehadiran"] == true).length;
+    });
   }
 
-  Future<bool> presentCount() async {
-    try {
-      QuerySnapshot _absent = await widget.present.collection('santri').get();
-      if (mounted) {
-        setState(() {
-          _absentCount = _absent.docs.where((element) {
-            return element.get("kehadiran");
-          }).length;
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.runtimeType);
-        print(e);
-      }
-    }
-    return false;
+  @override
+  void initState() {
+    _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
+    _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
+    getCountAbsent();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    String _role =
-        Provider.of<ProfileProvider>(context, listen: false).profile.role;
-    _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,9 +89,13 @@ class _AbsentListState extends State<AbsentList> {
                       Provider.of<KelasProvider>(context, listen: false).absent(uid: _uid, id: widget.id);
                     }
                   },
-                  child: FutureBuilder<bool>(
-                      future: _role != "Santri" ? presentCount() : present(),
+                  child: AnimatedBuilder(
+                      animation: Provider.of<KelasProvider>(context),
                       builder: (context, snapshot) {
+                        if(_role  == "Santri") {
+                          isPresent = widget.present["kehadiran"];
+                        }
+
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -156,8 +134,7 @@ class _AbsentListState extends State<AbsentList> {
                                 ],
                               ),
                             ),
-                            _role != "Santri"
-                                ? Container(
+                            if (_role != "Santri") Container(
                                     decoration: BoxDecoration(
                                         color: PaletteColor.grey40,
                                         borderRadius:
@@ -181,8 +158,7 @@ class _AbsentListState extends State<AbsentList> {
                                         ),
                                       ],
                                     ),
-                                  )
-                                : AnimatedContainer(
+                                  ) else AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
                                     curve: Curves.ease,
                                     width: isPresent ? 70 : 112,

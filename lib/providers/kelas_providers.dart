@@ -9,10 +9,15 @@ import 'package:flutter/foundation.dart';
 class KelasProvider extends ChangeNotifier {
   static Kelas _kelas = Kelas.blankKelas();
   static List<Map<String, dynamic>> _listSantri = <Map<String, dynamic>>[];
+  static List<Map<String, dynamic>> _listAbsen = <Map<String, dynamic>>[];
+  static List<Map<String, dynamic>> _listDiskusi = <Map<String, dynamic>>[];
+  static List<Map<String, dynamic>> _listMeet = <Map<String, dynamic>>[];
 
   Kelas get kelas => _kelas;
-
   List<Map<String, dynamic>> get listSantri => _listSantri;
+  List<Map<String, dynamic>> get listAbsen => _listAbsen;
+  List<Map<String, dynamic>> get listDiskusi => _listDiskusi;
+  List<Map<String, dynamic>> get listMeet => _listMeet;
 
   void updateKelas(Kelas kelas) async {
     _kelas = kelas;
@@ -26,6 +31,21 @@ class KelasProvider extends ChangeNotifier {
 
   void _setSantri(QuerySnapshot snapshot){
     _listSantri = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    notifyListeners();
+  }
+
+  void _setAbsens(QuerySnapshot snapshot){
+    _listAbsen = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    notifyListeners();
+  }
+
+  void _setDiskues(QuerySnapshot snapshot){
+    _listDiskusi = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    notifyListeners();
+  }
+
+  void _setMeets(QuerySnapshot snapshot){
+    _listMeet = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
     notifyListeners();
   }
 
@@ -254,6 +274,8 @@ class KelasProvider extends ChangeNotifier {
         await FirebaseReference.getAbsen(_kelas.kelasId, random).collection("santri").doc(element["uid"]).set(_newData);
       }
 
+      await getAbsents();
+
       return 200;
     } catch (e) {
       if (kDebugMode) {
@@ -314,31 +336,48 @@ class KelasProvider extends ChangeNotifier {
   }) async {
     try {
       await FirebaseReference.getAbsen(_kelas.kelasId, id).delete();
+      return 200;
     } catch (e) {
       if (kDebugMode) {
         print("deleteAbsen: Error");
       }
       return 400;
     }
-    return 200;
   }
 
-  Stream<QuerySnapshot> getsAbsents() { //TODO: Pindah di kelas provider lain
-    return FirebaseReference.kelas
-        .doc(_kelas.kelasId)
-        .collection("absen")
-        .orderBy("datetime", descending: false)
-        .snapshots();
+  Future<int> getAbsents() async { //TODO: Pindah di kelas provider lain
+    try {
+      var snap = await FirebaseReference.kelas
+          .doc(_kelas.kelasId)
+          .collection("absen")
+          .orderBy("datetime", descending: false).get();
+
+      _setAbsens(snap);
+
+      return 200;
+    } catch (e) {
+      if (kDebugMode) {
+        print("getAbsents: Error");
+      }
+      return 400;
+    }
   }
 
-  Stream<QuerySnapshot> getsAbsenStudents(String id) { //TODO: Pindah di kelas provider lain
-    return FirebaseReference.kelas
-        .doc(_kelas.kelasId)
-        .collection("absen")
-        .doc(id)
-        .collection("santri")
-        .orderBy("name", descending: false)
-        .snapshots();
+  Future<QuerySnapshot?> getsAbsenStudents(String id) async { //TODO: Pindah di kelas provider lain
+    try {
+      return await FirebaseReference.kelas
+          .doc(_kelas.kelasId)
+          .collection("absen")
+          .doc(id)
+          .collection("santri")
+          .orderBy("name", descending: false)
+          .get();
+    } catch (e) {
+      if (kDebugMode) {
+        print("getsAbsenStudents: Error");
+      }
+      return null;
+    }
   }
 
   Future<int> createMeet({  //TODO: Pindah di kelas provider lain
@@ -357,6 +396,7 @@ class KelasProvider extends ChangeNotifier {
       };
 
       await FirebaseReference.getMeeting(_kelas.kelasId, date).set(data);
+      await getsMeetings();
     } catch (e) {
       if (kDebugMode) {
         print("createMeet: ${e.runtimeType}");
@@ -371,6 +411,7 @@ class KelasProvider extends ChangeNotifier {
   Future<int> deleteMeet({required DateTime date}) async { //TODO: Pindah di kelas provider lain
     try {
       await FirebaseReference.getMeeting(_kelas.kelasId, date).delete();
+      return 200;
     } catch (e) {
       if (kDebugMode) {
         print("deleteMeet: ${e.runtimeType}");
@@ -379,23 +420,48 @@ class KelasProvider extends ChangeNotifier {
       }
       return 400;
     }
-    return 200;
   }
 
-  Stream<QuerySnapshot> getsMeetings() { //TODO: Pindah di kelas provider lain
-    return FirebaseReference.kelas
-        .doc(_kelas.kelasId)
-        .collection("meet")
-        .orderBy("datetime", descending: false)
-        .snapshots();
+  Future<int> getsMeetings() async { //TODO: Pindah di kelas provider lain
+    try {
+      var snap = await  FirebaseReference.kelas
+          .doc(_kelas.kelasId)
+          .collection("meet")
+          .orderBy("datetime", descending: false)
+          .get();
+
+      _setMeets(snap);
+
+      return 200;
+    } catch (e) {
+      if (kDebugMode) {
+        print("getsMeetings: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
   }
 
-  Stream<QuerySnapshot> getsDiskusies() { //TODO: Pindah di kelas provider lain
-    return FirebaseReference.kelas
-        .doc(_kelas.kelasId)
-        .collection("diskusi")
-        .orderBy("datetime", descending: false)
-        .snapshots();
+  Future<int> getsDiskusies() async { //TODO: Pindah di kelas provider lain
+    try {
+      var snap = await FirebaseReference.kelas
+          .doc(_kelas.kelasId)
+          .collection("diskusi")
+          .orderBy("datetime", descending: false)
+          .get();
+
+      _setDiskues(snap);
+
+      return 200;
+    } catch (e) {
+      if (kDebugMode) {
+        print("getsDiskusies: ${e.runtimeType}");
+        print(e);
+        print(e);
+      }
+      return 400;
+    }
   }
 
   Stream<QuerySnapshot> getsMessagesInDiskusi({required id}) { //TODO: Pindah di kelas provider lain
@@ -422,6 +488,7 @@ class KelasProvider extends ChangeNotifier {
       };
 
       await FirebaseReference.getDiskusi(_kelas.kelasId, id).set(data);
+      await getsDiskusies();
     } catch (e) {
       if (kDebugMode) {
         print("createMeet: ${e.runtimeType}");

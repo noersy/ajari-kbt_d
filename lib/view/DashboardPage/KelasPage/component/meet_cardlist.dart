@@ -11,7 +11,7 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:provider/provider.dart';
 
 class MeetList extends StatefulWidget {
-  final DocumentReference<Object?> meet;
+  final Map<String, dynamic> meet;
   final DateTime date;
 
   const MeetList({
@@ -29,12 +29,9 @@ class _MeetListState extends State<MeetList> {
   Widget build(BuildContext context) {
     final Profile _profile = Provider.of<ProfileProvider>(context).profile;
 
-    return FutureBuilder<DocumentSnapshot>(
-      future: widget.meet.get(),
-      builder: (context, snapshot) {
-        String _subject = snapshot.data?.get("subject") ?? "-";
-        String _serverURL = snapshot.data?.get("serverURL") ?? "-";
-        String _codeMeet = snapshot.data?.get("codeMeet") ?? "-";
+    String _subject = widget.meet["subject"];
+    String _serverURL = widget.meet["serverURL"];
+    String _codeMeet = widget.meet["codeMeet"];
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -146,8 +143,6 @@ class _MeetListState extends State<MeetList> {
             ),
           ],
         );
-      },
-    );
   }
 
   _joinMeeting({

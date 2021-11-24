@@ -24,10 +24,11 @@ class AbsenPage extends StatelessWidget {
         pinned: true,
         floating: true,
         barTitle: "Absensi",
-        body: StreamBuilder<QuerySnapshot>(
-            stream: Provider.of<KelasProvider>(context).getsAbsents(),
+        body: AnimatedBuilder(
+            animation: Provider.of<KelasProvider>(context),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
+              var _absens = Provider.of<KelasProvider>(context).listAbsen;
+              if (_absens.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -45,35 +46,19 @@ class AbsenPage extends StatelessWidget {
                 );
               }
 
-              if (snapshot.data!.size <= 0) {
-                return  Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
-                        Icons.create_new_folder_outlined,
-                        size:80,
-                        color: PaletteColor.grey40,
-                      ),
-                      Text("Belum ada data disini.", style: TextStyle(
-                        color: PaletteColor.grey60
-                      ),)
-                    ],
-                  ),
-                );
-              }
-
               return SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 child: Column(
-                  children: snapshot.data!.docs.map((e) {
-                    var data = e.data() as Map<String, dynamic>;
-                    var datetime = (data["datetime"] as Timestamp).toDate();
-                    var startAt = (data["start_at"] as Timestamp).toDate();
-                    var endAt = (data["end_at"] as Timestamp).toDate();
-                    var id = data["id"];
-                    return _absenList(context, id, datetime, startAt, endAt);
-                  }).toList(),
+                  children: [
+                    for(var item in _absens)
+                      _absenList(
+                        context,
+                        item["id"],
+                        (item["datetime"] as Timestamp).toDate(),
+                        (item["start_at"] as Timestamp).toDate(),
+                        (item["end_at"] as Timestamp).toDate(),
+                      )
+                  ]
                 ),
               );
             }),

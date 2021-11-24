@@ -71,6 +71,7 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
 
       if(prf.role == "Pengajar") {
         await Provider.of<KelasProvider>(context, listen: false).getSantri(codeKelas: prf.codeKelas);
+        await Provider.of<KelasProvider>(context, listen: false).getAbsents();
       }
 
       Navigator.of(context).pushReplacement(
