@@ -73,6 +73,8 @@ class KelasProvider extends ChangeNotifier {
 
       updateKelas(kelasFromJson(jsonEncode(dataKelas)));
 
+      getSantri(codeKelas: _code);
+
       return 200;
     } catch (e) {
       if (kDebugMode) {
@@ -117,6 +119,7 @@ class KelasProvider extends ChangeNotifier {
 
       //TODO:update data user
       updateKelas(kelasFromJson(jsonEncode(data)));
+      getSantri(codeKelas: codeKelas);
 
       return 200;
     } catch (e, r) {
