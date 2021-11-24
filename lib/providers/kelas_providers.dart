@@ -208,15 +208,22 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getGrade({ //TODO: Pisahkan ke provider lain
+  Future<QuerySnapshot?> getGrade({ //TODO: Pisahkan ke provider lain
     required String uid,
     required String codeKelas,
     required String nomorJilid,
-  }) {
-    if (codeKelas == "-") return const Stream.empty();
-    return FirebaseReference.getUserInKelas(codeKelas, uid)
-        .collection("jilid" + nomorJilid)
-        .snapshots();
+  }) async {
+    try {
+      if (codeKelas == "-")  throw Exception("Kelas blm ad");
+      return await FirebaseReference.getUserInKelas(codeKelas, uid)
+          .collection("jilid" + nomorJilid)
+          .get();
+    } catch (e) {
+      if (kDebugMode) {
+        print("getGrade: Error");
+      }
+      return null;
+    }
   }
 
   Future<void> setGrade({ //TODO: Pisahkan ke provider lain

@@ -171,7 +171,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
                             if (item.day ==
                                 itemAbsen['datetime'].toDate().day) ...[
                               AbsentList(
-                                present: itemAbsen,
                                 id: itemAbsen['id'],
                                 date: itemAbsen['datetime'].toDate(),
                                 startAt: itemAbsen['start_at'].toDate(),

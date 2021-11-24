@@ -11,14 +11,12 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 class AbsentList extends StatefulWidget {
-  final Map<String, dynamic> present;
   final DateTime startAt, endAt;
   final DateTime date;
   final String id;
 
   const AbsentList({
     Key? key,
-    required this.present,
     required this.startAt,
     required this.endAt,
     required this.date,
@@ -31,7 +29,7 @@ class AbsentList extends StatefulWidget {
 
 class _AbsentListState extends State<AbsentList> {
   DateFormat formattedDate = DateFormat('hh:mm');
-  bool isPresent = true;
+  bool _isPresent = true;
   int _absentCount = 0;
   String _uid = "-";
   String _role = "-";
@@ -45,11 +43,24 @@ class _AbsentListState extends State<AbsentList> {
     });
   }
 
+  void getKehadiran(uid) async {
+    var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
+    if(data == null) return;
+    var santri = data.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
+    setState(() {
+      _isPresent = santri["kehadiran"];
+    });
+  }
+
   @override
   void initState() {
     _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
     _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
-    getCountAbsent();
+
+    if(_role == "Pengajar") getCountAbsent();
+    if(_role == "Santri") getKehadiran(_uid);
+
+
     super.initState();
   }
 
@@ -70,7 +81,7 @@ class _AbsentListState extends State<AbsentList> {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 800),
                 curve: Curves.ease,
-                width: isPresent ? 240.0 : 290.0,
+                width: _isPresent ? 240.0 : 290.0,
                 margin: const EdgeInsets.only(left: 40.0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -92,10 +103,6 @@ class _AbsentListState extends State<AbsentList> {
                   child: AnimatedBuilder(
                       animation: Provider.of<KelasProvider>(context),
                       builder: (context, snapshot) {
-                        if(_role  == "Santri") {
-                          isPresent = widget.present["kehadiran"];
-                        }
-
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -161,10 +168,10 @@ class _AbsentListState extends State<AbsentList> {
                                   ) else AnimatedContainer(
                                     duration: const Duration(milliseconds: 500),
                                     curve: Curves.ease,
-                                    width: isPresent ? 70 : 112,
-                                    height: isPresent ? 26 : 26,
+                                    width: _isPresent ? 70 : 112,
+                                    height: _isPresent ? 26 : 26,
                                     decoration: BoxDecoration(
-                                        color: isPresent
+                                        color: _isPresent
                                             ? PaletteColor.primary
                                             : Colors.red,
                                         borderRadius:
@@ -180,7 +187,7 @@ class _AbsentListState extends State<AbsentList> {
                                         AnimatedOpacity(
                                           duration: const Duration(
                                               milliseconds: 1000),
-                                          opacity: isPresent ? 0 : 1,
+                                          opacity: _isPresent ? 0 : 1,
                                           child: Text(
                                             "Belum Present",
                                             style: TypographyStyle.button2
@@ -192,7 +199,7 @@ class _AbsentListState extends State<AbsentList> {
                                         AnimatedOpacity(
                                           duration: const Duration(
                                               milliseconds: 1000),
-                                          opacity: isPresent ? 1 : 0,
+                                          opacity: _isPresent ? 1 : 0,
                                           child: Text(
                                             "Present",
                                             style: TypographyStyle.button2

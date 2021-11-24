@@ -10,9 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-//@param nomor : String adalah nomor halaman per jilid iqro
-//@param uid : String, id user milik santri
-
 class ReadPage extends StatefulWidget {
   final String nomor, uid;
 
@@ -50,8 +47,8 @@ class _ReadPageState extends State<ReadPage> {
         pinned: true,
         floating: true,
         barTitle: 'Jilid ${widget.nomor}',
-        body: StreamBuilder<QuerySnapshot>(
-          stream: Provider.of<KelasProvider>(context).getGrade(
+        body: FutureBuilder<QuerySnapshot?>(
+          future: Provider.of<KelasProvider>(context).getGrade(
             uid: widget.uid,
             codeKelas: _profile.codeKelas,
             nomorJilid: widget.nomor,
