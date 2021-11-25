@@ -31,6 +31,7 @@ class _CreateKelasState extends State<CreateKelas> {
 
       var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
+      Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
 
       if (data == 400) throw Exception("Create Kelas failed");
     } catch (e) {

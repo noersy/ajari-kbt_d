@@ -189,8 +189,7 @@ class _AbsentListState extends State<AbsentList> {
                                     child: Stack(
                                       children: [
                                         AnimatedOpacity(
-                                          duration: const Duration(
-                                              milliseconds: 1000),
+                                          duration: const Duration(milliseconds: 1000),
                                           opacity: _isPresent ? 0 : 1,
                                           child: Text(
                                             "Belum Present",
@@ -201,8 +200,7 @@ class _AbsentListState extends State<AbsentList> {
                                           ),
                                         ),
                                         AnimatedOpacity(
-                                          duration: const Duration(
-                                              milliseconds: 1000),
+                                          duration: const Duration(milliseconds: 1000),
                                           opacity: _isPresent ? 1 : 0,
                                           child: Text(
                                             "Present",
@@ -217,7 +215,8 @@ class _AbsentListState extends State<AbsentList> {
                                   ),
                           ],
                         );
-                      }),
+                      },
+                  ),
                 ),
               ),
               Column(

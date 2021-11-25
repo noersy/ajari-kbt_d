@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 class DateCard extends StatefulWidget {
   final hari, tgl, color, onTap, haveEvent;
   final DateTime dateTime;
-  final VoidCallback callback;
 
   const DateCard({
     Key? key,
@@ -17,7 +16,6 @@ class DateCard extends StatefulWidget {
     this.color,
     this.onTap,
     this.haveEvent,
-    required this.callback,
   }) : super(key: key);
 
   @override
@@ -40,19 +38,10 @@ class _DateCardState extends State<DateCard> {
             : () async {
                 setState(() => !_selected ? _selected = true : false);
 
-                // var result = await showDialog(
-                //       context: context,
-                //       builder: (context) => DialogCreateAbsen(date: widget.dateTime),
-                //     ) ?? "Cancel";
-
-
                 await showDialog(
                       context: context,
                       builder: (context) => DialogCreate(dateTime: widget.dateTime,),
                     );
-
-
-                // widget.callback();
 
                 setState(() => _selected ? _selected = false : true);
         },

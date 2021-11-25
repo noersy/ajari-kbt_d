@@ -33,6 +33,7 @@ class _JoinKelasState extends State<JoinKelas> {
 
       if (hasil  == 400) throw Exception("Join failed");
       await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
+      Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
 
       if (!mounted) return;
     } catch (e) {

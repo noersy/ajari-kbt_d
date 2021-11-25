@@ -7,6 +7,7 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,10 @@ class ConfirmationLogoutDialog extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           padding: const EdgeInsets.all(SpacingDimens.spacing24),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
@@ -73,7 +77,10 @@ class ConfirmationLogoutDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.2,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 3.2,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: PaletteColor.primarybg,
@@ -97,7 +104,10 @@ class ConfirmationLogoutDialog extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.2,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 3.2,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: PaletteColor.primary,
@@ -131,14 +141,23 @@ class ConfirmationLogoutDialog extends StatelessWidget {
   }
 
   void logOut(BuildContext context) async {
-    await AuthLogin.signOut(context: context);
-    context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
-    context.read<ProfileProvider>().setProfile(Profile.blankProfile());
+    try {
+      await AuthLogin.signOut(context: context);
+      // Provider.of<KelasProvider>(context, listen: false).closeKelasService();
+      context.read<KelasProvider>().closeKelasService();
+      Provider.of<KelasProvider>(context, listen: false).clearData();
+      Provider.of<ProfileProvider>(context, listen: false).setProfile(
+          Profile.blankProfile());
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const SplashScreenPage(),
-      ),
-    );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const SplashScreenPage(),
+        ),
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 }

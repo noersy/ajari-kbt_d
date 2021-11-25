@@ -78,7 +78,7 @@ class ProfileProvider extends ChangeNotifier {
       return profile;
     } catch (e, r) {
       if (kDebugMode) {
-        print("getProfile: Error : $e");
+        print("getProfile: Error");
         print("$r");
       }
     }

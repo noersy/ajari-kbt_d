@@ -4,6 +4,7 @@ import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:ajari/view/DashboardPage/KelasPage/component/banner_kelas.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/component/join_kelas.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class ClassPage extends StatefulWidget {
 }
 
 class _ClassPageState extends State<ClassPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,8 +48,7 @@ class _ClassPageState extends State<ClassPage> {
                           JadwalKelas(),
                         ],
                       ),
-                      headerSliverBuilder:
-                          (BuildContext _, bool innerBoxIsScrolled) {
+                      headerSliverBuilder: (_, bool innerBoxIsScrolled) {
                         return <Widget>[
                           SliverAppBar(
                             backgroundColor: PaletteColor.primarybg,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ajari/config/firebase_reference.dart';
@@ -19,13 +20,19 @@ class KelasProvider extends ChangeNotifier {
   List<Map<String, dynamic>> get listDiskusi => _listDiskusi;
   List<Map<String, dynamic>> get listMeet => _listMeet;
 
-  void updateKelas(Kelas kelas) async {
-    _kelas = kelas;
+
+  void clearData() {
+    _kelas = Kelas.blankKelas();
+    _listSantri = <Map<String, dynamic>>[];
+    _listAbsen = <Map<String, dynamic>>[];
+    _listDiskusi = <Map<String, dynamic>>[];
+    _listMeet = <Map<String, dynamic>>[];
+
     notifyListeners();
   }
 
-  void setJumlahSantri(int jumlah) async {
-    _kelas.setJumlahSantri(jumlah);
+  void updateKelas(Kelas kelas) async {
+    _kelas = kelas;
     notifyListeners();
   }
 
@@ -47,6 +54,92 @@ class KelasProvider extends ChangeNotifier {
   void _setMeets(QuerySnapshot snapshot){
     _listMeet = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
     notifyListeners();
+  }
+
+  static bool _isListenning = false;
+
+  void closeKelasService() {
+    _isListenning = false;
+  }
+
+  void instalizeKelasService(){
+    try{
+
+      if(_kelas.kelasId == "-") throw Exception("Not have kelas yet");
+      _isListenning = true;
+
+      final StreamController<QuerySnapshot> _streamSantri = StreamController();
+      final StreamController<QuerySnapshot> _streamAbsen = StreamController();
+      final StreamController<QuerySnapshot> _streamDiskusi = StreamController();
+      final StreamController<QuerySnapshot> _streamMeet = StreamController();
+
+
+      if(_listSantri.isEmpty){
+        _streamSantri.addStream(FirebaseReference.getKelas(_kelas.kelasId).collection('santri').snapshots());
+        _streamSantri.stream.listen((event) {
+          _setSantri(event);
+
+          if(!_isListenning){
+            _streamSantri.close();
+          }
+
+          if (kDebugMode) {
+            print("set Santri");
+          }
+        });
+      }
+
+      if(_listAbsen.isEmpty){
+        _streamAbsen.addStream(FirebaseReference.kelas.doc(_kelas.kelasId).collection("absen").orderBy("datetime", descending: false).snapshots());
+        _streamAbsen.stream.listen((event) {
+          _setAbsens(event);
+
+          if(!_isListenning){
+            _streamAbsen.close();
+          }
+
+          if (kDebugMode) {
+            print("set absen");
+          }
+        });
+      }
+
+      if(_listDiskusi.isEmpty){
+        _streamDiskusi.addStream(FirebaseReference.kelas.doc(_kelas.kelasId).collection("diskusi").orderBy("datetime", descending: false).snapshots());
+        _streamDiskusi.stream.listen((event) {
+          _setDiskues(event);
+
+          if(!_isListenning){
+            _streamDiskusi.close();
+          }
+
+          if (kDebugMode) {
+            print("set diskusi");
+          }
+        });
+      }
+
+      if(_listMeet.isEmpty){
+        _streamMeet.addStream(FirebaseReference.kelas.doc(_kelas.kelasId).collection("meet").orderBy("datetime", descending: false).snapshots());
+        _streamMeet.stream.listen((event) {
+          _setMeets(event);
+
+          if(!_isListenning){
+            _streamMeet.close();
+          }
+
+          if (kDebugMode) {
+            print("set meet");
+          }
+        });
+      }
+
+
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   Future<int> createKelas({
@@ -73,7 +166,7 @@ class KelasProvider extends ChangeNotifier {
 
       updateKelas(kelasFromJson(jsonEncode(dataKelas)));
 
-      getSantri(codeKelas: _code);
+      getSantri();
 
       return 200;
     } catch (e) {
@@ -119,7 +212,7 @@ class KelasProvider extends ChangeNotifier {
 
       //TODO:update data user
       updateKelas(kelasFromJson(jsonEncode(data)));
-      getSantri(codeKelas: codeKelas);
+      getSantri();
 
       return 200;
     } catch (e, r) {
@@ -180,9 +273,9 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int>? getSantri({required codeKelas}) async {
+  Future<int> getSantri() async {
     try {
-      var data = await FirebaseReference.getKelas(codeKelas).collection('santri').get();
+      var data = await FirebaseReference.getKelas(_kelas.kelasId).collection('santri').get();
 
       _setSantri(data);
 

@@ -34,7 +34,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
 
   @override
   void initState() {
-    getDatas();
     var weekDay = _dateTime.weekday;
     for (int i = 0; i < 7; i++) {
       final _date = _dateTime.subtract(Duration(days: weekDay - i - 1));
@@ -51,11 +50,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
     super.initState();
   }
 
-  void getDatas() async {
-     await Provider.of<KelasProvider>(context, listen: false).getAbsents();
-     await Provider.of<KelasProvider>(context,  listen: false).getsMeetings();
-     await Provider.of<KelasProvider>(context, listen: false).getsDiskusies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +66,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                 //@todo this will be button for create absen and meet
                 body: Column(
                   children: [
-                    _tanggal(_absen, _meet),
+                    _tanggal(_absen, _meet, _diskusi),
                     _jadwal(_absen, _meet, _diskusi),
                   ],
                 ),
@@ -82,7 +76,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
     );
   }
 
-  Widget _tanggal(List<Map<String, dynamic>> _absen, List<Map<String, dynamic>> _meet) {
+  Widget _tanggal(List<Map<String, dynamic>> _absen, List<Map<String, dynamic>> _meet, List<Map<String, dynamic>> _diskusi) {
     return Container(
       margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
       height: 60,
@@ -107,15 +101,17 @@ class _JadwalKelasState extends State<JadwalKelas> {
                   element["datetime"].toDate().day ==
                   _listRealDate[index].day)
               .isNotEmpty;
+          bool _isDiskusi = _diskusi
+              .where((element) =>
+                  element["datetime"].toDate().day ==
+                  _listRealDate[index].day)
+              .isNotEmpty;
 
           return DateCard(
-            callback: () {
-              //@todo make create both meet and absent
-            },
             dateTime: _listRealDate[index],
             hari: _listDay[index],
             tgl: _listDate[index],
-            haveEvent: _isAbsent || _isMeet,
+            haveEvent: _isAbsent || _isMeet || _isDiskusi,
             color: _index != index
                 ? _indexCurret != index
                     ? PaletteColor.grey80

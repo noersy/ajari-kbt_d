@@ -1,4 +1,6 @@
 
+import 'package:ajari/model/kelas.dart';
+import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -24,13 +26,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
+    Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Profile _profile = context.read<ProfileProvider>().profile;
-
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       bottomNavigationBar: BottomNavigationBar(
@@ -57,7 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
           children:  [
-            HomePage(role: _profile.role, username: FirebaseAuth.instance.currentUser?.displayName ?? ""),
+            HomePage(),
             const ClassPage(),
           ],
         ),

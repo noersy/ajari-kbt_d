@@ -41,7 +41,6 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
   //   begin: 1.3,
   //   end: 1.4,
   // );
-
   // late final Animation<double> _animation = CurvedAnimation(
   //   parent: _controller,
   //   curve: Curves.ease,
@@ -67,11 +66,6 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
           ),
         );
         return;
-      }
-
-      if(prf.role == "Pengajar") {
-        await Provider.of<KelasProvider>(context, listen: false).getSantri(codeKelas: prf.codeKelas);
-        await Provider.of<KelasProvider>(context, listen: false).getAbsents();
       }
 
       Navigator.of(context).pushReplacement(

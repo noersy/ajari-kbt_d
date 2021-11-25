@@ -23,7 +23,7 @@ class DialogCreate extends StatelessWidget {
   void createMeet(context) async{
     var result = await showDialog(
       context: context,
-      builder: (context) =>  const DialogCreateMeet(),
+      builder: (context) =>  DialogCreateMeet(date: dateTime),
     );
 
     Navigator.of(context).pop();
