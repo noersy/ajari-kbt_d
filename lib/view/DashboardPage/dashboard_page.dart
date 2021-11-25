@@ -1,13 +1,9 @@
 
-import 'package:ajari/model/kelas.dart';
 import 'package:ajari/providers/kelas_providers.dart';
-import 'package:ajari/providers/profile_providers.dart';
-import 'package:ajari/model/profile.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/kelas_page.dart';
 import 'package:ajari/view/UserBottomSheetDialog/user_bottomsheet_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

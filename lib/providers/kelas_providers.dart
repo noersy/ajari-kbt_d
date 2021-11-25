@@ -136,6 +136,7 @@ class KelasProvider extends ChangeNotifier {
 
 
     }catch(e){
+      closeKelasService();
       if (kDebugMode) {
         print(e);
       }
@@ -210,7 +211,6 @@ class KelasProvider extends ChangeNotifier {
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
       await FirebaseReference.getUser(user.uid).update(newDataUser);
 
-      //TODO:update data user
       updateKelas(kelasFromJson(jsonEncode(data)));
       getSantri();
 
@@ -290,7 +290,7 @@ class KelasProvider extends ChangeNotifier {
 
 
 
-  Stream<QuerySnapshot> getMassage({ //TODO: Pisahkan ke provider lain
+  Stream<QuerySnapshot> getMassage({
     required uid,
     required codeKelas,
     required nomorJilid,
@@ -306,7 +306,7 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Future<QuerySnapshot?> getGrade({ //TODO: Pisahkan ke provider lain
+  Future<QuerySnapshot?> getGrade({
     required String uid,
     required String codeKelas,
     required String nomorJilid,
@@ -324,7 +324,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> setGrade({ //TODO: Pisahkan ke provider lain
+  Future<void> setGrade({
     required uid,
     required grade,
     required codeKelas,
@@ -347,7 +347,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createAbsen({ //TODO: Pindah di kelas provider lain
+  Future<int> createAbsen({
     required DateTime date,
     required DateTime startAt,
     required DateTime endAt,
@@ -390,7 +390,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> absent({//TODO: Pindah di kelas provider lain
+  Future<int> absent({
     required String id,
     required String uid,
   }) async {
@@ -412,7 +412,7 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> updateAbsen({//TODO: Pindah di kelas provider lain
+  Future<int> updateAbsen({
     required String id,
     required DateTime date,
     required DateTime startAt,
@@ -436,7 +436,7 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> deleteAbsen({ //TODO: Pindah di kelas provider lain
+  Future<int> deleteAbsen({
     required String id,
   }) async {
     try {
@@ -450,7 +450,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> getAbsents() async { //TODO: Pindah di kelas provider lain
+  Future<int> getAbsents() async {
     try {
       var snap = await FirebaseReference.kelas
           .doc(_kelas.kelasId)
@@ -468,7 +468,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<QuerySnapshot?> getsAbsenStudents(String id) async { //TODO: Pindah di kelas provider lain
+  Future<QuerySnapshot?> getsAbsenStudents(String id) async {
     try {
       return await FirebaseReference.kelas
           .doc(_kelas.kelasId)
@@ -485,7 +485,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> createMeet({  //TODO: Pindah di kelas provider lain
+  Future<int> createMeet({
     required DateTime date,
     required String subject,
   }) async {
@@ -513,7 +513,7 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> deleteMeet({required DateTime date}) async { //TODO: Pindah di kelas provider lain
+  Future<int> deleteMeet({required DateTime date}) async {
     try {
       await FirebaseReference.getMeeting(_kelas.kelasId, date).delete();
       return 200;
@@ -527,7 +527,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> getsMeetings() async { //TODO: Pindah di kelas provider lain
+  Future<int> getsMeetings() async {
     try {
       var snap = await  FirebaseReference.kelas
           .doc(_kelas.kelasId)
@@ -548,7 +548,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> getsDiskusies() async { //TODO: Pindah di kelas provider lain
+  Future<int> getsDiskusies() async {
     try {
       var snap = await FirebaseReference.kelas
           .doc(_kelas.kelasId)
@@ -569,7 +569,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Stream<QuerySnapshot> getsMessagesInDiskusi({required id}) { //TODO: Pindah di kelas provider lain
+  Stream<QuerySnapshot> getsMessagesInDiskusi({required id}) {
     return FirebaseReference.kelas
         .doc(_kelas.kelasId)
         .collection("diskusi")
@@ -579,7 +579,7 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Future<int> createDiskusi({ //TODO: Pindah di kelas provider lain
+  Future<int> createDiskusi({
     required DateTime date,
     required String subject,
   }) async {
@@ -605,7 +605,7 @@ class KelasProvider extends ChangeNotifier {
     return 200;
   }
 
-  Future<int> sendMessageDiskusi({ //TODO: Pindah di kelas provider lain
+  Future<int> sendMessageDiskusi({
     required String idDiskusi,
     required String message,
     required String role,
