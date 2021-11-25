@@ -1,3 +1,4 @@
+import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -8,7 +9,9 @@ import 'package:flutter/material.dart';
 import 'component.dart';
 
 class AudioTop extends StatefulWidget {
-  const AudioTop({Key? key}) : super(key: key);
+  final String nomorHalaman, nomorJilid;
+
+  const AudioTop({Key? key, required this.nomorHalaman, required this.nomorJilid}) : super(key: key);
 
   @override
   _AudioTopState createState() => _AudioTopState();
@@ -23,8 +26,13 @@ class _AudioTopState extends State<AudioTop> {
 
   @override
   initState() {
+    var audioPath = PathIqro.mainAudioPath +
+        "/jilid${widget.nomorJilid}" +
+        "/halaman${widget.nomorHalaman}" +
+        ".mp3";
+
     assetsAudioPlayer.open(
-      Audio("assets/audio/jilid1/halaman1.mp3"),
+      Audio(audioPath),
       showNotification: true,
       autoStart: false,
     );

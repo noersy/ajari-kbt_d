@@ -1,6 +1,8 @@
+import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/action_bottom.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/audio_top.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/santri_action.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/HalamanPage/component/ustaz_action.dart';
@@ -8,15 +10,12 @@ import 'package:flutter/material.dart';
 
 import 'component/component.dart';
 
-class HalamanPage extends StatelessWidget {
-  final String pathBacaan;
-  final String pathAudio;
+class ReadPage extends StatefulWidget {
   final String nomorHalaman, nomorJilid, uid, codeKelas, role, grade;
 
-  const HalamanPage({
+
+  const ReadPage({
     Key? key,
-    required this.pathBacaan,
-    required this.pathAudio,
     required this.nomorHalaman,
     required this.nomorJilid,
     required this.uid,
@@ -26,16 +25,32 @@ class HalamanPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<ReadPage> createState() => _ReadPageState();
+}
+
+class _ReadPageState extends State<ReadPage> {
+  int _nomorJilid = 0;
+  int _nomorHalaman = 0;
+
+  @override
+  void initState() {
+    _nomorJilid = int.parse(widget.nomorJilid);
+    _nomorHalaman = int.parse(widget.nomorHalaman) ;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var pathBacaan = PathIqro.mainImagePath +
+        "/jilid$_nomorJilid" +
+        "/halaman$_nomorHalaman" +
+        ".png";
+
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
-      // appBar: AppBarBack(
-      //   ctx: context,
-      //   title: "Halaman ${nomorHalaman}",
-      // ),
       body: NestedScrollView(
         physics: const BouncingScrollPhysics(),
-        body: _content(),
+        body: _content(pathBacaan),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
             SliverAppBar(
@@ -43,10 +58,13 @@ class HalamanPage extends StatelessWidget {
               shadowColor: Colors.transparent,
               elevation: 0,
               iconTheme: const IconThemeData(color: PaletteColor.primary),
-              title:  Text("Halaman $nomorHalaman", style: TypographyStyle.subtitle1),
-              bottom: const PreferredSize(
-                preferredSize: Size(0.0, 50),
-                child: AudioTop(),
+              title:  Text("Halaman $_nomorHalaman", style: TypographyStyle.subtitle1),
+              bottom:  PreferredSize(
+                preferredSize: const Size(0.0, 50),
+                child: AudioTop(
+                  nomorHalaman: "$_nomorHalaman",
+                  nomorJilid: "$_nomorJilid",
+                ),
               ),
               pinned: true,
               floating: true,
@@ -56,16 +74,10 @@ class HalamanPage extends StatelessWidget {
         },
       ),
 
-      // SilverAppBarBack(
-      //   pinned: false,
-      //   floating: true,
-      //   barTitle: "Halaman $nomorHalaman",
-      //   body: _content(),
-      // ),
     );
   }
 
-  _content() {
+  _content(pathBacaan) {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
@@ -118,12 +130,26 @@ class HalamanPage extends StatelessWidget {
               ),
             ),
           ),
-          codeKelas != "-"
-              ? role == "Santri"
+          widget.codeKelas != "-"
+              ? widget.role == "Santri"
                   ? _actionSantriContainer()
                   : _actionUstazContainer()
               : notJoinAction(),
-          // _actionPage(),
+          ActionBottom(
+            curretHalaman: _nomorHalaman,
+            prevAction: () {
+              setState(() {
+                _nomorHalaman -= 1;
+              });
+              print("prev");
+            },
+            nextAction: () {
+              setState(() {
+                _nomorHalaman += 1;
+              });
+              print("next");
+            },
+          ),
         ],
       ),
     );
@@ -136,12 +162,12 @@ class HalamanPage extends StatelessWidget {
         right: SpacingDimens.spacing16,
       ),
       child: SantriAction(
-        uid: uid,
-        grade: grade,
-        codeKelas: codeKelas,
-        nomorJilid: nomorJilid,
-        nomorHalaman: nomorHalaman,
-        role: role,
+        uid: widget.uid,
+        grade: widget.grade,
+        codeKelas: widget.codeKelas,
+        nomorJilid: widget.nomorJilid,
+        nomorHalaman: widget.nomorHalaman,
+        role: widget.role,
       ),
     );
   }
@@ -153,12 +179,12 @@ class HalamanPage extends StatelessWidget {
         right: SpacingDimens.spacing16,
       ),
       child: UstazAction(
-        uid: uid,
-        grade: grade,
-        codeKelas: codeKelas,
-        nomorJilid: nomorJilid,
-        nomorHalaman: nomorHalaman,
-        role: role,
+        uid: widget.uid,
+        grade: widget.grade,
+        codeKelas: widget.codeKelas,
+        nomorJilid: widget.nomorJilid,
+        nomorHalaman: widget.nomorHalaman,
+        role: widget.role,
       ),
     );
   }
