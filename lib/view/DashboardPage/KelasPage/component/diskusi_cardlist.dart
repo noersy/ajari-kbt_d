@@ -44,6 +44,7 @@ class _DiskusiListState extends State<DiskusiList> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: PaletteColor.primarybg,
+                    onPrimary: PaletteColor.primary,
                     elevation: 2,
                     padding: const EdgeInsets.all(SpacingDimens.spacing8),
                     shape: RoundedRectangleBorder(
@@ -52,7 +53,8 @@ class _DiskusiListState extends State<DiskusiList> {
                   ),
                   onPressed: () {
                     Navigator.of(context).push(routeTransition(
-                        DiskusiPage(subject: _subject, id: widget.id)));
+                        DiskusiPage(subject: _subject, id: widget.id)),
+                    );
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,7 +89,7 @@ class _DiskusiListState extends State<DiskusiList> {
                                   .copyWith(color: PaletteColor.primarybg),
                             ),
                             const SizedBox(width: 2),
-                            const Icon(Icons.chat, size: 18)
+                            const Icon(Icons.chat, size: 18, color: PaletteColor.primarybg,)
                           ],
                         ),
                       ),

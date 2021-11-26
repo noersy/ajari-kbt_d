@@ -53,9 +53,9 @@ class _DashboardPageState extends State<DashboardPage> {
         child: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children:  [
+          children:  const [
             HomePage(),
-            const ClassPage(),
+            ClassPage(),
           ],
         ),
       ),

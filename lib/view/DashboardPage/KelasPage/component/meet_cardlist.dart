@@ -50,6 +50,7 @@ class _MeetListState extends State<MeetList> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: PaletteColor.primarybg,
+                        onPrimary: PaletteColor.primary,
                         elevation: 2,
                         padding: const EdgeInsets.all(SpacingDimens.spacing8),
                         shape: RoundedRectangleBorder(
@@ -91,7 +92,7 @@ class _MeetListState extends State<MeetList> {
                                   style: TypographyStyle.button2.copyWith(color: PaletteColor.primarybg),
                                 ),
                                 const SizedBox(width: 2),
-                                const Icon(Icons.meeting_room_outlined, size: 20,)
+                                const Icon(Icons.meeting_room_outlined, size: 20, color: PaletteColor.primarybg,)
                               ],
                             ),
                           ),

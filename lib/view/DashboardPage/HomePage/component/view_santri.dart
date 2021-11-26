@@ -8,20 +8,21 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_musa_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_nuh_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
+import 'package:ajari/view/NotificationPage/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'component.dart';
 
 class ViewSantri extends StatelessWidget {
-  final PageController pageViewController;
   final String name;
 
-  const ViewSantri({
+  ViewSantri({
     Key? key,
-    required this.pageViewController,
     required this.name,
   }) : super(key: key);
+
+  final _pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,7 @@ class ViewSantri extends StatelessWidget {
           height: 220,
           child: PageView(
             physics: const BouncingScrollPhysics(),
-            controller: pageViewController,
+            controller: _pageViewController,
             children: [
               Stack(
                 alignment: Alignment.bottomCenter,
@@ -68,7 +69,7 @@ class ViewSantri extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 routeTransition(
-                                  Container(),
+                                  const NotificationPage(),
                                 ),
                               );
                             },
@@ -288,11 +289,11 @@ class ViewSantri extends StatelessWidget {
                 const SizedBox(height: SpacingDimens.spacing8),
                 Center(
                   child: SmoothPageIndicator(
-                    controller: pageViewController,
+                    controller: _pageViewController,
                     count: 2,
                     axisDirection: Axis.horizontal,
                     onDotClicked: (i) {
-                      pageViewController.animateToPage(
+                      _pageViewController.animateToPage(
                         i,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.ease,

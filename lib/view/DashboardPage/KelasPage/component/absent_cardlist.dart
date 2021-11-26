@@ -89,6 +89,7 @@ class _AbsentListState extends State<AbsentList> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: PaletteColor.primarybg,
+                    onPrimary: PaletteColor.primary,
                     elevation: 2,
                     padding: const EdgeInsets.all(SpacingDimens.spacing8),
                     shape: RoundedRectangleBorder(

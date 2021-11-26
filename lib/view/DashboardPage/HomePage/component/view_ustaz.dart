@@ -8,29 +8,27 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StudensPage/studens_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/home_button.dart';
+import 'package:ajari/view/NotificationPage/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ViewUstaz extends StatefulWidget {
-  final PageController pageViewController;
   final String name;
 
   const ViewUstaz({
     Key? key,
-    required this.pageViewController,
     required this.name,
   }) : super(key: key);
+
 
   @override
   State<ViewUstaz> createState() => _ViewUstazState();
 }
 
 class _ViewUstazState extends State<ViewUstaz> {
-  @override
-  void initState() {
-    super.initState();
-  }
+
+  final _pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,7 @@ class _ViewUstazState extends State<ViewUstaz> {
           height: 220,
           child: PageView(
             physics: const BouncingScrollPhysics(),
-            controller: widget.pageViewController,
+            controller: _pageViewController,
             children: [
               Stack(
                 children: [
@@ -77,7 +75,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 routeTransition(
-                                  Container(),
+                                  const NotificationPage(),
                                 ),
                               );
                             },
@@ -187,11 +185,11 @@ class _ViewUstazState extends State<ViewUstaz> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SmoothPageIndicator(
-                    controller: widget.pageViewController,
+                    controller: _pageViewController,
                     count: 2,
                     axisDirection: Axis.horizontal,
                     onDotClicked: (i) {
-                      widget.pageViewController.animateToPage(
+                      _pageViewController.animateToPage(
                         i,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.ease,
