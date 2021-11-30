@@ -44,8 +44,8 @@ class _ListHalamanPageState extends State<ListHalamanPage> {
         pinned: true,
         floating: true,
         barTitle: 'Jilid ${widget.nomor}',
-        body: FutureBuilder<QuerySnapshot?>(
-          future: Provider.of<KelasProvider>(context).getGrade(
+        body: StreamBuilder<QuerySnapshot?>(
+          stream: Provider.of<KelasProvider>(context).getGrade(
             uid: widget.uid,
             codeKelas: _profile.codeKelas,
             nomorJilid: widget.nomor,

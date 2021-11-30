@@ -306,21 +306,21 @@ class KelasProvider extends ChangeNotifier {
         .snapshots();
   }
 
-  Future<QuerySnapshot?> getGrade({
+  Stream<QuerySnapshot> getGrade({
     required String uid,
     required String codeKelas,
     required String nomorJilid,
-  }) async {
+  }) {
     try {
       if (codeKelas == "-")  throw Exception("Kelas blm ad");
-      return await FirebaseReference.getUserInKelas(codeKelas, uid)
+      return FirebaseReference.getUserInKelas(codeKelas, uid)
           .collection("jilid" + nomorJilid)
-          .get();
+          .snapshots();
     } catch (e) {
       if (kDebugMode) {
         print("getGrade: Error");
       }
-      return null;
+      return const Stream.empty();
     }
   }
 
@@ -468,20 +468,20 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<QuerySnapshot?> getsAbsenStudents(String id) async {
+  Stream<QuerySnapshot> getsAbsenStudents(String id) {
     try {
-      return await FirebaseReference.kelas
+      return FirebaseReference.kelas
           .doc(_kelas.kelasId)
           .collection("absen")
           .doc(id)
           .collection("santri")
           .orderBy("name", descending: false)
-          .get();
+          .snapshots();
     } catch (e) {
       if (kDebugMode) {
         print("getsAbsenStudents: Error");
       }
-      return null;
+      return const Stream.empty();
     }
   }
 

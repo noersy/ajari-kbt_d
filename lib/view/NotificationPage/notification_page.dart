@@ -1,7 +1,6 @@
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -22,17 +21,17 @@ class _NotificationPageState extends State<NotificationPage> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
+              padding: const EdgeInsets.all(SpacingDimens.spacing12),
+              child: ElevatedButton(
                 onPressed: () {},
-                style: TextButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   padding: const EdgeInsets.all(SpacingDimens.spacing12),
                   elevation: 2,
-                  primary: Theme.of(context).primaryColor,
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  onPrimary: Theme.of(context).primaryColor,
+                  primary: Theme.of(context).backgroundColor,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,12 +68,8 @@ class _NotificationPageState extends State<NotificationPage> {
               top: SpacingDimens.spacing8,
               bottom: SpacingDimens.spacing8,
             ),
-            backgroundColor: Theme
-                .of(context)
-                .backgroundColor,
-            primary: Theme
-                .of(context)
-                .primaryColor,
+            backgroundColor: Theme.of(context).backgroundColor,
+            primary: Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),
             ),

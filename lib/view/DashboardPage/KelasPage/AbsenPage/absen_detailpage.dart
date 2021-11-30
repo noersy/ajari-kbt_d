@@ -61,8 +61,8 @@ class _AbsenDetailPageState extends State<AbsenDetailPage> {
             )
           ]
       ),
-      body: FutureBuilder<QuerySnapshot?>(
-        future: Provider.of<KelasProvider>(context).getsAbsenStudents(widget.id),
+      body: StreamBuilder<QuerySnapshot?>(
+        stream: Provider.of<KelasProvider>(context).getsAbsenStudents(widget.id),
         builder: (BuildContext context, snapshot) {
           if(!snapshot.hasData || snapshot.data!.size <= 0){
             return const Center(child: Text("No has data."));

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/route/route_transisition.dart';
@@ -5,6 +7,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/AbsenPage/absen_detailpage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,30 +32,23 @@ class AbsentList extends StatefulWidget {
 
 class _AbsentListState extends State<AbsentList> {
   DateFormat formattedDate = DateFormat('hh:mm');
+  final StreamController<QuerySnapshot> _streamSantri = StreamController();
   bool _isPresent = true;
   int _absentCount = 0;
   String _uid = "-";
   String _role = "-";
 
-  void getCountAbsent() async {
-    var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
-
-    if(data == null) return;
+  void getKehadiran(uid)  {
     if (!mounted) return;
-      setState(() {
-        _absentCount = data.docs.where((element) => element["kehadiran"] == true).length;
-      });
+    Stream<QuerySnapshot> stream =  Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
+    _streamSantri.addStream(stream);
 
-  }
+    _streamSantri.stream.listen((event) {
+     var santri = event.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
 
-  void getKehadiran(uid) async {
-    var data = await Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
-    if(data == null) return;
-    if (!mounted) return;
-      var santri = data.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
-      setState(() {
-        _isPresent = santri["kehadiran"];
-      });
+     setState(() => _isPresent = santri["kehadiran"]);
+     if (!mounted) _streamSantri.close();
+    });
   }
 
   @override
@@ -60,7 +56,6 @@ class _AbsentListState extends State<AbsentList> {
     _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
     _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
 
-    if(_role == "Pengajar") getCountAbsent();
     if(_role == "Santri") getKehadiran(_uid);
 
 
@@ -102,7 +97,6 @@ class _AbsentListState extends State<AbsentList> {
                           AbsenDetailPage(dateTIme: widget.date, startAt: widget.startAt, endAt: widget.endAt, id: widget.id,)));
                     } else if (_role == "Santri") {
                       Provider.of<KelasProvider>(context, listen: false).absent(uid: _uid, id: widget.id);
-                      getKehadiran(_uid);
                     }
                   },
                   child: AnimatedBuilder(
@@ -159,8 +153,16 @@ class _AbsentListState extends State<AbsentList> {
                                     ),
                                     child: Row(
                                       children: [
-                                        Text("$_absentCount",
-                                            style: TypographyStyle.button2),
+                                        StreamBuilder<QuerySnapshot>(
+                                          stream: Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id),
+                                          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                                            if(snapshot.hasData){
+                                              _absentCount = snapshot.data.docs.where((element) => element["kehadiran"] == true).length;
+                                            }
+                                            return Text("$_absentCount",
+                                            style: TypographyStyle.button2);
+                                          },
+                                        ),
                                         const SizedBox(
                                             width: SpacingDimens.spacing4),
                                         const Icon(
