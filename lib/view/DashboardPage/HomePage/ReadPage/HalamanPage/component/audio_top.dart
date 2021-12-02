@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:async/async.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'component.dart';
 
 class AudioTop extends StatefulWidget {
   final String nomorHalaman, nomorJilid;
 
-  const AudioTop({Key? key, required this.nomorHalaman, required this.nomorJilid}) : super(key: key);
+  const AudioTop(
+      {Key? key, required this.nomorHalaman, required this.nomorJilid})
+      : super(key: key);
 
   @override
   _AudioTopState createState() => _AudioTopState();
@@ -24,19 +30,32 @@ class _AudioTopState extends State<AudioTop> {
   bool isNotStart = true;
   bool _play = true;
 
+  void getAudio() async {
+    try {
+      var audioPath = PathIqro.mainAudioPath +
+          "/jilid${widget.nomorJilid}" +
+          "/halaman${widget.nomorHalaman}" +
+          ".mp3";
+
+      await rootBundle.load(audioPath);
+
+      Audio _audio = Audio(audioPath);
+
+      assetsAudioPlayer.open(
+        _audio,
+        showNotification: true,
+        autoStart: false,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+  }
+
   @override
   initState() {
-    var audioPath = PathIqro.mainAudioPath +
-        "/jilid${widget.nomorJilid}" +
-        "/halaman${widget.nomorHalaman}" +
-        ".mp3";
-
-    assetsAudioPlayer.open(
-      Audio(audioPath),
-      showNotification: true,
-      autoStart: false,
-    );
-
+    getAudio();
     super.initState();
   }
 
@@ -82,7 +101,8 @@ class _AudioTopState extends State<AudioTop> {
             stream: assetsAudioPlayer.currentPosition,
             builder: (context, snapshot) {
               _duration = snapshot.data ?? const Duration(seconds: 0);
-              String _time = "${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}";
+              String _time =
+                  "${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}";
               return Row(
                 children: [
                   Container(

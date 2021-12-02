@@ -3,9 +3,11 @@ import 'dart:typed_data';
 
 import 'package:ajari/component/dialog/dialog_confirmation.dart';
 import 'package:ajari/component/dialog/dialog_delete.dart';
+import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
+import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/component/message_dialog.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -214,7 +216,7 @@ class _SantriActionState extends State<SantriAction> {
                                       width: SpacingDimens.spacing4,
                                     ),
                                     Text(
-                                      _time,
+                                      _time, style: TypographyStyle.button2,
                                     ),
                                   ],
                                 ),
@@ -266,7 +268,7 @@ class _SantriActionState extends State<SantriAction> {
 
       final String filepath = await getFilePath() + 'record.m4a';
 
-      String? path = await downloadFile(filepath, widget.nomorHalaman);
+      String? path = await downloadFile(filepath, widget.nomorHalaman, widget.nomorJilid);
 
       if (path != null) {
         await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
@@ -350,7 +352,7 @@ class _SantriActionState extends State<SantriAction> {
       File file = File(filePath);
 
       await FirebaseStorage.instance
-          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .ref(RecordFile.recordFile(nomorJilid: widget.nomorJilid, nomorHalaman: widget.nomorHalaman)+'record.m4a')
           .putFile(file);
     } on FirebaseException catch (e) {
       if (kDebugMode) {
@@ -362,7 +364,6 @@ class _SantriActionState extends State<SantriAction> {
       }
     }
   }
-
 
 
 

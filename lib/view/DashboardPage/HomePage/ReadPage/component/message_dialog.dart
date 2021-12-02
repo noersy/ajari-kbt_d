@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ajari/component/dialog/dialog_failed.dart';
+import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -392,11 +393,18 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
     try {
       await _checkPermission();
 
-      File downloadToFile =
-          File('${_getFilePath()}audio_${widget.nomorHalaman}.m4a');
+      File downloadToFile = File(RecordFile.recordFile(
+              nomorJilid: widget.nomorJilid,
+              nomorHalaman: widget.nomorHalaman) +
+          'record.m4a');
 
       String url = await firebase_storage.FirebaseStorage.instance
-          .ref('uploads/audio_${widget.nomorHalaman}.m4a')
+          .ref(
+            RecordFile.recordFile(
+                    nomorJilid: widget.nomorJilid,
+                    nomorHalaman: widget.nomorHalaman) +
+                'record.m4a',
+          )
           .getDownloadURL();
 
       await _assetsAudioPlayerRecord.open(
@@ -444,12 +452,15 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
       child: FutureBuilder<PlayingAudio?>(
         future: _assetsAudioPlayerRecord.onReadyToPlay.first,
         builder: (context, snapshot) {
-          final _duartion = snapshot.data?.duration ?? const Duration(seconds: 0);
+          final _duartion =
+              snapshot.data?.duration ?? const Duration(seconds: 0);
           return StreamBuilder<Duration>(
             stream: _assetsAudioPlayerRecord.currentPosition,
             builder: (context, AsyncSnapshot<Duration> snapshot) {
               Duration _duartion2 = snapshot.data ?? const Duration(seconds: 0);
-              String _time = "${twoDigits(_duartion2.inMinutes.remainder(60),)}:${twoDigits(_duartion2.inSeconds.remainder(60))}";
+              String _time = "${twoDigits(
+                _duartion2.inMinutes.remainder(60),
+              )}:${twoDigits(_duartion2.inSeconds.remainder(60))}";
               return Row(
                 children: [
                   Container(
@@ -464,7 +475,7 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
                     child: TextButton(
                       style: TextButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(50),
                         ),
                         padding: const EdgeInsets.all(0),
                         backgroundColor: PaletteColor.grey,
@@ -481,7 +492,9 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
                         });
                       },
                       child: Icon(
-                        _play ? Icons.pause_outlined : Icons.play_arrow_outlined,
+                        _play
+                            ? Icons.pause_outlined
+                            : Icons.play_arrow_outlined,
                         color: PaletteColor.primarybg,
                       ),
                     ),

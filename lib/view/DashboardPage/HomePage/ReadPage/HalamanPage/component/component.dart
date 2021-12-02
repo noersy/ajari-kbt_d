@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ajari/config/path_iqro.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -43,11 +44,11 @@ Future<bool> checkPermission() async {
       permissions[Permission.microphone]!.isGranted;
 }
 
-Future<String?> downloadFile(filePath, nomorHalaman) async {
+Future<String?> downloadFile(filePath, nomorHalaman, nomorJilid) async {
   File downloadToFile = File('$filePath');
   try {
     await FirebaseStorage.instance
-        .ref('uploads/audio_$nomorHalaman.m4a')
+        .ref(RecordFile.recordFile(nomorJilid: nomorJilid, nomorHalaman: nomorHalaman)+'record.m4a')
         .writeToFile(downloadToFile);
     return downloadToFile.path;
   } on FirebaseException catch (e) {

@@ -38,13 +38,13 @@ class _AbsentListState extends State<AbsentList> {
   String _uid = "-";
   String _role = "-";
 
-  void getKehadiran(uid)  {
+  void getKehadiran()  {
     if (!mounted) return;
     Stream<QuerySnapshot> stream =  Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
     _streamSantri.addStream(stream);
 
     _streamSantri.stream.listen((event) {
-     var santri = event.docs.where((element) => element["uid"] == uid).first.data() as Map<String, dynamic>;
+     var santri = event.docs.where((element) => element["uid"] == _uid).first.data() as Map<String, dynamic>;
 
      setState(() => _isPresent = santri["kehadiran"]);
      if (!mounted) _streamSantri.close();
@@ -56,8 +56,7 @@ class _AbsentListState extends State<AbsentList> {
     _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
     _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
 
-    if(_role == "Santri") getKehadiran(_uid);
-
+    if(_role == "Santri") getKehadiran();
 
     super.initState();
   }
