@@ -21,8 +21,7 @@ class UserBottomSheetDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Profile? _profile =
-        Provider.of<ProfileProvider>(context, listen: false).profile;
+    final Profile _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -43,60 +42,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                   color: PaletteColor.grey60,
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  top: SpacingDimens.spacing16,
-                  bottom: SpacingDimens.spacing8,
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      height: 65.0,
-                      width: 65.0,
-                      child: CircleAvatar(
-                        backgroundColor: PaletteColor.grey40,
-                        backgroundImage: _user != null
-                            ? CachedNetworkImageProvider(_user!.photoURL!)
-                            : null,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                        left: SpacingDimens.spacing24,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _user?.displayName ?? "",
-                            style: TypographyStyle.subtitle2,
-                          ),
-                          const SizedBox(
-                            height: SpacingDimens.spacing8,
-                          ),
-                          Container(
-                            alignment: Alignment.center,
-                            padding:
-                                const EdgeInsets.all(SpacingDimens.spacing4),
-                            decoration: BoxDecoration(
-                              color: PaletteColor.primary,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              _profile!.role,
-                              style: TypographyStyle.subtitle2.merge(
-                                const TextStyle(
-                                  color: PaletteColor.primarybg,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              ProfileTile(user: _user, profile: _profile),
               Container(
                 height: 1,
                 width: MediaQuery.of(context).size.width,
@@ -105,22 +51,20 @@ class UserBottomSheetDialog extends StatelessWidget {
                   top: SpacingDimens.spacing8,
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  if (_user != null) {
-                    Navigator.of(ctx).push(
-                      routeTransition(
-                        ProfilePage(
-                          user: _user!,
-                          role: _profile.role,
-                        ),
-                      ),
-                    );
-                  }
+              TextButton(
+                style: TextButton.styleFrom(
+                  primary: PaletteColor.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                onPressed: () {
+
                 },
                 child: actionBottomSheet(
-                  icon: Icons.person_outlined,
-                  title: "My Profile",
+                  icon: Icons.help_outline,
+                  title: "About",
                 ),
               ),
               Container(
@@ -128,8 +72,15 @@ class UserBottomSheetDialog extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 color: PaletteColor.primarybg2,
               ),
-              GestureDetector(
-                onTap: () {
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  primary: PaletteColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                onPressed: () {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -158,25 +109,109 @@ class UserBottomSheetDialog extends StatelessWidget {
   }
 
   Widget actionBottomSheet({required IconData icon, required String title}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: SpacingDimens.spacing16,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 25,
+            color: PaletteColor.primary,
+          ),
+          const SizedBox(
+            width: SpacingDimens.spacing24,
+          ),
+          Text(
+            title,
+            style: TypographyStyle.subtitle2,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileTile extends StatelessWidget {
+  final User? user;
+  final Profile profile;
+
+  const ProfileTile({Key? key, required this.user, required this.profile})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      color: PaletteColor.primarybg,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: SpacingDimens.spacing16,
+      margin: const EdgeInsets.only(
+        top: SpacingDimens.spacing16,
+        bottom: SpacingDimens.spacing8,
+      ),
+      child: ElevatedButton(
+        onPressed: (){
+          if (user != null) {
+            Navigator.of(context).push(
+              routeTransition(
+                ProfilePage(
+                  user: user!,
+                  role: profile.role,
+                ),
+              ),
+            );
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          primary: PaletteColor.primarybg,
+          onPrimary: PaletteColor.primary.withOpacity(0.5),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+          )
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 25,
-              color: PaletteColor.primary,
+            SizedBox(
+              height: 65.0,
+              width: 65.0,
+              child: CircleAvatar(
+                backgroundColor: PaletteColor.grey40,
+                backgroundImage: user != null
+                    ? CachedNetworkImageProvider(user!.photoURL!)
+                    : null,
+              ),
             ),
-            const SizedBox(
-              width: SpacingDimens.spacing24,
-            ),
-            Text(
-              title,
-              style: TypographyStyle.subtitle2,
+            Container(
+              margin: const EdgeInsets.only(
+                left: SpacingDimens.spacing24,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user?.displayName ?? "",
+                    style: TypographyStyle.subtitle2,
+                  ),
+                  const SizedBox(
+                    height: SpacingDimens.spacing8,
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(SpacingDimens.spacing4),
+                    decoration: BoxDecoration(
+                      color: PaletteColor.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      profile.role,
+                      style: TypographyStyle.subtitle2.merge(
+                        const TextStyle(
+                          color: PaletteColor.primarybg,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
