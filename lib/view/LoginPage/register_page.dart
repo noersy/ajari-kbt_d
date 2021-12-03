@@ -6,6 +6,7 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
+import 'package:crypt/crypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -243,10 +244,17 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading = true;
     });
 
+    if(_passwordController.text.compareTo(_passwordKonController.text) != 0) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password not match.")));
+      setState(() => isLoading = false);
+      return;
+    }
+
+    String hashedPassword = Crypt.sha256(_passwordController.text, rounds: 12, salt:  FirebaseAuth.instance.currentUser?.uid).toString();
+
     try {
       final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
-
 
       if (profile.role == "-") {
         Navigator.of(context).pushReplacement(
@@ -255,7 +263,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 SelectionPage(
                   user: FirebaseAuth.instance.currentUser!,
                   username: _usernameController.text,
-                  password: _passwordController.text,
+                  password: hashedPassword,
                 ),
           ),
         );
