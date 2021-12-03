@@ -8,8 +8,10 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
+import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:ajari/view/LoginPage/selection_role.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,32 +22,7 @@ class SplashScreenPage extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStateMixin {
-
-  // late final AnimationController _controller = AnimationController(
-  //   duration: const Duration(seconds: 3),
-  //   vsync: this,
-  // );
-  //
-  // final Tween<double> turnsTween = Tween<double>(
-  //   begin: 3,
-  //   end: 3.2,
-  // );
-  //
-  // final Tween<double> turnsTween2 = Tween<double>(
-  //   begin: 2.2,
-  //   end: 2,
-  // );
-  //
-  // final Tween<double> turnsTween3 = Tween<double>(
-  //   begin: 1.3,
-  //   end: 1.4,
-  // );
-  // late final Animation<double> _animation = CurvedAnimation(
-  //   parent: _controller,
-  //   curve: Curves.ease,
-  // );
-
+class _SplashScreenState extends State<SplashScreenPage>{
 
   startTime() async {
     var _duration = const Duration(seconds: 3);
@@ -62,7 +39,7 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
       if (prf.role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => SelectionPage(user: user),
+            builder: (context) => RegisterPage(user: user),
           ),
         );
         return;
@@ -110,7 +87,6 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: AuthLogin.initializeFirebase(context: context),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -119,72 +95,21 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
             backgroundColor: PaletteColor.primarybg,
-            body: Stack(
-              children: [
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        child: Image.asset(
-                          "assets/images/ajarilogo.png",
-                        ),
-                      ),
-                      indicatorLoad(),
-                    ],
-                  ),
+            body: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    Image.asset(
+                      "assets/images/ajarilogo.png",
+                    ),
+                    Expanded(
+                      child: indicatorLoad(),
+                    ),
+                  ],
                 ),
-                // Positioned(
-                //   bottom: 5.0,
-                //   left: -135.0,
-                //   child: RotationTransition(
-                //     turns: turnsTween.animate(_animation),
-                //     child: Container(
-                //       height: 190,
-                //       width: 190,
-                //       decoration: BoxDecoration(
-                //           color: PaletteColor.primary,
-                //           borderRadius: BorderRadius.circular(85.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom: -65.0,
-                //   left: -65.0,
-                //   child: RotationTransition(
-                //     turns: turnsTween2.animate(_animation),
-                //     child: Container(
-                //       height: 190,
-                //       width: 190,
-                //       decoration: BoxDecoration(
-                //           color: PaletteColor.primary,
-                //           borderRadius: BorderRadius.circular(85.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Positioned(
-                //   bottom: -135.0,
-                //   left: 25.0,
-                //   child: RotationTransition(
-                //     turns: turnsTween3.animate(_animation),
-                //     child: Container(
-                //       height: 190,
-                //       width: 190,
-                //       decoration: BoxDecoration(
-                //           color: PaletteColor.primary,
-                //           borderRadius: BorderRadius.circular(85.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                ),
-              ],
+              ),
             ),
           );
         }

@@ -18,7 +18,8 @@ class UserBottomSheetDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Profile _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
+    final Profile _profile =
+        Provider.of<ProfileProvider>(context, listen: false).profile;
 
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
@@ -41,62 +42,69 @@ class UserBottomSheetDialog extends StatelessWidget {
               ),
               ProfileTile(profile: _profile),
               Container(
-                height: 1,
-                width: MediaQuery.of(context).size.width,
-                color: PaletteColor.primarybg2,
                 margin: const EdgeInsets.only(
-                  top: SpacingDimens.spacing8,
+                  top: 8.0,
+                  bottom: 4.0,
                 ),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: PaletteColor.primary,
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: PaletteColor.primarybg,
 
-                },
-                child: actionBottomSheet(
-                  icon: Icons.help_outline,
-                  title: "About",
                 ),
-              ),
-              Container(
-                height: 1,
-                width: MediaQuery.of(context).size.width,
-                color: PaletteColor.primarybg2,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  primary: PaletteColor.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    primary: PaletteColor.primary,
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: actionBottomSheet(
+                    icon: Icons.help_outline,
+                    title: "About",
                   ),
                 ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return ConfirmationLogoutDialog(
-                        homePageCtx: ctx,
-                        sheetDialogCtx: context,
-                      );
-                    },
-                  );
-                },
-                child: actionBottomSheet(
-                  icon: Icons.logout,
-                  title: "Logout",
+              ),
+              Container(
+                height: 1.5,
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                decoration: BoxDecoration(
+                  color: PaletteColor.grey40.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(10.0)
                 ),
               ),
               Container(
-                height: 1,
-                width: MediaQuery.of(context).size.width,
-                color: PaletteColor.primarybg2,
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: PaletteColor.primarybg,
+
+                ),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                      primary: PaletteColor.primary,
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ConfirmationLogoutDialog(
+                          homePageCtx: ctx,
+                          sheetDialogCtx: context,
+                        );
+                      },
+                    );
+                  },
+                  child: actionBottomSheet(
+                    icon: Icons.logout,
+                    title: "Logout",
+                  ),
+                ),
               ),
             ],
           ),
@@ -133,34 +141,32 @@ class UserBottomSheetDialog extends StatelessWidget {
 class ProfileTile extends StatelessWidget {
   final Profile profile;
 
-  const ProfileTile({Key? key, required this.profile})
-      : super(key: key);
+  const ProfileTile({Key? key, required this.profile}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        top: SpacingDimens.spacing16,
-        bottom: SpacingDimens.spacing8,
+        top: SpacingDimens.spacing12,
+        bottom: SpacingDimens.spacing4,
       ),
       child: ElevatedButton(
-        onPressed: (){
-            Navigator.of(context).push(
-              routeTransition(
-                ProfilePage(
-                  profile: profile,
-                ),
+        onPressed: () {
+          Navigator.of(context).push(
+            routeTransition(
+              ProfilePage(
+                profile: profile,
               ),
-            );
+            ),
+          );
         },
         style: ElevatedButton.styleFrom(
-          primary: PaletteColor.primarybg,
-          onPrimary: PaletteColor.primary.withOpacity(0.5),
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)
-          )
-        ),
+            primary: PaletteColor.primarybg,
+            onPrimary: PaletteColor.primary.withOpacity(0.5),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
         child: Row(
           children: [
             SizedBox(

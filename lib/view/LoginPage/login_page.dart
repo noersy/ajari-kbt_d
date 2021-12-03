@@ -8,6 +8,7 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/button_login_wgoogle.dart';
+import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -146,19 +147,19 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception("Login Failed");
       }
 
-      if (profile.role == "-") {
+      if (profile.username == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => SelectionPage(user: FirebaseAuth.instance.currentUser!),
+            builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
           ),
         );
         return;
       }
 
-      if (profile.role == "-") {
+      if (profile.username == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => SelectionPage(user: FirebaseAuth.instance.currentUser!),
+            builder: (context) => RegisterPage(user: FirebaseAuth.instance.currentUser!),
           ),
         );
         return;

@@ -13,6 +13,8 @@ class Profile {
     required this.role,
     required this.codeKelas,
     required this.name,
+    required this.username,
+    required this.password,
     required this.email,
     required this.uid,
     required this.urlImage,
@@ -22,8 +24,9 @@ class Profile {
   final String role;
   final String email;
   final String name;
+  final String username;
+  final String password;
   final String codeKelas;
-
   final String urlImage;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
@@ -31,6 +34,8 @@ class Profile {
         role: json["role"],
         email: json["email"],
         name: json["name"],
+        password: json["password"],
+        username: json["username"],
         codeKelas: json["code_kelas"],
         urlImage: json["urlImage"],
       );
@@ -42,12 +47,15 @@ class Profile {
         "username": name,
         "code_kelas": codeKelas,
         "urlImage": urlImage,
+        "password": password,
       };
 
   static blankProfile() => Profile(
         role: "-",
         codeKelas: "-",
         name: '-',
+        password: "-",
+        username: '-',
         email: '-',
         uid: '-',
         urlImage: '-',

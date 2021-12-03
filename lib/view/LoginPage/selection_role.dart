@@ -12,8 +12,10 @@ import 'package:provider/provider.dart';
 
 class SelectionPage extends StatefulWidget {
   final User user;
+  final String username;
+  final String password;
 
-  const SelectionPage({Key? key, required this.user}) : super(key: key);
+  const SelectionPage({Key? key, required this.user, required this.username, required this.password}) : super(key: key);
 
   @override
   _RegisterPage createState() => _RegisterPage();

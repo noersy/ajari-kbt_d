@@ -1,6 +1,7 @@
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ButtonLogin extends StatelessWidget {
@@ -17,25 +18,25 @@ class ButtonLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: SpacingDimens.spacing64),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(0),
-            primary: PaletteColor.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3.0),
-            ),
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(2.0),
+          primary: PaletteColor.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          onPressed: onPressedFunction,
-          child: SizedBox(
-            height: 48,
-            child: Center(
-              child: Text(
-                title,
-                style: TypographyStyle.button1.copyWith(
-                    color: PaletteColor.primarybg,
-                ),
+        ),
+        onPressed: onPressedFunction,
+        child: SizedBox(
+          height: 48,
+          child: Center(
+            child: Text(
+              title,
+              style: TypographyStyle.button1.copyWith(
+                color: PaletteColor.primarybg,
+                fontSize: 18,
+                fontWeight: FontWeight.bold
               ),
             ),
           ),

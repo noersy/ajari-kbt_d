@@ -19,12 +19,16 @@ class ProfileProvider extends ChangeNotifier {
   Future<void> createProfile({
     required String role,
     required User user,
+    String? username,
+    String? password,
   }) async {
     try {
       Map<String, dynamic> data = <String, dynamic>{
         "uid": user.uid,
         "name": user.displayName,
         "email": user.email,
+        "username" : username ?? "-",
+        "password" : password ?? "-",
         "urlImage": user.photoURL,
         "role": role,
         "code_kelas": '-'
