@@ -6,7 +6,6 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/ProfilePage/profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +14,7 @@ import 'component/confirmation_logoutdialog.dart';
 class UserBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;
 
-  UserBottomSheetDialog({Key? key, required this.ctx}) : super(key: key);
-
-  final User? _user = FirebaseAuth.instance.currentUser;
+  const UserBottomSheetDialog({Key? key, required this.ctx}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +39,7 @@ class UserBottomSheetDialog extends StatelessWidget {
                   color: PaletteColor.grey60,
                 ),
               ),
-              ProfileTile(user: _user, profile: _profile),
+              ProfileTile(profile: _profile),
               Container(
                 height: 1,
                 width: MediaQuery.of(context).size.width,
@@ -134,10 +131,9 @@ class UserBottomSheetDialog extends StatelessWidget {
 }
 
 class ProfileTile extends StatelessWidget {
-  final User? user;
   final Profile profile;
 
-  const ProfileTile({Key? key, required this.user, required this.profile})
+  const ProfileTile({Key? key, required this.profile})
       : super(key: key);
 
   @override
@@ -149,16 +145,13 @@ class ProfileTile extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: (){
-          if (user != null) {
             Navigator.of(context).push(
               routeTransition(
                 ProfilePage(
-                  user: user!,
-                  role: profile.role,
+                  profile: profile,
                 ),
               ),
             );
-          }
         },
         style: ElevatedButton.styleFrom(
           primary: PaletteColor.primarybg,
@@ -175,9 +168,7 @@ class ProfileTile extends StatelessWidget {
               width: 65.0,
               child: CircleAvatar(
                 backgroundColor: PaletteColor.grey40,
-                backgroundImage: user != null
-                    ? CachedNetworkImageProvider(user!.photoURL!)
-                    : null,
+                backgroundImage: CachedNetworkImageProvider(profile.urlImage),
               ),
             ),
             Container(
@@ -188,7 +179,7 @@ class ProfileTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user?.displayName ?? "",
+                    profile.name,
                     style: TypographyStyle.subtitle2,
                   ),
                   const SizedBox(

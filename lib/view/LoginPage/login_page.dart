@@ -136,8 +136,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      await AuthLogin.signInWithGoogle(context: context);
-      final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
+      User? user = await AuthLogin.signInWithGoogle(context: context);
+      if(user == null) throw Exception("User is null");
+      final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
 
 

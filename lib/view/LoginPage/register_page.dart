@@ -240,7 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       await AuthLogin.signInWithGoogle(context: context);
       final profile = await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
+          .getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
       await Provider.of<KelasProvider>(context, listen: false)
           .getKelas(codeKelas: _profile?.codeKelas ?? "");
 

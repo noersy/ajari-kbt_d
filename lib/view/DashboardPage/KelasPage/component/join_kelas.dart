@@ -31,8 +31,9 @@ class _JoinKelasState extends State<JoinKelas> {
       if (_user == null) throw Exception("Not login yet.");
       var hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, user: _user!);
 
+      String uid = Provider.of<ProfileProvider>(context, listen: false).profile.uid;
       if (hasil  == 400) throw Exception("Join failed");
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: _user!.uid);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: uid);
       Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
 
       if (!mounted) return;

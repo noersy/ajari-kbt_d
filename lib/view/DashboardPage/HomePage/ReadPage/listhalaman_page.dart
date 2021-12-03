@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ListHalamanPage extends StatefulWidget {
-  final String nomor, uid;
+  final String nomor;
 
-  const ListHalamanPage({Key? key, required this.nomor, required this.uid})
+  const ListHalamanPage({Key? key, required this.nomor})
       : super(key: key);
 
   @override
@@ -46,7 +46,7 @@ class _ListHalamanPageState extends State<ListHalamanPage> {
         barTitle: 'Jilid ${widget.nomor}',
         body: StreamBuilder<QuerySnapshot?>(
           stream: Provider.of<KelasProvider>(context).getGrade(
-            uid: widget.uid,
+            uid: _profile.uid,
             codeKelas: _profile.codeKelas,
             nomorJilid: widget.nomor,
           ),
@@ -79,7 +79,7 @@ class _ListHalamanPageState extends State<ListHalamanPage> {
 
                 return HalamanContainer(
                   ctx: context,
-                  uid: widget.uid,
+                  uid: _profile.uid,
                   role: _profile.role,
                   grade: data['grade'] != null ? "${data['grade']}" : '-',
                   codeKelas: _profile.codeKelas,
@@ -89,7 +89,7 @@ class _ListHalamanPageState extends State<ListHalamanPage> {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ReadPage(
-                          uid: widget.uid,
+                          uid: _profile.uid,
                           role: _profile.role,
                           grade: data['grade'] != null ? "${data['grade']}" : 'E',
                           codeKelas: _profile.codeKelas,

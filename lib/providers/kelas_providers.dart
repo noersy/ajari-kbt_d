@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:ajari/config/firebase_reference.dart';
 import 'package:ajari/model/kelas.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -145,17 +146,17 @@ class KelasProvider extends ChangeNotifier {
 
   Future<int> createKelas({
     required namaKelas,
-    required User? user,
+    required Profile profile,
   }) async {
     try {
-      if (user == null) throw Exception("user has null");
+      if (profile.uid == "-") throw Exception("user has null");
 
       String _code = FirebaseReference.getRandomString(5);
 
       Map<String, dynamic> dataKelas = <String, dynamic>{
         "nama": namaKelas,
-        "pengajar": user.displayName,
-        "pengajar_id": user.uid,
+        "pengajar": profile.name,
+        "pengajar_id": profile.uid,
         "jumlah_santri": 0,
         "kelas_id": _code
       };
@@ -163,7 +164,7 @@ class KelasProvider extends ChangeNotifier {
       Map<String, dynamic> dataUser = <String, dynamic>{"code_kelas": _code};
 
       await FirebaseReference.getKelas(_code).set(dataKelas);
-      await FirebaseReference.getUser(user.uid).update(dataUser);
+      await FirebaseReference.getUser(profile.uid).update(dataUser);
 
       updateKelas(kelasFromJson(jsonEncode(dataKelas)));
 

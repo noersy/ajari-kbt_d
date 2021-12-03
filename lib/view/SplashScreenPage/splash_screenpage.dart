@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreenPage> with TickerProviderStat
     try {
       User? user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
-      final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user.uid);
+      final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf.codeKelas);
 
       if (prf.role == "-") {

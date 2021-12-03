@@ -1,4 +1,5 @@
 import 'package:ajari/component/appbar/appbar_notification.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/view_ustaz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,8 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
-    String username = FirebaseAuth.instance.currentUser?.displayName ?? "";
+    Profile profile = Provider.of<ProfileProvider>(context, listen: false).profile;
 
     return DecoratedBox(
       decoration: const BoxDecoration(
@@ -29,9 +29,9 @@ class HomePage extends StatelessWidget {
         //   ctx: context,
         //   title: 'Hallo, $username!',
         // ),
-        body: role == "Santri"
-            ? ViewSantri(name: username)
-            : ViewUstaz(name: username),
+        body: profile.role == "Santri"
+            ? ViewSantri(name: profile.name)
+            : ViewUstaz(name: profile.name),
       ),
     );
   }

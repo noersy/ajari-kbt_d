@@ -128,8 +128,8 @@ class _RegisterPage extends State<SelectionPage> {
   void onPressedFunction() async {
     try {
       if(_selected == "") return;
-      await Provider.of<ProfileProvider>(context, listen: false).createProfile(userid: widget.user.uid, role: _selected);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: FirebaseAuth.instance.currentUser?.uid ?? "");
+      await Provider.of<ProfileProvider>(context, listen: false).createProfile(user: widget.user, role: _selected);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

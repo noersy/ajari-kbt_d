@@ -10,16 +10,13 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  final User user;
-  final String role;
+  final Profile profile;
 
-  const ProfilePage({Key? key, required this.user, required this.role})
-      : super(key: key);
+  const ProfilePage({Key? key, required this.profile}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -27,7 +24,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   void _delete() async {
-    await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.user.uid);
+    await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.profile.uid);
     await AuthLogin.signOut(context: context);
     context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
     context.read<ProfileProvider>().setProfile(Profile.blankProfile());
@@ -83,10 +80,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       padding: const EdgeInsets.all(SpacingDimens.spacing8),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: widget.user.photoURL?.isNotEmpty != null
+                        child: widget.profile.urlImage != "-"
                             ? CachedNetworkImage(
                                 fit: BoxFit.fill,
-                                imageUrl: widget.user.photoURL!,
+                                imageUrl: widget.profile.urlImage,
                               )
                             : const SizedBox.shrink(),
                       ),
@@ -96,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding:
                         const EdgeInsets.only(bottom: SpacingDimens.spacing8),
                     child: Text(
-                      "${widget.user.displayName}",
+                      widget.profile.name,
                       style: TypographyStyle.button1,
                     ),
                   ),
@@ -108,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Text(
-                      widget.role,
+                      widget.profile.role,
                       style: TypographyStyle.subtitle2.merge(
                         const TextStyle(
                           color: PaletteColor.primarybg,
@@ -139,8 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    containerData(title: "Name", body: '${widget.user.displayName}'),
-                    containerData(title: "Email", body: '${widget.user.email}'),
+                    containerData(title: "Name", body: widget.profile.name),
+                    containerData(title: "Email", body: widget.profile.email),
                   ],
                 ),
               ),

@@ -1,10 +1,10 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +19,6 @@ class CreateKelas extends StatefulWidget {
 class _CreateKelasState extends State<CreateKelas> {
   final TextEditingController _editingController = TextEditingController();
 
-  final User? user = FirebaseAuth.instance.currentUser;
-
   bool _loading = false;
 
   void _createKelas(ctx) async {
@@ -29,8 +27,9 @@ class _CreateKelasState extends State<CreateKelas> {
         _loading = true;
       });
 
-      var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, user: user);
-      await Provider.of<ProfileProvider>(context, listen: false).getProfile(userUid: user?.uid ?? "");
+      Profile _profile =  Provider.of<ProfileProvider>(context, listen: false).profile;
+      var data = await Provider.of<KelasProvider>(context, listen: false).createKelas(namaKelas: _editingController.text, profile: _profile);
+      await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: _profile.uid);
       Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
 
       if (data == 400) throw Exception("Create Kelas failed");

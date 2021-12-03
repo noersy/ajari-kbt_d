@@ -12,45 +12,44 @@ class Profile {
   Profile({
     required this.role,
     required this.codeKelas,
-    // required this.username,
-    // required this.email,
-    // required this.uid,
-    // required this.urlImage,
+    required this.name,
+    required this.email,
+    required this.uid,
+    required this.urlImage,
   });
 
-  // final String uid;
+  final String uid;
   final String role;
-
-  // final String email;
-  // final String username;
+  final String email;
+  final String name;
   final String codeKelas;
 
-  // final String urlImage;
+  final String urlImage;
 
   factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        // uid: json["uid"],
+        uid: json["uid"],
         role: json["role"],
-        // email: json["email"],
-        // username: json["username"],
+        email: json["email"],
+        name: json["name"],
         codeKelas: json["code_kelas"],
-        // urlImage: json["urlImage"],
+        urlImage: json["urlImage"],
       );
 
   Map<String, dynamic> toJson() => {
-        // "uid": uid,
+        "uid": uid,
         "role": role,
-        // "email": email,
-        // "username": username,
+        "email": email,
+        "username": name,
         "code_kelas": codeKelas,
-        // "urlImage": urlImage,
+        "urlImage": urlImage,
       };
 
   static blankProfile() => Profile(
         role: "-",
         codeKelas: "-",
-        // username: '-',
-        // email: '-',
-        // uid: '-',
-        // urlImage: '-',
+        name: '-',
+        email: '-',
+        uid: '-',
+        urlImage: '-',
       );
 }
