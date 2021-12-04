@@ -24,7 +24,7 @@ class UserBottomSheetDialog extends StatelessWidget {
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
-          height: 280.0,
+          height: 260.0,
           padding: const EdgeInsets.symmetric(
             horizontal: SpacingDimens.spacing24,
             vertical: SpacingDimens.spacing16,
@@ -41,70 +41,39 @@ class UserBottomSheetDialog extends StatelessWidget {
                 ),
               ),
               ProfileTile(profile: _profile),
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 8.0,
-                  bottom: 4.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: PaletteColor.primarybg,
-
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: PaletteColor.primary,
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  onPressed: () {},
-                  child: actionBottomSheet(
-                    icon: Icons.help_outline,
-                    title: "About",
-                  ),
-                ),
+              _actionBottomSheet(
+                onPressed: () {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: "Ajari",
+                    applicationVersion: "0.1.0",
+                    applicationLegalese: "Ajari adalah aplikasi belajar iqro'. \n\nN. Syahfei, A.Algifary, \nH. Gagagas. I Sholeh",
+                  );
+                },
+                icon: Icons.help_outline,
+                title: "About",
               ),
               Container(
                 height: 1.5,
                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                 decoration: BoxDecoration(
-                  color: PaletteColor.grey40.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(10.0)
-                ),
+                    color: PaletteColor.grey40.withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(10.0)),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 4.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: PaletteColor.primarybg,
-
-                ),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                      primary: PaletteColor.primary,
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ConfirmationLogoutDialog(
-                          homePageCtx: ctx,
-                          sheetDialogCtx: context,
-                        );
-                      },
-                    );
-                  },
-                  child: actionBottomSheet(
-                    icon: Icons.logout,
-                    title: "Logout",
-                  ),
-                ),
+              _actionBottomSheet(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return ConfirmationLogoutDialog(
+                        homePageCtx: ctx,
+                        sheetDialogCtx: context,
+                      );
+                    },
+                  );
+                },
+                icon: Icons.logout,
+                title: "Logout",
               ),
             ],
           ),
@@ -113,26 +82,41 @@ class UserBottomSheetDialog extends StatelessWidget {
     );
   }
 
-  Widget actionBottomSheet({required IconData icon, required String title}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: SpacingDimens.spacing16,
+  Widget _actionBottomSheet(
+      {required IconData icon,
+      required String title,
+      required Function() onPressed}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: PaletteColor.primarybg,
       ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 25,
-            color: PaletteColor.primary,
+      child: TextButton(
+        style: TextButton.styleFrom(
+          primary: PaletteColor.primary,
+          padding: const EdgeInsets.all(12.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
           ),
-          const SizedBox(
-            width: SpacingDimens.spacing24,
-          ),
-          Text(
-            title,
-            style: TypographyStyle.subtitle2,
-          ),
-        ],
+        ),
+        onPressed: onPressed,
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 25,
+              color: PaletteColor.primary,
+            ),
+            const SizedBox(
+              width: SpacingDimens.spacing24,
+            ),
+            Text(
+              title,
+              style: TypographyStyle.subtitle2,
+            ),
+          ],
+        ),
       ),
     );
   }

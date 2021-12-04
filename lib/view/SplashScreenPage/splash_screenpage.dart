@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
       if (prf.role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => RegisterPage(user: user),
+            builder: (context) => const RegisterPage(),
           ),
         );
         return;

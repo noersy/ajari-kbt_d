@@ -36,7 +36,7 @@ class _MainFormsState extends State<MainForms> {
           Container(
             alignment: Alignment.bottomLeft,
             child: Text(
-              "Email",
+              "Username",
               style: TypographyStyle.mini.merge(
                 const TextStyle(
                   color: PaletteColor.grey60,
@@ -54,7 +54,7 @@ class _MainFormsState extends State<MainForms> {
                 top: SpacingDimens.spacing8,
                 bottom: SpacingDimens.spacing8,
               ),
-              hintText: "Enter Email",
+              hintText: "Enter Username",
               hintStyle: TypographyStyle.paragraph.merge(
                 const TextStyle(
                   color: PaletteColor.grey60,

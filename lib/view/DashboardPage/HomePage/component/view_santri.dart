@@ -283,264 +283,267 @@ class ViewSantri extends StatelessWidget {
                       offset: const Offset(0, -1),
                       color: PaletteColor.primarybg2.withOpacity(0.5)),
                 ]),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: SpacingDimens.spacing8),
-                Center(
-                  child: SmoothPageIndicator(
-                    controller: _pageViewController,
-                    count: 2,
-                    axisDirection: Axis.horizontal,
-                    onDotClicked: (i) {
-                      _pageViewController.animateToPage(
-                        i,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
-                    effect: const ExpandingDotsEffect(
-                      expansionFactor: 3,
-                      spacing: 8,
-                      radius: 16,
-                      dotWidth: 10,
-                      dotHeight: 10,
-                      dotColor: PaletteColor.grey40,
-                      activeDotColor: PaletteColor.primary,
-                      paintStyle: PaintingStyle.fill,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: SpacingDimens.spacing8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: SpacingDimens.spacing4,
-                          left: SpacingDimens.spacing16,
-                          right: SpacingDimens.spacing8,
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 1,
-                            primary: PaletteColor.primarybg,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
-                            side: BorderSide(
-                              color: PaletteColor.grey80.withOpacity(0.08),
-                            ),
-                          ),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  ReadBottomSheetDialog(
-                                ctx: context,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 65,
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  margin: const EdgeInsets.all(
-                                      SpacingDimens.spacing8),
-                                  decoration: BoxDecoration(
-                                      color:
-                                          PaletteColor.primary.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(100)),
-                                  child: const Icon(
-                                    CostumeIcons.holyQuran,
-                                    color: PaletteColor.primary,
-                                  ),
-                                ),
-                                Container(
-                                  width: 70,
-                                  padding: const EdgeInsets.only(
-                                      bottom: SpacingDimens.spacing12,
-                                      left: SpacingDimens.spacing12),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "قرأ",
-                                        style: TypographyStyle.subtitle1.merge(
-                                            const TextStyle(
-                                                color: PaletteColor.primary,
-                                                fontSize: 20)),
-                                      ),
-                                      Text("Baca",
-                                          style: TypographyStyle.subtitle2
-                                              .merge(const TextStyle(
-                                                  fontSize: 12))),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: SpacingDimens.spacing8),
+                  Center(
+                    child: SmoothPageIndicator(
+                      controller: _pageViewController,
+                      count: 2,
+                      axisDirection: Axis.horizontal,
+                      onDotClicked: (i) {
+                        _pageViewController.animateToPage(
+                          i,
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                      effect: const ExpandingDotsEffect(
+                        expansionFactor: 3,
+                        spacing: 8,
+                        radius: 16,
+                        dotWidth: 10,
+                        dotHeight: 10,
+                        dotColor: PaletteColor.grey40,
+                        activeDotColor: PaletteColor.primary,
+                        paintStyle: PaintingStyle.fill,
                       ),
                     ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          top: SpacingDimens.spacing4,
-                          right: SpacingDimens.spacing16,
-                          left: SpacingDimens.spacing8,
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 1,
-                            primary: PaletteColor.primarybg,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                            ),
-                            side: BorderSide(
-                              color: PaletteColor.grey80.withOpacity(0.08),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => const StoryPage()),
-                            );
-                          },
-                          child: Container(
-                            height: 65,
-                            alignment: Alignment.center,
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                      color:
-                                          PaletteColor.primary.withOpacity(0.2),
-                                      borderRadius: BorderRadius.circular(
-                                        100,
-                                      )),
-                                  child: const Icon(
-                                    Icons.collections_bookmark_sharp,
-                                    color: PaletteColor.primary,
-                                  ),
-                                ),
-                                Container(
-                                  width: 60,
-                                  padding: const EdgeInsets.only(
-                                      bottom: SpacingDimens.spacing12,
-                                      left: SpacingDimens.spacing12),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "قصة",
-                                        style: TypographyStyle.subtitle1.merge(
-                                            const TextStyle(
-                                                color: PaletteColor.primary,
-                                                fontSize: 20)),
-                                      ),
-                                      Text(
-                                        "Cerita",
-                                        style: TypographyStyle.subtitle2.merge(
-                                          const TextStyle(fontSize: 12),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(
-                      top: SpacingDimens.spacing24,
-                      left: SpacingDimens.spacing28,
-                      bottom: SpacingDimens.spacing16),
-                  child: const Text(
-                    "Something Interesting",
-                    style: TypographyStyle.subtitle2,
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 140,
-                  child: ListView(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
+                  const SizedBox(height: SpacingDimens.spacing8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SizedBox(
-                        width: SpacingDimens.spacing28,
-                      ),
-                      cardStry(
-                        image: 'assets/images/nabi_ibrahim.png',
-                        title: const Text(
-                          "Kisah Nabi Ibrahim",
-                          style: TextStyle(
-                              color: PaletteColor.primarybg, fontSize: 16),
-                        ),
-                        color: const Color(0xFF9F5A2A),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const NabiIbrahimPage(),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: SpacingDimens.spacing4,
+                            left: SpacingDimens.spacing16,
+                            right: SpacingDimens.spacing8,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 1,
+                              primary: PaletteColor.primarybg,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              side: BorderSide(
+                                color: PaletteColor.grey80.withOpacity(0.08),
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                      cardStry(
-                        image: 'assets/images/nabi_musa.png',
-                        title: const Text(
-                          "Kisah Nabi Musa",
-                          style:
-                              TextStyle(color: Color(0xFF620101), fontSize: 16),
-                        ),
-                        color: const Color(0xFFF7EAC0),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const NabiMusaPage(),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    ReadBottomSheetDialog(
+                                  ctx: context,
+                                ),
+                              );
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: 65,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    margin: const EdgeInsets.all(
+                                        SpacingDimens.spacing8),
+                                    decoration: BoxDecoration(
+                                        color:
+                                            PaletteColor.primary.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(100)),
+                                    child: const Icon(
+                                      CostumeIcons.holyQuran,
+                                      color: PaletteColor.primary,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 70,
+                                    padding: const EdgeInsets.only(
+                                        bottom: SpacingDimens.spacing12,
+                                        left: SpacingDimens.spacing12),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "قرأ",
+                                          style: TypographyStyle.subtitle1.merge(
+                                              const TextStyle(
+                                                  color: PaletteColor.primary,
+                                                  fontSize: 20)),
+                                        ),
+                                        Text("Baca",
+                                            style: TypographyStyle.subtitle2
+                                                .merge(const TextStyle(
+                                                    fontSize: 12))),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          );
-                        },
-                      ),
-                      cardStry(
-                        image: 'assets/images/nabi_nuh.png',
-                        title: const Text(
-                          "Kisah Nabi Nuh",
-                          style: TextStyle(
-                              color: PaletteColor.primarybg, fontSize: 16),
+                          ),
                         ),
-                        color: const Color(0xFF8DAA3C),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const NabihNuhPage(),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            top: SpacingDimens.spacing4,
+                            right: SpacingDimens.spacing16,
+                            left: SpacingDimens.spacing8,
+                          ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 1,
+                              primary: PaletteColor.primarybg,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                              side: BorderSide(
+                                color: PaletteColor.grey80.withOpacity(0.08),
+                              ),
                             ),
-                          );
-                        },
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => const StoryPage()),
+                              );
+                            },
+                            child: Container(
+                              height: 65,
+                              alignment: Alignment.center,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            PaletteColor.primary.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(
+                                          100,
+                                        )),
+                                    child: const Icon(
+                                      Icons.collections_bookmark_sharp,
+                                      color: PaletteColor.primary,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 60,
+                                    padding: const EdgeInsets.only(
+                                        bottom: SpacingDimens.spacing12,
+                                        left: SpacingDimens.spacing12),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "قصة",
+                                          style: TypographyStyle.subtitle1.merge(
+                                              const TextStyle(
+                                                  color: PaletteColor.primary,
+                                                  fontSize: 20)),
+                                        ),
+                                        Text(
+                                          "Cerita",
+                                          style: TypographyStyle.subtitle2.merge(
+                                            const TextStyle(fontSize: 12),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  Container(
+                    margin: const EdgeInsets.only(
+                        top: SpacingDimens.spacing24,
+                        left: SpacingDimens.spacing28,
+                        bottom: SpacingDimens.spacing16),
+                    child: const Text(
+                      "Something Interesting",
+                      style: TypographyStyle.subtitle2,
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 140,
+                    child: ListView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        const SizedBox(
+                          width: SpacingDimens.spacing28,
+                        ),
+                        cardStry(
+                          image: 'assets/images/nabi_ibrahim.png',
+                          title: const Text(
+                            "Kisah Nabi Ibrahim",
+                            style: TextStyle(
+                                color: PaletteColor.primarybg, fontSize: 16),
+                          ),
+                          color: const Color(0xFF9F5A2A),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const NabiIbrahimPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        cardStry(
+                          image: 'assets/images/nabi_musa.png',
+                          title: const Text(
+                            "Kisah Nabi Musa",
+                            style:
+                                TextStyle(color: Color(0xFF620101), fontSize: 16),
+                          ),
+                          color: const Color(0xFFF7EAC0),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const NabiMusaPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        cardStry(
+                          image: 'assets/images/nabi_nuh.png',
+                          title: const Text(
+                            "Kisah Nabi Nuh",
+                            style: TextStyle(
+                                color: PaletteColor.primarybg, fontSize: 16),
+                          ),
+                          color: const Color(0xFF8DAA3C),
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const NabihNuhPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
