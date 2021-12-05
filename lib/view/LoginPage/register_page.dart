@@ -292,7 +292,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
 
-      if (profile.role == "-") {
+      if (profile["role"] == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) =>

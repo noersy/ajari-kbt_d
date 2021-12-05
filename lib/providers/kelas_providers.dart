@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ajari/config/firebase_reference.dart';
 import 'package:ajari/model/kelas.dart';
@@ -7,6 +8,9 @@ import 'package:ajari/model/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sembast/sembast.dart';
+import 'package:sembast/sembast_io.dart';
 
 class KelasProvider extends ChangeNotifier {
   static Kelas _kelas = Kelas.blankKelas();
@@ -84,9 +88,6 @@ class KelasProvider extends ChangeNotifier {
             _streamSantri.close();
           }
 
-          if (kDebugMode) {
-            print("set Santri");
-          }
         });
       }
 
@@ -99,9 +100,7 @@ class KelasProvider extends ChangeNotifier {
             _streamAbsen.close();
           }
 
-          if (kDebugMode) {
-            print("set absen");
-          }
+
         });
       }
 
@@ -114,9 +113,7 @@ class KelasProvider extends ChangeNotifier {
             _streamDiskusi.close();
           }
 
-          if (kDebugMode) {
-            print("set diskusi");
-          }
+
         });
       }
 
@@ -129,9 +126,6 @@ class KelasProvider extends ChangeNotifier {
             _streamMeet.close();
           }
 
-          if (kDebugMode) {
-            print("set meet");
-          }
         });
       }
 
@@ -255,7 +249,7 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<int> getKelas({required String codeKelas}) async {
+  Future<Map<String, dynamic>> getKelas({required String codeKelas}) async {
     try {
       var data = await FirebaseReference.getKelas(codeKelas).get();
 
@@ -265,12 +259,12 @@ class KelasProvider extends ChangeNotifier {
 
       updateKelas(kelas);
 
-      return 200;
+      return data.data() as Map<String, dynamic>;
     } catch (e) {
       if (kDebugMode) {
         print("getKelas: Error");
       }
-      return 400;
+      return {};
     }
   }
 
@@ -641,4 +635,43 @@ class KelasProvider extends ChangeNotifier {
     }
     return 200;
   }
+
+
+  static const String dbPath = 'ajari.db';
+  static final DatabaseFactory dbFactory = databaseFactoryIo;
+
+  static Database? db;
+
+  Future<void> setDatabase() async {
+    try {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
+      db = await dbFactory.openDatabase(appDocPath + dbPath);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void storeLocalKelas(Map<String, dynamic> profile) async {
+    try {
+      var store = StoreRef.main();
+      if (db == null) return;
+      await store.record('kelas').put(db!, profile);
+    } catch (e) {}
+  }
+
+  Future<Kelas> getLocalKelas() async {
+    try {
+      var store = StoreRef.main();
+      if (db == null) throw Exception("error");
+      var data = await store.record('kelas').get(db!);
+      updateKelas(kelasFromJson(jsonEncode(data)));
+      return kelasFromJson(jsonEncode(data));
+    } catch (e,r) {
+      print(e);
+      print(r);
+    }
+    return Kelas.blankKelas();
+  }
+
 }
