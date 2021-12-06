@@ -1,8 +1,6 @@
-import 'package:ajari/component/appbar/appbar_notification.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/view_ustaz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

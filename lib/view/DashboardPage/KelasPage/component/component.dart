@@ -5,17 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DateCard extends StatefulWidget {
-  final hari, tgl, color, onTap, haveEvent;
+  final String hari, tgl;
+  final Color color;
+  final Function()? onTap;
+  final bool haveEvent;
   final DateTime dateTime;
 
   const DateCard({
     Key? key,
     required this.dateTime,
-    this.hari,
-    this.tgl,
-    this.color,
-    this.onTap,
-    this.haveEvent,
+    required this.hari,
+    required this.tgl,
+    required this.color,
+    required this.onTap,
+    required this.haveEvent,
   }) : super(key: key);
 
   @override

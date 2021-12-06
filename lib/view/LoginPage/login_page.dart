@@ -1,9 +1,6 @@
-import 'dart:typed_data';
-
 import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/config/firebase_reference.dart';
-import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -33,14 +30,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  Profile? _profile;
   bool isLoading = false;
-
-  @override
-  void initState() {
-    _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +133,11 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context) => const DashboardPage(),
         ),
       );
-    }catch(e){
-
+    }catch(e, r){
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
     }
 
     setState(() {

@@ -240,12 +240,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  bool _validateStructure(String value){
-    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{6,}$';
-    RegExp regExp = RegExp(pattern);
-    return regExp.hasMatch(value);
-  }
-
   void onPressedFunction() async {
     setState(() {
       isLoading = true;

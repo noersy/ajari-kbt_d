@@ -1,4 +1,3 @@
-import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
@@ -146,8 +145,9 @@ class ConfirmationLogoutDialog extends StatelessWidget {
       // Provider.of<KelasProvider>(context, listen: false).closeKelasService();
       context.read<KelasProvider>().closeKelasService();
       Provider.of<KelasProvider>(context, listen: false).clearData();
-      Provider.of<ProfileProvider>(context, listen: false).setProfile(
-          Profile.blankProfile());
+      Provider.of<KelasProvider>(context, listen: false).deleteLocalKelas();
+      Provider.of<ProfileProvider>(context, listen: false).deleteLocalProfile();
+      Provider.of<ProfileProvider>(context, listen: false).setProfile(Profile.blankProfile());
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

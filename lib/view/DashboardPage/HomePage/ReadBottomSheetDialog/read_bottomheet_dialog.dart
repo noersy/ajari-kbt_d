@@ -1,12 +1,8 @@
-import 'package:ajari/providers/kelas_providers.dart';
-import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/ReadPage/listhalaman_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ReadBottomSheetDialog extends StatelessWidget {
   final BuildContext ctx;

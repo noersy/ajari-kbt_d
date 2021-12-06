@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:ajari/config/firebase_reference.dart';
 import 'package:ajari/model/profile.dart';
-import 'package:ajari/view/ProfilePage/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -131,8 +130,12 @@ class ProfileProvider extends ChangeNotifier {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String appDocPath = appDocDir.path;
       db = await dbFactory.openDatabase(appDocPath + dbPath);
-    } catch (e) {
-      print(e);
+    } catch (e, r) {
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+
     }
   }
 
@@ -141,7 +144,26 @@ class ProfileProvider extends ChangeNotifier {
       var store = StoreRef.main();
       if (db == null) return;
       await store.record('profile').put(db!, profile);
-    } catch (e) {}
+    } catch (e, r) {
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+    }
+  }
+
+  void deleteLocalProfile() async {
+    try {
+      var store = StoreRef.main();
+      if (db == null) return;
+      await store.record('profile').delete(db!);
+    } catch (e, r) {
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+
+    }
   }
 
   Future<Profile> getLocalProfile() async {
@@ -152,8 +174,11 @@ class ProfileProvider extends ChangeNotifier {
       setProfile(profileFromJson(jsonEncode(data)));
       return profileFromJson(jsonEncode(data));
     } catch (e,r) {
-      print(e);
-      print(r);
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+
     }
     return Profile.blankProfile();
   }

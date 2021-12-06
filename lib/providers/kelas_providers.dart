@@ -648,7 +648,9 @@ class KelasProvider extends ChangeNotifier {
       String appDocPath = appDocDir.path;
       db = await dbFactory.openDatabase(appDocPath + dbPath);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
@@ -657,7 +659,25 @@ class KelasProvider extends ChangeNotifier {
       var store = StoreRef.main();
       if (db == null) return;
       await store.record('kelas').put(db!, profile);
-    } catch (e) {}
+    } catch (e, r) {
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+    }
+  }
+
+  void deleteLocalKelas() async {
+    try {
+      var store = StoreRef.main();
+      if (db == null) return;
+      await store.record('kelas').delete(db!);
+    } catch (e, r) {
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
+    }
   }
 
   Future<Kelas> getLocalKelas() async {
@@ -668,8 +688,10 @@ class KelasProvider extends ChangeNotifier {
       updateKelas(kelasFromJson(jsonEncode(data)));
       return kelasFromJson(jsonEncode(data));
     } catch (e,r) {
-      print(e);
-      print(r);
+      if (kDebugMode) {
+        print(e);
+        print(r);
+      }
     }
     return Kelas.blankKelas();
   }

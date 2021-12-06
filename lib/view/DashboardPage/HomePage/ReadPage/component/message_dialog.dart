@@ -12,7 +12,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -361,23 +360,6 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
 
   bool _play = false;
-
-  Future<String> _getFilePath() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    String filePath = '$appDocPath/'; // 3
-
-    Directory appFolder = Directory(appDocPath);
-    bool appFolderExists = await appFolder.exists();
-    if (!appFolderExists) {
-      final created = await appFolder.create(recursive: true);
-      if (kDebugMode) {
-        print(created.path);
-      }
-    }
-
-    return filePath;
-  }
 
   Future<bool> _checkPermission() async {
     Map<Permission, PermissionStatus> permissions = await [

@@ -141,13 +141,11 @@ class _ReadPageState extends State<ReadPage> {
               setState(() {
                 _nomorHalaman -= 1;
               });
-              print("prev");
             },
             nextAction: () {
               setState(() {
                 _nomorHalaman += 1;
               });
-              print("next");
             },
           ),
         ],
