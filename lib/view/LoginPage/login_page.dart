@@ -90,6 +90,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: SpacingDimens.spacing8),
+
+              Align(
+                child: loadingIndicator,
+                alignment: FractionalOffset.center,
+              ),
             ],
           ),
         ),
