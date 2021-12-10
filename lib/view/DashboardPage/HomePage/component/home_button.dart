@@ -3,14 +3,14 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:flutter/material.dart';
 
-class HomeButton extends StatelessWidget {
+class UstazHomePageButton extends StatelessWidget {
   final IconData icon;
   final double? iconSize;
   final String titleArab;
   final String title;
   final Widget target;
 
-  const HomeButton({
+  const UstazHomePageButton({
     Key? key,
     required this.icon,
     required this.titleArab,
@@ -69,7 +69,7 @@ class HomeButton extends StatelessWidget {
                         child: Text(
                           // "قيم",
                           titleArab,
-                          style: TypographyStyle.subtitle1.copyWith(color: PaletteColor.primarybg, fontSize: 78),
+                          style: TypographyStyle.subtitle1.copyWith(color: PaletteColor.primarybg, fontSize: 70),
                         ),
                       ),
                     ),

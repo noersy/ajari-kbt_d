@@ -213,7 +213,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Expanded(
-                        child: HomeButton(
+                        child: UstazHomePageButton(
                           icon: CostumeIcons.holyQuran,
                           titleArab: "قيم",
                           title: "Nilai",
@@ -222,7 +222,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                       ),
                       SizedBox(width: SpacingDimens.spacing4),
                       Expanded(
-                        child: HomeButton(
+                        child: UstazHomePageButton(
                           icon: Icons.collections_bookmark_sharp,
                           iconSize: 28.0,
                           titleArab: "قصة",
@@ -241,3 +241,5 @@ class _ViewUstazState extends State<ViewUstaz> {
     );
   }
 }
+
+
