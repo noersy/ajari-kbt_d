@@ -37,6 +37,11 @@ class MessageDialog extends StatefulWidget {
 }
 
 class _MessageDialogState extends State<MessageDialog> {
+  final TextEditingController _editingController = TextEditingController();
+  late DateTime _dateTime;
+  bool _first = true;
+
+
   @override
   Widget build(BuildContext context) {
     return widget.codeKelas != "-"
@@ -49,139 +54,134 @@ class _MessageDialogState extends State<MessageDialog> {
           );
   }
 
-  final TextEditingController _editingController = TextEditingController();
-
-  late DateTime _dateTime;
-
-  bool _first = true;
 
   contentBox(context) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(0.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Halaman ' + widget.nomorHalaman,
-                            style: TypographyStyle.subtitle1.merge(
-                              const TextStyle(
-                                color: PaletteColor.black,
-                              ),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Halaman ' + widget.nomorHalaman,
+                          style: TypographyStyle.subtitle1.merge(
+                            const TextStyle(
+                              color: PaletteColor.black,
                             ),
                           ),
                         ),
-                        const Divider(),
+                      ),
+                      const Divider(),
+                    ],
+                  ),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        PlayerAudioDown(
+                          nomorJilid: widget.nomorJilid,
+                          nomorHalaman: widget.nomorHalaman,
+                          uid: widget.uid,
+                          codeKelas: widget.codeKelas,
+                          role: widget.role,
+                          isPlayed: widget.isPlayed,
+                        ),
+                        const SizedBox(height: 22),
+                        _message(),
                       ],
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          PlayerAudioDown(
-                            nomorJilid: widget.nomorJilid,
-                            nomorHalaman: widget.nomorHalaman,
-                            uid: widget.uid,
-                            codeKelas: widget.codeKelas,
-                            role: widget.role,
-                            isPlayed: widget.isPlayed,
-                          ),
-                          const SizedBox(height: 22),
-                          _message(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+                color: PaletteColor.primary,
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                      offset: const Offset(0, -2),
+                      color: PaletteColor.grey80.withOpacity(0.05),
+                      spreadRadius: 3,
+                  )
+                ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(SpacingDimens.spacing8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: PaletteColor.primarybg,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              offset: const Offset(0, 1),
+                              color: PaletteColor.grey.withOpacity(0.1),
+                              spreadRadius: 1.5,
+                          )
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: PaletteColor.primary,
-                  borderRadius: BorderRadius.circular(10.0),
-                  boxShadow: [
-                    BoxShadow(
-                        offset: const Offset(0, -2),
-                        color: PaletteColor.grey80.withOpacity(0.05),
-                        spreadRadius: 3)
-                  ]),
-              child: Padding(
-                padding: const EdgeInsets.all(SpacingDimens.spacing8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: PaletteColor.primarybg,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                                offset: const Offset(0, 1),
-                                color: PaletteColor.grey.withOpacity(0.1),
-                                spreadRadius: 1.5)
-                          ],
-                        ),
-                        child: TextFormField(
-                          controller: _editingController,
-                          decoration: const InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: SpacingDimens.spacing8,
-                              vertical: SpacingDimens.spacing8,
-                            ),
+                      child: TextFormField(
+                        controller: _editingController,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: SpacingDimens.spacing8,
+                            vertical: SpacingDimens.spacing8,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: SpacingDimens.spacing8,
-                    ),
-                    SizedBox(
-                      width: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(0),
-                          primary: PaletteColor.primarybg,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0)),
-                        ),
-                        onPressed: () {
-                          if (_editingController.text.isEmpty) return;
+                  ),
+                  const SizedBox(
+                    width: SpacingDimens.spacing8,
+                  ),
+                  SizedBox(
+                    width: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(0),
+                        primary: PaletteColor.primarybg,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                      ),
+                      onPressed: () {
+                        if (_editingController.text.isEmpty) return;
 
-                          Provider.of<KelasProvider>(context, listen: false)
-                              .sendMessage(
-                            uid: widget.uid,
-                            codeKelas: widget.codeKelas,
-                            nomorJilid: widget.nomorJilid,
-                            nomorHalaman: widget.nomorHalaman,
-                            message: _editingController.text,
-                            role: widget.role,
-                          );
-                          _editingController.clear();
-                        },
-                        child: const Icon(
-                          Icons.send,
-                          color: PaletteColor.primary,
-                        ),
+                        Provider.of<KelasProvider>(context, listen: false)
+                            .sendMessage(
+                          uid: widget.uid,
+                          codeKelas: widget.codeKelas,
+                          nomorJilid: widget.nomorJilid,
+                          nomorHalaman: widget.nomorHalaman,
+                          message: _editingController.text,
+                          role: widget.role,
+                        );
+                        _editingController.clear();
+                      },
+                      child: const Icon(
+                        Icons.send,
+                        color: PaletteColor.primary,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -360,6 +360,8 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
 
   bool _play = false;
+  Duration _duration = const Duration(seconds: 0);
+  Duration _duration2 = const Duration(seconds: 0);
 
   Future<bool> _checkPermission() async {
     Map<Permission, PermissionStatus> permissions = await [
@@ -396,8 +398,10 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
       );
 
       if (widget.isPlayed) {
+        setState(() {
+          _play = true;
+        });
         _assetsAudioPlayerRecord.play();
-        _play = true;
       }
 
       if (kDebugMode) {
@@ -431,18 +435,20 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
         border: Border.all(color: PaletteColor.grey60),
         borderRadius: BorderRadius.circular(10),
       ),
-      child: FutureBuilder<PlayingAudio?>(
+      child: FutureBuilder(
         future: _assetsAudioPlayerRecord.onReadyToPlay.first,
-        builder: (context, snapshot) {
-          final _duartion =
-              snapshot.data?.duration ?? const Duration(seconds: 0);
+        builder: (context,  AsyncSnapshot<PlayingAudio?> snapshot) {
+          _duration2 = snapshot.data?.duration ?? const Duration(days: 100);
           return StreamBuilder<Duration>(
             stream: _assetsAudioPlayerRecord.currentPosition,
-            builder: (context, AsyncSnapshot<Duration> snapshot) {
-              Duration _duartion2 = snapshot.data ?? const Duration(seconds: 0);
-              String _time = "${twoDigits(
-                _duartion2.inMinutes.remainder(60),
-              )}:${twoDigits(_duartion2.inSeconds.remainder(60))}";
+            builder: (_, AsyncSnapshot<Duration> snapshot) {
+              _duration = snapshot.data ?? const Duration(seconds: 0);
+              if(_duration.inSeconds.compareTo(_duration2.inSeconds) == 0){
+                _assetsAudioPlayerRecord.pause();
+                _assetsAudioPlayerRecord.seek(const Duration(seconds: 0));
+                _play = false;
+              }
+              String _time = "${twoDigits(_duration.inMinutes.remainder(60))}:""${twoDigits(_duration.inSeconds.remainder(60))}";
               return Row(
                 children: [
                   Container(
@@ -463,20 +469,17 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
                         backgroundColor: PaletteColor.grey,
                       ),
                       onPressed: () {
-                        setState(() {
                           if (!_play) {
                             _assetsAudioPlayerRecord.play();
-                            _play = true;
+                            setState(() => _play = true);
                           } else {
                             _assetsAudioPlayerRecord.pause();
-                            _play = false;
+                            _assetsAudioPlayerRecord.seek(const Duration(seconds: 0));
+                            setState(() => _play = false);
                           }
-                        });
                       },
                       child: Icon(
-                        _play
-                            ? Icons.pause_outlined
-                            : Icons.play_arrow_outlined,
+                        _play ? Icons.pause_outlined : Icons.play_arrow_outlined,
                         color: PaletteColor.primarybg,
                       ),
                     ),
@@ -505,7 +508,7 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
                         AnimatedPositioned(
                           top: 7,
                           left: _play ? 155 : 0,
-                          duration: _duartion,
+                          duration: _play ? _duration2 : const Duration(seconds: 0),
                           child: Container(
                             width: 26,
                             height: 26,
