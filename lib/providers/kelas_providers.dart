@@ -175,7 +175,7 @@ class KelasProvider extends ChangeNotifier {
 
   Future<int> joinKelas({
     required codeKelas,
-    required User user,
+    required Profile profile,
   }) async {
     try {
       var kelas = await FirebaseReference.getKelas(codeKelas).get();
@@ -189,11 +189,10 @@ class KelasProvider extends ChangeNotifier {
       };
 
       Map<String, dynamic> newUserInKelas = <String, dynamic>{
-        "uid": user.uid,
-        'name': user.displayName,
-        'number': user.phoneNumber,
-        'email': user.email,
-        'photo': user.photoURL
+        "uid": profile.uid,
+        'name': profile.name,
+        'email': profile.email,
+        'photo': profile.urlImage
       };
 
       var dataKelas = await FirebaseReference.kelas.doc(codeKelas).get();
@@ -202,9 +201,9 @@ class KelasProvider extends ChangeNotifier {
       var data = dataKelas.data();
 
 
-      await FirebaseReference.getUserInKelas(codeKelas, user.uid).set(newUserInKelas);
+      await FirebaseReference.getUserInKelas(codeKelas, profile.uid).set(newUserInKelas);
       await FirebaseReference.getKelas(codeKelas).update(newDataKelas);
-      await FirebaseReference.getUser(user.uid).update(newDataUser);
+      await FirebaseReference.getUser(profile.uid).update(newDataUser);
 
       updateKelas(kelasFromJson(jsonEncode(data)));
       getSantri();

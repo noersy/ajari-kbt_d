@@ -1,4 +1,5 @@
 import 'package:ajari/component/indicator/indicator_load.dart';
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
@@ -18,9 +19,11 @@ class JoinKelas extends StatefulWidget {
 }
 
 class _JoinKelasState extends State<JoinKelas> {
-  final _user = FirebaseAuth.instance.currentUser;
+  // final _user = FirebaseAuth.instance.currentUser;
   TextEditingController santriInput = TextEditingController();
   bool _loading = false;
+
+  Profile get _profile => Provider.of<ProfileProvider>(context, listen: false).profile;
 
   void joinkelas(santriInput) async {
     try {
@@ -28,8 +31,8 @@ class _JoinKelasState extends State<JoinKelas> {
         _loading = true;
       });
 
-      if (_user == null) throw Exception("Not login yet.");
-      var hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, user: _user!);
+      // if (_user == null) throw Exception("Not login yet.");
+      var hasil = await Provider.of<KelasProvider>(context, listen: false).joinKelas(codeKelas: santriInput.text, profile: _profile);
 
       String uid = Provider.of<ProfileProvider>(context, listen: false).profile.uid;
       if (hasil  == 400) throw Exception("Join failed");
