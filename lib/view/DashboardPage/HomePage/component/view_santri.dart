@@ -7,7 +7,6 @@ import 'package:ajari/view/DashboardPage/HomePage/ReadBottomSheetDialog/read_bot
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_ibrahim_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_musa_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_nuh_page.dart';
-import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/NotificationPage/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -255,7 +254,8 @@ class ViewSantri extends StatelessWidget {
                                       fontWeight: FontWeight.w100,
                                     ),
                                   ),
-                                  const Text(" 1", style: TypographyStyle.subtitle2),
+                                  const Text(" 1",
+                                      style: TypographyStyle.subtitle2),
                                 ],
                               ),
                             ),
@@ -272,17 +272,19 @@ class ViewSantri extends StatelessWidget {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-                color: PaletteColor.primarybg2,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  topRight: Radius.circular(35),
+              color: PaletteColor.primarybg2,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(35),
+                topRight: Radius.circular(35),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 2,
+                  offset: const Offset(0, -1),
+                  color: PaletteColor.primarybg2.withOpacity(0.5),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                      blurRadius: 2,
-                      offset: const Offset(0, -1),
-                      color: PaletteColor.primarybg2.withOpacity(0.5)),
-                ]),
+              ],
+            ),
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
@@ -313,169 +315,29 @@ class ViewSantri extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: SpacingDimens.spacing8),
+                  const SizedBox(height: SpacingDimens.spacing12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: SpacingDimens.spacing4,
-                            left: SpacingDimens.spacing16,
-                            right: SpacingDimens.spacing8,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 1,
-                              primary: PaletteColor.primarybg,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                              side: BorderSide(
-                                color: PaletteColor.grey80.withOpacity(0.08),
-                              ),
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    ReadBottomSheetDialog(
-                                  ctx: context,
-                                ),
-                              );
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 65,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    margin: const EdgeInsets.all(
-                                        SpacingDimens.spacing8),
-                                    decoration: BoxDecoration(
-                                        color:
-                                            PaletteColor.primary.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(100)),
-                                    child: const Icon(
-                                      CostumeIcons.holyQuran,
-                                      color: PaletteColor.primary,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 70,
-                                    padding: const EdgeInsets.only(
-                                        bottom: SpacingDimens.spacing12,
-                                        left: SpacingDimens.spacing12),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "قرأ",
-                                          style: TypographyStyle.subtitle1.merge(
-                                              const TextStyle(
-                                                  color: PaletteColor.primary,
-                                                  fontSize: 20)),
-                                        ),
-                                        Text("Baca",
-                                            style: TypographyStyle.subtitle2
-                                                .merge(const TextStyle(
-                                                    fontSize: 12))),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      SantriHomePageButton(
+                        arab: "أقر",
+                        title: "Baca",
+                        dialog: ReadBottomSheetDialog(ctx: context),
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: SpacingDimens.spacing4,
-                            right: SpacingDimens.spacing16,
-                            left: SpacingDimens.spacing8,
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 1,
-                              primary: PaletteColor.primarybg,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6.0),
-                              ),
-                              side: BorderSide(
-                                color: PaletteColor.grey80.withOpacity(0.08),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) => const StoryPage()),
-                              );
-                            },
-                            child: Container(
-                              height: 65,
-                              alignment: Alignment.center,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        color:
-                                            PaletteColor.primary.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(
-                                          100,
-                                        )),
-                                    child: const Icon(
-                                      Icons.collections_bookmark_sharp,
-                                      color: PaletteColor.primary,
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 60,
-                                    padding: const EdgeInsets.only(
-                                        bottom: SpacingDimens.spacing12,
-                                        left: SpacingDimens.spacing12),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "قصة",
-                                          style: TypographyStyle.subtitle1.merge(
-                                              const TextStyle(
-                                                  color: PaletteColor.primary,
-                                                  fontSize: 20)),
-                                        ),
-                                        Text(
-                                          "Cerita",
-                                          style: TypographyStyle.subtitle2.merge(
-                                            const TextStyle(fontSize: 12),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      const SizedBox(width: SpacingDimens.spacing8),
+                      SantriHomePageButton(
+                        arab: "قصة",
+                        title: "Cerita",
+                        dialog: ReadBottomSheetDialog(ctx: context),
                       ),
                     ],
                   ),
                   Container(
                     margin: const EdgeInsets.only(
-                        top: SpacingDimens.spacing24,
-                        left: SpacingDimens.spacing28,
-                        bottom: SpacingDimens.spacing16),
+                      top: SpacingDimens.spacing24,
+                      left: SpacingDimens.spacing28,
+                      bottom: SpacingDimens.spacing16,
+                    ),
                     child: const Text(
                       "Something Interesting",
                       style: TypographyStyle.subtitle2,
@@ -484,62 +346,62 @@ class ViewSantri extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: 140,
-                    child: ListView(
+                    child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        const SizedBox(
-                          width: SpacingDimens.spacing28,
-                        ),
-                        cardStry(
-                          image: 'assets/images/nabi_ibrahim.png',
-                          title: const Text(
-                            "Kisah Nabi Ibrahim",
-                            style: TextStyle(
-                                color: PaletteColor.primarybg, fontSize: 16),
+                      child: Row(
+                        children: [
+                          const SizedBox(width: SpacingDimens.spacing28),
+                          cardStry(
+                            image: 'assets/images/nabi_ibrahim.png',
+                            title: const Text(
+                              "Kisah Nabi Ibrahim",
+                              style: TextStyle(
+                                  color: PaletteColor.primarybg, fontSize: 16),
+                            ),
+                            color: const Color(0xFF9F5A2A),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const NabiIbrahimPage(),
+                                ),
+                              );
+                            },
                           ),
-                          color: const Color(0xFF9F5A2A),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const NabiIbrahimPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        cardStry(
-                          image: 'assets/images/nabi_musa.png',
-                          title: const Text(
-                            "Kisah Nabi Musa",
-                            style:
-                                TextStyle(color: Color(0xFF620101), fontSize: 16),
+                          cardStry(
+                            image: 'assets/images/nabi_musa.png',
+                            title: const Text(
+                              "Kisah Nabi Musa",
+                              style: TextStyle(
+                                  color: Color(0xFF620101), fontSize: 16),
+                            ),
+                            color: const Color(0xFFF7EAC0),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const NabiMusaPage(),
+                                ),
+                              );
+                            },
                           ),
-                          color: const Color(0xFFF7EAC0),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const NabiMusaPage(),
-                              ),
-                            );
-                          },
-                        ),
-                        cardStry(
-                          image: 'assets/images/nabi_nuh.png',
-                          title: const Text(
-                            "Kisah Nabi Nuh",
-                            style: TextStyle(
-                                color: PaletteColor.primarybg, fontSize: 16),
+                          cardStry(
+                            image: 'assets/images/nabi_nuh.png',
+                            title: const Text(
+                              "Kisah Nabi Nuh",
+                              style: TextStyle(
+                                  color: PaletteColor.primarybg, fontSize: 16),
+                            ),
+                            color: const Color(0xFF8DAA3C),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const NabihNuhPage(),
+                                ),
+                              );
+                            },
                           ),
-                          color: const Color(0xFF8DAA3C),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const NabihNuhPage(),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -548,6 +410,84 @@ class ViewSantri extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SantriHomePageButton extends StatelessWidget {
+  final Widget dialog;
+  final String arab, title;
+
+  const SantriHomePageButton({
+    Key? key,
+    required this.dialog,
+    required this.arab,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 1,
+        primary: PaletteColor.primarybg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6.0),
+        ),
+        side: BorderSide(
+          color: PaletteColor.grey80.withOpacity(0.08),
+        ),
+      ),
+      onPressed: () => showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) => dialog,
+      ),
+      child: Container(
+        alignment: Alignment.center,
+        height: 65,
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.all(SpacingDimens.spacing8),
+              decoration: BoxDecoration(
+                color: PaletteColor.primary.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: const Icon(
+                CostumeIcons.holyQuran,
+                color: PaletteColor.primary,
+              ),
+            ),
+            Container(
+              width: 70,
+              padding: const EdgeInsets.only(
+                bottom: SpacingDimens.spacing12,
+                left: SpacingDimens.spacing12,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    arab,
+                    style: TypographyStyle.subtitle1.copyWith(
+                      color: PaletteColor.primary,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    title,
+                    style: TypographyStyle.subtitle2.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
