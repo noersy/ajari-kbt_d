@@ -9,6 +9,7 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -283,6 +284,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final encrypted = encrypter.encrypt(_passwordController.text, iv: iv);
 
     try {
+      await Provider.of<ProfileProvider>(context, listen: false).chekRole(user: FirebaseAuth.instance.currentUser!);
       final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
       await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
 
@@ -301,10 +303,13 @@ class _RegisterPageState extends State<RegisterPage> {
       }
 
 
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
+    } catch (e, r) {
+      if (kDebugMode) {
+        print("$e : $r");
+      }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }

@@ -35,7 +35,7 @@ dependencies:
   permission_handler: ^8.1.6
   cached_network_image: ^3.1.0+1
   path_provider: ^2.0.6
-  jitsi_meet: ^4.0.0
+#  jitsi_meet: ^4.0.0
   record: ^3.0.0
   encrypt: ^5.0.1
   sembast: ^3.1.1

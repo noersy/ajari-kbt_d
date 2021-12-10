@@ -37,14 +37,18 @@ class _SplashScreenState extends State<SplashScreenPage>{
     try {
       await Provider.of<ProfileProvider>(context, listen: false).setDatabase();
       await Provider.of<KelasProvider>(context, listen: false).setDatabase();
+
       final localProfile = await Provider.of<ProfileProvider>(context, listen: false).getLocalProfile();
 
       if(localProfile.role != "-"){
-        final kelas = await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
-        if(kelas.kelasId == "-"){
+
+        if(localProfile.codeKelas == "-"){
           final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
-          Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+          await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
         }
+
+        await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const DashboardPage(),
@@ -54,13 +58,15 @@ class _SplashScreenState extends State<SplashScreenPage>{
       }
 
       User? user = await AuthLogin.signInWithGoogle(context: context);
-      if (user == null) throw Exception("Not login");
-      final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
-      final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
-      Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
-      Provider.of<ProfileProvider>(context, listen: false).storeLocalProfile(prf);
 
-      if (prf["role"] == "-" || prf.isEmpty) {
+      if (user == null) throw Exception("Not login");
+
+      final role = await Provider.of<ProfileProvider>(context, listen: false).chekRole(user: user);
+      final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
+
+      print(role);
+
+      if (role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const RegisterPage(),
@@ -68,6 +74,12 @@ class _SplashScreenState extends State<SplashScreenPage>{
         );
         return;
       }
+
+      final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
+
+      Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+      Provider.of<ProfileProvider>(context, listen: false).storeLocalProfile(prf);
+
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

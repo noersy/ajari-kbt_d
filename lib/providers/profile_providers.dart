@@ -83,8 +83,8 @@ class ProfileProvider extends ChangeNotifier {
     try {
       if (uid == "-") throw Exception("User is null : $uid");
 
-      final DocumentSnapshot documentSnapshot =
-          await FirebaseReference.user.doc(uid).get();
+      final DocumentSnapshot documentSnapshot = await FirebaseReference.user.doc(uid).get();
+
       var data = documentSnapshot.data() as Map<String, dynamic>?;
 
       if (data == null) throw Exception("Data is $data");
@@ -107,17 +107,15 @@ class ProfileProvider extends ChangeNotifier {
     try {
       DocumentSnapshot data = await FirebaseReference.user.doc(user.uid).get();
 
-      if (!data.exists) throw Exception("Error");
+      if (data.exists) return data.get("role");
 
-      await createProfile(role: '', user: user);
-
-      return data.get("role");
-    } catch (e) {
+      await createProfile(role: '-', user: user);
+    } catch (e, r) {
       if (kDebugMode) {
-        print("chekRole: Not Found");
+        print("$e : $r");
       }
-      return "Tidak ada";
     }
+    return "-";
   }
 
   static const String dbPath = 'ajari.db';
@@ -169,8 +167,13 @@ class ProfileProvider extends ChangeNotifier {
   Future<Profile> getLocalProfile() async {
     try {
       var store = StoreRef.main();
-      if (db == null) throw Exception("error");
+      if (db == null) return Profile.blankProfile();
+
       var data = await store.record('profile').get(db!);
+
+      if (data == null) return Profile.blankProfile();
+
+
       setProfile(profileFromJson(jsonEncode(data)));
       return profileFromJson(jsonEncode(data));
     } catch (e,r) {

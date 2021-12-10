@@ -117,9 +117,7 @@ class _LoginPageState extends State<LoginPage> {
       User? user = await AuthLogin.signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
       final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
-      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
-
-      if (prf["role"] == "-" || prf.isEmpty) {
+      if (prf["role"] == "-" || prf.isEmpty ) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const RegisterPage(),
@@ -127,6 +125,8 @@ class _LoginPageState extends State<LoginPage> {
         );
         return;
       }
+
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

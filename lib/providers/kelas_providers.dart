@@ -249,22 +249,22 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  Future<Map<String, dynamic>> getKelas({required String codeKelas}) async {
+  Future<Kelas> getKelas({required String codeKelas}) async {
     try {
       var data = await FirebaseReference.getKelas(codeKelas).get();
 
-      if (!data.exists && data.data() == null) throw throw Exception("Error");
+      if (!data.exists && data.data() == null) return Kelas.blankKelas();
 
-      _kelas = kelasFromJson(jsonEncode(data.data()));
+      Kelas kelas = kelasFromJson(jsonEncode(data.data()));
 
       updateKelas(kelas);
 
-      return data.data() as Map<String, dynamic>;
+      return kelas;
     } catch (e) {
       if (kDebugMode) {
         print("getKelas: Error");
       }
-      return {};
+      return Kelas.blankKelas();
     }
   }
 
@@ -654,11 +654,14 @@ class KelasProvider extends ChangeNotifier {
     }
   }
 
-  void storeLocalKelas(Map<String, dynamic> profile) async {
+  Future<void> storeLocalKelas(Kelas kelas) async {
     try {
       var store = StoreRef.main();
+
       if (db == null) return;
-      await store.record('kelas').put(db!, profile);
+
+      await store.record('kelas').put(db!, jsonEncode(kelas.toJson()));
+
     } catch (e, r) {
       if (kDebugMode) {
         print(e);
@@ -684,7 +687,11 @@ class KelasProvider extends ChangeNotifier {
     try {
       var store = StoreRef.main();
       if (db == null) throw Exception("error");
+
       var data = await store.record('kelas').get(db!);
+
+      if(data.isEmpty || data.runtimeType == String) return Kelas.blankKelas();
+
       updateKelas(kelasFromJson(jsonEncode(data)));
       return kelasFromJson(jsonEncode(data));
     } catch (e,r) {
