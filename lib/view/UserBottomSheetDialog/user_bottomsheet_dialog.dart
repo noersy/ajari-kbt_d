@@ -47,7 +47,12 @@ class UserBottomSheetDialog extends StatelessWidget {
                     context: context,
                     applicationName: "Ajari",
                     applicationVersion: "0.1.0",
-                    applicationLegalese: "Ajari adalah aplikasi belajar iqro'. \n\nN. Syahfei, A.Algifary, \nH. Gagagas. I Sholeh",
+                    applicationLegalese: """
+Ajari adalah aplikasi belajar iqro'. \n
+N. Syahfei, A.Algifary, 
+H. Gagagas. I Sholeh
+\nEmail Contect : dev.noersy@gmail.com
+""",
                   );
                 },
                 icon: Icons.help_outline,
