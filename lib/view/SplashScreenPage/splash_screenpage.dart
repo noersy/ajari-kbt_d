@@ -64,8 +64,6 @@ class _SplashScreenState extends State<SplashScreenPage>{
       final role = await Provider.of<ProfileProvider>(context, listen: false).chekRole(user: user);
       final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
 
-      print(role);
-
       if (role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(

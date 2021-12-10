@@ -9,7 +9,6 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

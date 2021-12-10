@@ -44,11 +44,11 @@ Future<bool> checkPermission() async {
       permissions[Permission.microphone]!.isGranted;
 }
 
-Future<String?> downloadFile(filePath, nomorHalaman, nomorJilid) async {
-  File downloadToFile = File('$filePath');
+Future<String?> downloadFile( String uid, String filePath, String nomorHalaman,String nomorJilid) async {
+  File downloadToFile = File(filePath);
   try {
     await FirebaseStorage.instance
-        .ref(RecordFile.recordFile(nomorJilid: nomorJilid, nomorHalaman: nomorHalaman)+'record.m4a')
+        .ref(RecordFile.recordFile(uid: uid, nomorJilid: nomorJilid, nomorHalaman: nomorHalaman)+'record.m4a')
         .writeToFile(downloadToFile);
     return downloadToFile.path;
   } on FirebaseException catch (e) {
@@ -56,9 +56,9 @@ Future<String?> downloadFile(filePath, nomorHalaman, nomorJilid) async {
   }
 }
 
-Future<String?> deleteFile({required nomorHalaman}) async {
+Future<String?> deleteFile({required nomorHalaman, required uid, required nomorJilid}) async {
   try {
-    await FirebaseStorage.instance.ref('uploads/audio_$nomorHalaman.m4a').delete();
+    await FirebaseStorage.instance.ref(RecordFile.recordFile(uid: uid, nomorJilid: nomorJilid, nomorHalaman: nomorHalaman)+'record.m4a').delete();
   } on FirebaseException catch (e) {
     return "Not found $e";
   }

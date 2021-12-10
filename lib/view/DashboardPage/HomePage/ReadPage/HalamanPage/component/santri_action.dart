@@ -104,7 +104,11 @@ class _SantriActionState extends State<SantriAction> {
                         builder: (context) => DialogDelete(
                           content: "Ini akan menghapus record audio.",
                           onPressedFunction: () {
-                            deleteFile(nomorHalaman: widget.nomorHalaman);
+                            deleteFile(
+                              uid: widget.uid,
+                                nomorHalaman: widget.nomorHalaman,
+                              nomorJilid: widget.nomorJilid,
+                            );
                             setState(() {
                               _path = null;
                               _downloadAudio = false;
@@ -268,7 +272,7 @@ class _SantriActionState extends State<SantriAction> {
 
       final String filepath = await getFilePath() + 'record.m4a';
 
-      String? path = await downloadFile(filepath, widget.nomorHalaman, widget.nomorJilid);
+      String? path = await downloadFile(widget.uid, filepath, widget.nomorHalaman, widget.nomorJilid);
 
       if (path != null) {
         await assetsAudioPlayerRecord.open(Audio.file(path), autoStart: false);
@@ -291,7 +295,7 @@ class _SantriActionState extends State<SantriAction> {
           title: "Kirim Audio",
           content: "Ini akan mengirim record ke ustaz",
           onPressedFunction: () {
-            _sendRecored(_path);
+            _sendRecored(_path!, widget.uid);
             setState(() {
               _downloadAudio = true;
             });
@@ -347,12 +351,12 @@ class _SantriActionState extends State<SantriAction> {
     }
   }
 
-  void _sendRecored(filePath) async {
+  void _sendRecored(String filePath, String uid) async {
     try {
       File file = File(filePath);
 
       await FirebaseStorage.instance
-          .ref(RecordFile.recordFile(nomorJilid: widget.nomorJilid, nomorHalaman: widget.nomorHalaman)+'record.m4a')
+          .ref(RecordFile.recordFile(uid : uid,nomorJilid: widget.nomorJilid, nomorHalaman: widget.nomorHalaman)+'record.m4a')
           .putFile(file);
     } on FirebaseException catch (e) {
       if (kDebugMode) {

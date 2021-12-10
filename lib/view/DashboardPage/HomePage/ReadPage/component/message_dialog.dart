@@ -378,6 +378,7 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
       await _checkPermission();
 
       File downloadToFile = File(RecordFile.recordFile(
+        uid: widget.uid,
               nomorJilid: widget.nomorJilid,
               nomorHalaman: widget.nomorHalaman) +
           'record.m4a');
@@ -385,6 +386,7 @@ class _PlayerAudioDownState extends State<PlayerAudioDown> {
       String url = await firebase_storage.FirebaseStorage.instance
           .ref(
             RecordFile.recordFile(
+              uid: widget.uid,
                     nomorJilid: widget.nomorJilid,
                     nomorHalaman: widget.nomorHalaman) +
                 'record.m4a',
