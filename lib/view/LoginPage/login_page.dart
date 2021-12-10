@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Align(
                   alignment: Alignment.center,
                   child: MainForms(
-                    nimFilter: _usernameController,
+                    controllerUsername: _usernameController,
                     passwordFilter: _passwordController,
                   ),
                 ),

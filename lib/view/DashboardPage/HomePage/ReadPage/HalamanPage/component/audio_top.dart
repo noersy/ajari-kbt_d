@@ -101,6 +101,7 @@ class _AudioTopState extends State<AudioTop> {
             stream: assetsAudioPlayer.currentPosition,
             builder: (_, AsyncSnapshot<Duration> snapshot) {
               _duration = snapshot.data ?? const Duration(seconds: 0);
+
               String _time = "${twoDigits(_duration.inMinutes.remainder(60))}:${twoDigits(_duration.inSeconds.remainder(60))}";
               return Row(
                 children: [

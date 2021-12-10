@@ -602,20 +602,16 @@ class KelasProvider extends ChangeNotifier {
   Future<int> sendMessageDiskusi({
     required String idDiskusi,
     required String message,
-    required String role,
+    required Profile profile,
   }) async {
     try {
       String id = FirebaseReference.getRandomString(23);
 
-      final user = FirebaseAuth.instance.currentUser;
-
-      if (user == null) throw Exception("Error");
-
       Map<String, dynamic> data = {
         "id": id,
-        "uid": user.uid,
-        "name": user.displayName,
-        "role": role,
+        "uid": profile.uid,
+        "name": profile.name,
+        "role": profile.role,
         "datetime": DateTime.now(),
         "message": message,
       };

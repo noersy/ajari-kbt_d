@@ -89,11 +89,11 @@ class _DiskusiPageState extends State<DiskusiPage> {
                         decoration:  InputDecoration(
                           suffixIcon: IconButton(
                             onPressed: () {
-                              Provider.of<KelasProvider>(context, listen: false)
-                                  .sendMessageDiskusi(
-                                  role: profile.role,
+                              Provider.of<KelasProvider>(context, listen: false).sendMessageDiskusi(
+                                  profile: profile,
                                   idDiskusi: widget.id,
-                                  message: _editingController.text);
+                                  message: _editingController.text,
+                              );
                               _editingController.clear();
                               FocusScope.of(context).unfocus();
                             },

@@ -4,12 +4,12 @@ import 'package:ajari/theme/typography_style.dart';
 import 'package:flutter/material.dart';
 
 class MainForms extends StatefulWidget {
-  final TextEditingController nimFilter;
+  final TextEditingController controllerUsername;
   final TextEditingController passwordFilter;
 
   const MainForms({
     Key? key,
-    required this.nimFilter,
+    required this.controllerUsername,
     required this.passwordFilter,
   }) : super(key: key);
 
@@ -35,9 +35,8 @@ class _MainFormsState extends State<MainForms> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           TextFormField(
-            controller: widget.nimFilter,
+            controller: widget.controllerUsername,
             cursorColor: PaletteColor.primary,
-            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(
                 left: SpacingDimens.spacing16,

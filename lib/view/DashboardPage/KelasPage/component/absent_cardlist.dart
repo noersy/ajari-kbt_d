@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/route/route_transisition.dart';
@@ -35,28 +36,28 @@ class _AbsentListState extends State<AbsentList> {
   final StreamController<QuerySnapshot> _streamSantri = StreamController();
   bool _isPresent = true;
   int _absentCount = 0;
-  String _uid = "-";
-  String _role = "-";
+  Profile get _profile =>  Provider.of<ProfileProvider>(context, listen: false).profile;
 
   void getKehadiran()  {
     if (!mounted) return;
     Stream<QuerySnapshot> stream =  Provider.of<KelasProvider>(context, listen: false).getsAbsenStudents(widget.id);
-    _streamSantri.addStream(stream);
 
+    _streamSantri.addStream(stream);
     _streamSantri.stream.listen((event) {
-     var santri = event.docs.where((element) => element["uid"] == _uid).first.data() as Map<String, dynamic>;
+
+
+      var santri = event.docs.where((element) => element["uid"] == _profile.uid).first.data() as Map<String, dynamic>;
 
      setState(() => _isPresent = santri["kehadiran"]);
+
      if (!mounted) _streamSantri.close();
     });
   }
 
   @override
   void initState() {
-    _role = Provider.of<ProfileProvider>(context, listen: false).profile.role;
-    _uid = FirebaseAuth.instance.currentUser?.uid ?? "-";
 
-    if(_role == "Santri") getKehadiran();
+    if(_profile.role == "Santri") getKehadiran();
 
     super.initState();
   }
@@ -91,11 +92,11 @@ class _AbsentListState extends State<AbsentList> {
                     ),
                   ),
                   onPressed: () {
-                    if (_role == "Pengajar") {
+                    if (_profile.role == "Pengajar") {
                       Navigator.of(context).push(routeTransition(
                           AbsenDetailPage(dateTIme: widget.date, startAt: widget.startAt, endAt: widget.endAt, id: widget.id,)));
-                    } else if (_role == "Santri") {
-                      Provider.of<KelasProvider>(context, listen: false).absent(uid: _uid, id: widget.id);
+                    } else if (_profile.role == "Santri") {
+                      Provider.of<KelasProvider>(context, listen: false).absent(uid: _profile.uid, id: widget.id);
                     }
                   },
                   child: AnimatedBuilder(
@@ -139,7 +140,7 @@ class _AbsentListState extends State<AbsentList> {
                                 ],
                               ),
                             ),
-                            if (_role != "Santri") Container(
+                            if (_profile.role != "Santri") Container(
                                     decoration: BoxDecoration(
                                         color: PaletteColor.grey40,
                                         borderRadius:
