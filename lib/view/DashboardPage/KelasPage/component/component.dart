@@ -31,30 +31,29 @@ class _DateCardState extends State<DateCard> {
   @override
   Widget build(BuildContext context) {
     var profile = Provider.of<ProfileProvider>(context).profile;
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 2, right: 2),
-      child: ElevatedButton(
-        onPressed: widget.onTap,
-        onLongPress: profile.role == "Santri"
-            ? null
-            : () async {
-                setState(() => !_selected ? _selected = true : false);
-
-                await showDialog(
-                      context: context,
-                      builder: (context) => DialogCreate(dateTime: widget.dateTime,),
-                    );
-
-                setState(() => _selected ? _selected = false : true);
-        },
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.all(0),
-          primary: PaletteColor.primary,
-          backgroundColor: _selected ? PaletteColor.primary : PaletteColor.primarybg,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-        ),
-        child: SizedBox.expand(
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 2.0, right: 2.0, bottom: 4.0, top: 8.0),
+        child: ElevatedButton(
+          onPressed: widget.onTap,
+          onLongPress: profile.role != "Santri"
+              ? () async {
+                  setState(() => !_selected ? _selected = true : false);
+                  await showDialog(
+                    context: context,
+                    builder: (context) => DialogCreate(
+                      dateTime: widget.dateTime,
+                    ),
+                  );
+                  setState(() => _selected ? _selected = false : true);
+                }
+              : null,
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(0),
+            primary: PaletteColor.primary,
+            backgroundColor: _selected ? PaletteColor.primary : PaletteColor.primarybg,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -63,7 +63,6 @@ class _JadwalKelasState extends State<JadwalKelas> {
         return Expanded(
               child: Scaffold(
                 floatingActionButton: null,
-                //@todo this will be button for create absen and meet
                 body: Column(
                   children: [
                     _tanggal(_absen, _meet, _diskusi),
@@ -76,61 +75,58 @@ class _JadwalKelasState extends State<JadwalKelas> {
     );
   }
 
-  Widget _tanggal(List<Map<String, dynamic>> _absen, List<Map<String, dynamic>> _meet, List<Map<String, dynamic>> _diskusi) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: SpacingDimens.spacing4),
-      height: 60,
-      child: ListView.builder(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemExtent: 50,
-        itemCount: 7,
-        padding: const EdgeInsets.only(
-          top: SpacingDimens.spacing8,
-          left: SpacingDimens.spacing16,
-          right: SpacingDimens.spacing16,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          bool _isAbsent = _absen
-              .where((element) =>
-                  element["datetime"].toDate().day ==
-                  _listRealDate[index].day)
-              .isNotEmpty;
-          bool _isMeet = _meet
-              .where((element) =>
-                  element["datetime"].toDate().day ==
-                  _listRealDate[index].day)
-              .isNotEmpty;
-          bool _isDiskusi = _diskusi
-              .where((element) =>
-                  element["datetime"].toDate().day ==
-                  _listRealDate[index].day)
-              .isNotEmpty;
+  bool _checkDataKelas(int index, {required List<Map<String, dynamic>> item}){
+    return item.where((element) => element["datetime"].toDate().day == _listRealDate[index].day).isNotEmpty;
+  }
 
-          return DateCard(
-            dateTime: _listRealDate[index],
-            hari: _listDay[index],
-            tgl: _listDate[index],
-            haveEvent: _isAbsent || _isMeet || _isDiskusi,
-            color: _index != index
-                ? _indexCurret != index
-                    ? PaletteColor.grey80
-                    : PaletteColor.primary.withOpacity(0.6)
-                : PaletteColor.primary,
-            onTap: () {
-              setState(() {
-                _index = index;
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              });
-            },
-          );
-        },
+  Widget _tanggal(
+      List<Map<String, dynamic>> _absen,
+      List<Map<String, dynamic>> _meet,
+      List<Map<String, dynamic>> _diskusi,
+      ) {
+    return Container(
+      height: 65,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.only(
+        bottom: SpacingDimens.spacing4,
+        left: SpacingDimens.spacing12,
+        right: SpacingDimens.spacing12,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          for(int index=0; index < 7; index++)
+            DateCard(
+              dateTime: _listRealDate[index],
+              hari: _listDay[index],
+              tgl: _listDate[index],
+              haveEvent: _checkDataKelas(index, item: _absen)
+                  || _checkDataKelas(index, item: _meet)
+                  || _checkDataKelas(index, item: _diskusi),
+              color: _index != index
+                  ? _indexCurret != index
+                  ? PaletteColor.grey80
+                  : PaletteColor.primary.withOpacity(0.6)
+                  : PaletteColor.primary,
+              onTap: () {
+                setState(() {
+                  _index = index;
+                  _pageController.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  );
+                });
+              },
+            ),
+        ],
       ),
     );
+  }
+
+  bool _cekData(item, {required List<Map<String, dynamic>> list}){
+    return list.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty;
   }
 
   Widget _jadwal(_absen, _meet, _diskusi) {
@@ -150,9 +146,9 @@ class _JadwalKelasState extends State<JadwalKelas> {
           },
           children: [
             for (var item in _listRealDate) ...[
-              _absen!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
-                  || _meet!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
-                  || _diskusi!.where((element) => element["datetime"].toDate().day == item.day).isNotEmpty
+                  _cekData(item, list: _absen) ||
+                  _cekData(item, list: _meet) ||
+                  _cekData(item, list: _diskusi)
                   ? SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: Column(
@@ -171,8 +167,7 @@ class _JadwalKelasState extends State<JadwalKelas> {
                             ],
                           ],
                           for (var itemMeet in _meet!) ...[
-                            if (item.day ==
-                                itemMeet['datetime'].toDate().day) ...[
+                            if (item.day == itemMeet['datetime'].toDate().day) ...[
                               MeetList(
                                   meet: itemMeet,
                                   date: itemMeet['datetime'].toDate(),
@@ -196,10 +191,14 @@ class _JadwalKelasState extends State<JadwalKelas> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
                           Icon(Icons.notification_add_outlined,
-                              color: PaletteColor.grey60, size: 30),
+                              color: PaletteColor.grey60,
+                              size: 30,
+                          ),
                           SizedBox(width: SpacingDimens.spacing4),
-                          Text("Tidak ada jadwal",
-                              style: TextStyle(color: PaletteColor.grey60))
+                          Text(
+                            "Tidak ada jadwal",
+                            style: TextStyle(color: PaletteColor.grey60),
+                          )
                         ],
                       ),
                     ),
