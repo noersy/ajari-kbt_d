@@ -12,37 +12,34 @@ class ButtonLoginGoogle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: SpacingDimens.spacing12),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: PaletteColor.primarybg,
-            elevation: 1,
-            padding: const EdgeInsets.all(0),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3.0),
-              side: const BorderSide(
-                color: PaletteColor.green,
-              ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - SpacingDimens.spacing24*2,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: PaletteColor.primarybg,
+          padding: const EdgeInsets.symmetric(vertical: 2.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(7.0),
+            side: BorderSide(
+              width: 1.5,
+              color: PaletteColor.green.withOpacity(0.3),
             ),
           ),
-          onPressed: onPressedFunction,
-          child: SizedBox(
-            height: 48,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/googlelogo.png'),
-                Text(
-                  label,
-                  style: TypographyStyle.button1.copyWith(
-                      color: PaletteColor.grey60,
-                  ),
+        ),
+        onPressed: onPressedFunction,
+        child: SizedBox(
+          height: 48,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/googlelogo.png'),
+              Text(
+                label,
+                style: TypographyStyle.button1.copyWith(
+                    color: PaletteColor.grey60,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

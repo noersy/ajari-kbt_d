@@ -15,15 +15,14 @@ class ButtonLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: SpacingDimens.spacing64),
-      width: MediaQuery.of(context).size.width,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - SpacingDimens.spacing24*2,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.symmetric(vertical: 2.0),
           primary: PaletteColor.primary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(7.0),
           ),
         ),
         onPressed: onPressedFunction,
@@ -33,10 +32,9 @@ class ButtonLogin extends StatelessWidget {
             child: Text(
               title,
               style: TypographyStyle.button1.copyWith(
-                color: PaletteColor.primarybg,
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-              ),
+                  color: PaletteColor.primarybg,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),

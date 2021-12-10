@@ -29,21 +29,11 @@ class _MainFormsState extends State<MainForms> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: SpacingDimens.spacing44),
+      padding: const EdgeInsets.all(SpacingDimens.spacing28),
+      height: 300,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Container(
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              "Username",
-              style: TypographyStyle.mini.merge(
-                const TextStyle(
-                  color: PaletteColor.grey60,
-                ),
-              ),
-            ),
-          ),
           TextFormField(
             controller: widget.nimFilter,
             cursorColor: PaletteColor.primary,
@@ -54,31 +44,26 @@ class _MainFormsState extends State<MainForms> {
                 top: SpacingDimens.spacing8,
                 bottom: SpacingDimens.spacing8,
               ),
+              label: Text(
+                "Username",
+                style: TypographyStyle.paragraph.copyWith(
+                  color: PaletteColor.grey60,
+                ),
+              ),
               hintText: "Enter Username",
-              hintStyle: TypographyStyle.paragraph.merge(
-                const TextStyle(
-                  color: PaletteColor.grey60,
-                ),
+              hintStyle: TypographyStyle.paragraph.copyWith(
+                color: PaletteColor.grey60,
               ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: PaletteColor.primary,
-                ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7.0),
+                borderSide: const BorderSide(color: PaletteColor.primary),
               ),
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: SpacingDimens.spacing36),
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              "Password",
-              style: TypographyStyle.mini.merge(
-                const TextStyle(
-                  color: PaletteColor.grey60,
-                ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: PaletteColor.primary),
               ),
             ),
           ),
+          const SizedBox(height: SpacingDimens.spacing12),
           TextFormField(
             obscureText: _isHidePassword,
             controller: widget.passwordFilter,
@@ -91,16 +76,22 @@ class _MainFormsState extends State<MainForms> {
                 top: SpacingDimens.spacing12,
                 bottom: SpacingDimens.spacing8,
               ),
-              hintText: "Enter Password",
-              hintStyle: TypographyStyle.paragraph.merge(
-                const TextStyle(
+              label: Text(
+                "Password",
+                style: TypographyStyle.paragraph.copyWith(
                   color: PaletteColor.grey60,
                 ),
               ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: PaletteColor.primary,
-                ),
+              hintText: "Enter Password",
+              hintStyle: TypographyStyle.paragraph.copyWith(
+                color: PaletteColor.grey60,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(7.0),
+                borderSide: const BorderSide(color: PaletteColor.primary),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: PaletteColor.primary),
               ),
               suffixIcon: GestureDetector(
                 onTap: _togglePasswordVisibility,
@@ -109,6 +100,20 @@ class _MainFormsState extends State<MainForms> {
                   color: _isHidePassword
                       ? PaletteColor.grey60
                       : PaletteColor.primary,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.only(top: SpacingDimens.spacing16),
+            child: GestureDetector(
+              onTap: () {},
+              child: Text(
+                "Forgot password?",
+                style: TypographyStyle.caption2.merge(
+                  const TextStyle(
+                    color: PaletteColor.primary,
+                  ),
                 ),
               ),
             ),
