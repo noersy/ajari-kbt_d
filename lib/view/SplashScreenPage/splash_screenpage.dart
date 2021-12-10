@@ -47,7 +47,13 @@ class _SplashScreenState extends State<SplashScreenPage>{
           await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
         }
 
-        await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
+        final kelas = await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
+        if(kelas.kelasId == "-"){
+          final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
+          await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+        }
+
+        print(kelas.toJson());
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -75,7 +81,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
 
       final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
 
-      Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+      await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
       Provider.of<ProfileProvider>(context, listen: false).storeLocalProfile(prf);
 
 

@@ -182,10 +182,12 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-      final profile = await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(uid: user.first["uid"]);
-      await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: user.first["code_kelas"] ?? "");
+      final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.first["uid"]);
+      final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: user.first["code_kelas"] ?? "");
+
+      Provider.of<ProfileProvider>(context, listen: false).storeLocalProfile(profile);
+      Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+
 
       if (profile["role"] == "-" || profile.isEmpty) {
         Navigator.of(context).pushReplacement(

@@ -686,8 +686,9 @@ class KelasProvider extends ChangeNotifier {
 
       if(data.isEmpty || data.runtimeType == String) return Kelas.blankKelas();
 
-      updateKelas(kelasFromJson(jsonEncode(data)));
-      return kelasFromJson(jsonEncode(data));
+      Kelas kelas = kelasFromJson(jsonEncode(data));
+      updateKelas(kelas);
+      return kelas;
     } catch (e,r) {
       if (kDebugMode) {
         print(e);

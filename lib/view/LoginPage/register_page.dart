@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import 'component/auth_login.dart';
 import 'component/button_login.dart';
+import 'login_page.dart';
 import 'selection_role.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -44,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _profile = Provider.of<ProfileProvider>(context, listen: false).profile;
     super.initState();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     Widget loadingIndicator = isLoading
@@ -218,7 +219,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         children: [
                           const Text("Already have an account? ", style: TypographyStyle.caption1),
                           GestureDetector(
-                            onTap: (){},
+                            onTap: (){
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                              );
+                            },
                               child: Text("Sign in ", style: TypographyStyle.caption1.copyWith(
                                 color: PaletteColor.primary,
                               )),
