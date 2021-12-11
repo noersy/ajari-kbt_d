@@ -7,7 +7,7 @@ import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
-import 'package:ajari/view/LoginPage/component/auth_login.dart';
+import 'package:ajari/providers/auth_providers.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   void _delete() async {
     await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.profile.uid);
-    await AuthLogin.signOut(context: context);
+    await Provider.of<AuthProvider>(context, listen: false).signOut(context: context);
     context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
     context.read<ProfileProvider>().setProfile(Profile.blankProfile());
 

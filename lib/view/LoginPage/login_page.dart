@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'component/auth_login.dart';
+import '../../providers/auth_providers.dart';
 import 'component/button_login.dart';
 import 'component/main_forms.dart';
 
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      User? user = await AuthLogin.signInWithGoogle(context: context);
+      User? user = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
       final prf = await Provider.of<ProfileProvider>(context, listen: false)
           .getProfile(uid: user.uid);

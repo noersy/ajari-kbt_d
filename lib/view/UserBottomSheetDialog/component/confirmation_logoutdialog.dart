@@ -4,7 +4,7 @@ import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
-import 'package:ajari/view/LoginPage/component/auth_login.dart';
+import 'package:ajari/providers/auth_providers.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +141,7 @@ class ConfirmationLogoutDialog extends StatelessWidget {
 
   void logOut(BuildContext context) async {
     try {
-      await AuthLogin.signOut(context: context);
+      await Provider.of<AuthProvider>(context, listen: false).signOut(context: context);
       // Provider.of<KelasProvider>(context, listen: false).closeKelasService();
       context.read<KelasProvider>().closeKelasService();
       Provider.of<KelasProvider>(context, listen: false).clearData();

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
+import 'package:ajari/providers/auth_providers.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
-import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
 
   startTime() async {
     var _duration = const Duration(seconds: 3);
-    return Timer(_duration, navigationPage);
+    return Timer(_duration, _navigationPage);
   }
 
   @override
@@ -32,7 +32,11 @@ class _SplashScreenState extends State<SplashScreenPage>{
     super.initState();
   }
 
-  navigationPage() async {
+  // void _test(){
+  //   Navigator.of(context).pushReplacement(routeTransition(const PushNotification()));
+  // }
+
+  void _navigationPage() async {
     try {
       await Provider.of<ProfileProvider>(context, listen: false).setDatabase();
       await Provider.of<KelasProvider>(context, listen: false).setDatabase();
@@ -61,7 +65,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
         return;
       }
 
-      User? user = await AuthLogin.signInWithGoogle(context: context);
+      User? user = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context: context);
 
       if (user == null) throw Exception("Not login");
 
@@ -115,7 +119,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: AuthLogin.initializeFirebase(context: context),
+        future: Provider.of<AuthProvider>(context).initializeFirebase(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text('Error initializing Firebase'));

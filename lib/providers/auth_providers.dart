@@ -3,12 +3,19 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 
-class AuthLogin {
-  static Future<FirebaseApp> initializeFirebase({context}) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+  print('Handling a background message ${message.data}');
+}
+
+class AuthProvider extends ChangeNotifier{
+
+  Future<FirebaseApp> initializeFirebase() async {
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseApp firebaseApp = await Firebase.initializeApp(
         options: const FirebaseOptions(
@@ -24,12 +31,11 @@ class AuthLogin {
       webRecaptchaSiteKey: 'recaptcha-v3-site-key',
     );
 
-
-
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     return firebaseApp;
   }
 
-  static Future<User?> signInWithGoogle({required BuildContext context}) async {
+  Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -54,14 +60,14 @@ class AuthLogin {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
-            AuthLogin.customSnackBar(
+            AuthProvider.customSnackBar(
               content:
               'The account already exists with a different credential',
             ),
           );
         } else if (e.code == 'invalid-credential') {
           ScaffoldMessenger.of(context).showSnackBar(
-            AuthLogin.customSnackBar(
+            AuthProvider.customSnackBar(
               content:
               'Error occurred while accessing credentials. Try again.',
             ),
@@ -73,7 +79,7 @@ class AuthLogin {
           print(r);
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          AuthLogin.customSnackBar(
+          AuthProvider.customSnackBar(
             content: 'Error occurred using Google Sign In. Try again.',
           ),
         );
@@ -93,7 +99,7 @@ class AuthLogin {
     );
   }
 
-  static Future<void> signOut({required BuildContext context}) async {
+  Future<void> signOut({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
@@ -103,7 +109,7 @@ class AuthLogin {
       await FirebaseAuth.instance.signOut();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        AuthLogin.customSnackBar(
+        AuthProvider.customSnackBar(
           content: 'Error signing out. Try again.',
         ),
       );

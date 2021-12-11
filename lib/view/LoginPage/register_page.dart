@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'component/auth_login.dart';
+import '../../providers/auth_providers.dart';
 import 'component/button_login.dart';
 import 'login_page.dart';
 import 'selection_role.dart';
@@ -261,7 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
       isLoading = true;
     });
 
-    await AuthLogin.signInWithGoogle(context: context);
+    await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context: context);
 
     setState(() {
       isLoading = false;
