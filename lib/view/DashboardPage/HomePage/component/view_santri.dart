@@ -7,6 +7,7 @@ import 'package:ajari/view/DashboardPage/HomePage/ReadBottomSheetDialog/read_bot
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_ibrahim_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_musa_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_nuh_page.dart';
+import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/NotificationPage/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -322,13 +323,19 @@ class ViewSantri extends StatelessWidget {
                       SantriHomePageButton(
                         arab: "أقر",
                         title: "Baca",
-                        dialog: ReadBottomSheetDialog(ctx: context),
+                        onPressed: ()=> showModalBottomSheet(
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (BuildContext context) => ReadBottomSheetDialog(ctx: context),
+                        ),
                       ),
                       const SizedBox(width: SpacingDimens.spacing8),
                       SantriHomePageButton(
                         arab: "قصة",
                         title: "Cerita",
-                        dialog: ReadBottomSheetDialog(ctx: context),
+                        onPressed: ()=> Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_)=> const StoryPage())
+                        ),
                       ),
                     ],
                   ),
@@ -415,12 +422,13 @@ class ViewSantri extends StatelessWidget {
 }
 
 class SantriHomePageButton extends StatelessWidget {
-  final Widget dialog;
+  final Function() onPressed;
   final String arab, title;
+
 
   const SantriHomePageButton({
     Key? key,
-    required this.dialog,
+    required this.onPressed,
     required this.arab,
     required this.title,
   }) : super(key: key);
@@ -438,11 +446,7 @@ class SantriHomePageButton extends StatelessWidget {
           color: PaletteColor.grey80.withOpacity(0.08),
         ),
       ),
-      onPressed: () => showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) => dialog,
-      ),
+      onPressed: onPressed,
       child: Container(
         alignment: Alignment.center,
         height: 65,

@@ -13,20 +13,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class ViewUstaz extends StatefulWidget {
+class ViewUstaz extends StatelessWidget {
   final String name;
 
-  const ViewUstaz({
+  ViewUstaz({
     Key? key,
     required this.name,
   }) : super(key: key);
 
-
-  @override
-  State<ViewUstaz> createState() => _ViewUstazState();
-}
-
-class _ViewUstazState extends State<ViewUstaz> {
 
   final _pageViewController = PageController();
 
@@ -58,7 +52,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                         Positioned(
                           top: 18,
                           child: Text(
-                            widget.name,
+                            name,
                             style: TypographyStyle.subtitle2.copyWith(color: PaletteColor.primarybg),
                           ),
                         ),
@@ -158,9 +152,7 @@ class _ViewUstazState extends State<ViewUstaz> {
                   ),
                 ],
               ),
-              Container(
-                alignment: Alignment.bottomRight,
-              )
+              Container()
             ],
           ),
         ),
@@ -175,8 +167,18 @@ class _ViewUstazState extends State<ViewUstaz> {
               boxShadow: [
                 BoxShadow(
                   blurRadius: 2,
-                  offset: const Offset(0, -1),
-                  color: PaletteColor.primarybg2.withOpacity(0.5)
+                  offset: const Offset(0, 0),
+                  color: PaletteColor.grey80.withOpacity(0.5)
+                ),
+                BoxShadow(
+                  blurRadius: 3,
+                  offset: const Offset(0, 0),
+                  color: PaletteColor.grey60.withOpacity(0.5)
+                ),
+                BoxShadow(
+                  blurRadius: 4,
+                  offset: const Offset(0, 0),
+                  color: PaletteColor.grey40.withOpacity(0.5)
                 ),
               ]
             ),
@@ -241,5 +243,8 @@ class _ViewUstazState extends State<ViewUstaz> {
     );
   }
 }
+
+
+
 
 

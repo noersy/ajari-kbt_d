@@ -6,6 +6,8 @@ import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/ProfilePage/profile_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,17 +45,7 @@ class UserBottomSheetDialog extends StatelessWidget {
               ProfileTile(profile: _profile),
               _actionBottomSheet(
                 onPressed: () {
-                  showAboutDialog(
-                    context: context,
-                    applicationName: "Ajari",
-                    applicationVersion: "0.1.0",
-                    applicationLegalese: """
-Ajari adalah aplikasi belajar iqro'. \n
-N. Syahfei, A.Algifary, 
-H. Gagagas. I Sholeh
-\nEmail Contect : dev.noersy@gmail.com
-""",
-                  );
+                  getPecageInfo(context);
                 },
                 icon: Icons.help_outline,
                 title: "About",
@@ -123,6 +115,34 @@ H. Gagagas. I Sholeh
           ],
         ),
       ),
+    );
+  }
+
+  void getPecageInfo(context) async {
+    // PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    // String _appName = packageInfo.appName;
+    // String _packageName = packageInfo.packageName;
+    // String _version = packageInfo.version;
+    // String _buildNumber = packageInfo.buildNumber;
+
+    showAboutDialog(
+      context: context,
+      applicationName: "Ajari",
+      applicationVersion: "1.2.0",
+      applicationIcon: SizedBox(
+        height: 80.0,
+        child: Image.asset("assets/images/logo_login.png"),
+      ),
+      applicationLegalese: "EC00202148122 · 18 Sep 2021",
+      children: const [
+        SizedBox(height: SpacingDimens.spacing16),
+        Text("Ajari adalah aplikasi belajar iqro."),
+        SizedBox(height: SpacingDimens.spacing12),
+        Text("N. Syahfei, A.Algifary", style: TypographyStyle.mini),
+        Text("H. Gagagas. I Sholeh", style: TypographyStyle.mini),
+        SizedBox(height: SpacingDimens.spacing8),
+        Text('Email Contect : dev.noersy@gmail.com', style: TypographyStyle.mini),
+      ],
     );
   }
 }

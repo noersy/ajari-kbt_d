@@ -48,12 +48,11 @@ class _SplashScreenState extends State<SplashScreenPage>{
         }
 
         final kelas = await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
+
         if(kelas.kelasId == "-"){
           final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
           await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
         }
-
-        print(kelas.toJson());
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -115,15 +114,14 @@ class _SplashScreenState extends State<SplashScreenPage>{
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: AuthLogin.initializeFirebase(context: context),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError) {
-          return const Center(child: Text('Error initializing Firebase'));
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return Scaffold(
-            backgroundColor: PaletteColor.primarybg,
-            body: SingleChildScrollView(
+    return Scaffold(
+      body: FutureBuilder(
+        future: AuthLogin.initializeFirebase(context: context),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text('Error initializing Firebase'));
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
@@ -138,14 +136,12 @@ class _SplashScreenState extends State<SplashScreenPage>{
                   ],
                 ),
               ),
-            ),
-          );
-        }
+            );
+          }
 
-        return Scaffold(
-          body: indicatorLoad(),
-        );
-      },
+          return indicatorLoad();
+        },
+      ),
     );
   }
 }

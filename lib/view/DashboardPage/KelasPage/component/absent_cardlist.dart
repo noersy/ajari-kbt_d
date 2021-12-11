@@ -44,12 +44,10 @@ class _AbsentListState extends State<AbsentList> {
     _streamSantri.addStream(stream);
     _streamSantri.stream.listen((event) {
 
-
       var santri = event.docs.where((element) => element["uid"] == _profile.uid).first.data() as Map<String, dynamic>;
+      setState(() => _isPresent = santri["kehadiran"]);
 
-     setState(() => _isPresent = santri["kehadiran"]);
-
-     if (!mounted) _streamSantri.close();
+      if (!mounted) _streamSantri.close();
     });
   }
 
