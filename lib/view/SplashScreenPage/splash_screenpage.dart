@@ -4,7 +4,6 @@ import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
-import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/auth_login.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
