@@ -3,6 +3,7 @@ import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/config/firebase_reference.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
+import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -12,7 +13,6 @@ import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -123,19 +123,15 @@ class _LoginPageState extends State<LoginPage> {
     try {
       User? user = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context: context);
       if (user == null) throw Exception("Not login");
-      final prf = await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(uid: user.uid);
+      final prf = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: user.uid);
+
       if (prf["role"] == "-" || prf.isEmpty) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const RegisterPage(),
-          ),
-        );
+        Navigator.of(context).pushReplacement(routeTransition(RegisterPage(user: user)));
+        setState(() => isLoading = false);
         return;
       }
 
-      await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: prf["code_kelas"]);
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: prf["code_kelas"]);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -148,11 +144,11 @@ class _LoginPageState extends State<LoginPage> {
         print(r);
       }
     }
-
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
   }
+
+
+
 
   void onPressedFunction() async {
     setState(() {
@@ -170,8 +166,7 @@ class _LoginPageState extends State<LoginPage> {
               0);
 
       if (user.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("User tidak ditemukan")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("User tidak ditemukan")));
         setState(() => isLoading = false);
         return;
       }
@@ -190,8 +185,7 @@ class _LoginPageState extends State<LoginPage> {
       final decrypted = encrypter.decrypt(en, iv: iv);
 
       if (decrypted.compareTo(_passwordController.text) != 0) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Password salah")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Password salah")));
         setState(() => isLoading = false);
         return;
       }
@@ -202,15 +196,15 @@ class _LoginPageState extends State<LoginPage> {
       Provider.of<ProfileProvider>(context, listen: false).storeLocalProfile(profile);
       Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
 
-
-      if (profile["role"] == "-" || profile.isEmpty) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const RegisterPage(),
-          ),
-        );
-        return;
-      }
+      //
+      // if (profile["role"] == "-" || profile.isEmpty) {
+      //   Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(
+      //       builder: (context) => const RegisterPage(user: ),
+      //     ),
+      //   );
+      //   return;
+      // }
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

@@ -75,7 +75,7 @@ class _SplashScreenState extends State<SplashScreenPage>{
       if (role == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const RegisterPage(),
+            builder: (context) => RegisterPage(user: user),
           ),
         );
         return;

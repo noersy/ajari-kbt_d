@@ -4,6 +4,7 @@ import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
+import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
@@ -26,10 +27,14 @@ class _ProfilePageState extends State<ProfilePage> {
   void _delete() async {
     await Provider.of<ProfileProvider>(context, listen: false).deleteProfile(userid: widget.profile.uid);
     await Provider.of<AuthProvider>(context, listen: false).signOut(context: context);
-    context.read<KelasProvider>().updateKelas(Kelas.blankKelas());
-    context.read<ProfileProvider>().setProfile(Profile.blankProfile());
+    Provider.of<KelasProvider>(context, listen: false).clearData();
+    Provider.of<KelasProvider>(context, listen: false).deleteLocalKelas();
+    Provider.of<ProfileProvider>(context, listen: false).deleteLocalProfile();
 
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const LoginPage()));
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    await Navigator.of(context).pushAndRemoveUntil(routeTransition(const LoginPage()), (route) => false);
   }
 
   @override

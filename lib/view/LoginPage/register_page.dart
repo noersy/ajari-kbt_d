@@ -19,7 +19,8 @@ import 'login_page.dart';
 import 'selection_role.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  final User user;
+  const RegisterPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -181,7 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: PaletteColor.grey60,
                           ),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0)),
+                              borderRadius: BorderRadius.circular(8.0),
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8.0),
                             borderSide: const BorderSide(
@@ -318,30 +320,28 @@ class _RegisterPageState extends State<RegisterPage> {
     });
 
     if (_isSudahDipakai) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Username sudah dipakai")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Username sudah dipakai")));
       setState(() => isLoading = false);
       return;
     }
+
 
     final key = encrypt.Key.fromUtf8('ASDFGHJKLASDFGHJ');
     final iv = encrypt.IV.fromLength(16);
     final encrypter = encrypt.Encrypter(encrypt.AES(key));
     final encrypted = encrypter.encrypt(_passwordController.text, iv: iv);
 
+
     try {
-      await Provider.of<ProfileProvider>(context, listen: false)
-          .chekRole(user: FirebaseAuth.instance.currentUser!);
-      final profile = await Provider.of<ProfileProvider>(context, listen: false)
-          .getProfile(uid: FirebaseAuth.instance.currentUser?.uid ?? "");
-      await Provider.of<KelasProvider>(context, listen: false)
-          .getKelas(codeKelas: _profile?.codeKelas ?? "");
+      await Provider.of<ProfileProvider>(context, listen: false).chekRole(user: widget.user);
+      final profile = await Provider.of<ProfileProvider>(context, listen: false).getProfile(uid: widget.user.uid);
+      await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: _profile?.codeKelas ?? "");
 
       if (profile["role"] == "-") {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => SelectionPage(
-              user: FirebaseAuth.instance.currentUser!,
+              user: widget.user,
               username: _usernameController.text,
               password: encrypted.base16,
             ),
