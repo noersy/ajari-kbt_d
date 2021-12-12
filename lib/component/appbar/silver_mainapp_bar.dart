@@ -1,4 +1,5 @@
 import 'package:ajari/theme/palette_color.dart';
+import 'package:ajari/theme/shadow_box.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -17,9 +18,9 @@ class SilverMainAppBar extends StatefulWidget {
     required this.body,
     required this.pinned,
     required this.floating,
-    required this.scrollController,
     required this.banner,
     required this.action,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -32,8 +33,8 @@ class _SilverMainAppBarState extends State<SilverMainAppBar> {
   @override
   Widget build(BuildContext context) {
     return NestedScrollView(
-      controller: widget.scrollController,
       physics: const BouncingScrollPhysics(),
+      controller: widget.scrollController,
       body: widget.body,
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -71,36 +72,7 @@ class _SilverMainAppBarState extends State<SilverMainAppBar> {
                   bottomLeft: Radius.circular(35.0),
                   bottomRight: Radius.circular(35.0),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: PaletteColor.grey40.withOpacity(0.1),
-                    spreadRadius: 3.5,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey40.withOpacity(0.2),
-                    spreadRadius: 3,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey40.withOpacity(0.2),
-                    spreadRadius: 2.5,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey60.withOpacity(0.05),
-                    spreadRadius: 2,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey60.withOpacity(0.1),
-                    spreadRadius: 1.5,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey60.withOpacity(0.2),
-                    spreadRadius: 1,
-                  ),
-                  BoxShadow(
-                    color: PaletteColor.grey60.withOpacity(0.2),
-                    spreadRadius: 0.5,
-                  ),
-                ]
+                boxShadow: ShadowCostume.shadow1,
               ),
               child: Column(
                 children: [

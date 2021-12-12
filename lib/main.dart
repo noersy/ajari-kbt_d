@@ -27,12 +27,16 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthProvider(),
         ),
       ],
-      child: const MaterialApp(
+      child:  MaterialApp(
         color: PaletteColor.primary,
         debugShowCheckedModeBanner: false,
         initialRoute: "/",
         title: 'Ajari',
-        home: SplashScreenPage(),
+        home: const SplashScreenPage(),
+        theme: ThemeData.light().copyWith(
+          primaryColor: PaletteColor.primary,
+          splashColor: PaletteColor.primary,
+        ),
       ),
     );
   }
