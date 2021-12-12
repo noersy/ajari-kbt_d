@@ -7,7 +7,6 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StudensPage/studens_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/component/home_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +33,9 @@ class _ViewUstazState extends State<ViewUstaz> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      controller: widget.scrollController,
+      primary: false,
+      physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: [
           Padding(
