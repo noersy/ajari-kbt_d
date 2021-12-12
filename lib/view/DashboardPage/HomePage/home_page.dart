@@ -25,13 +25,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _scrollController = ScrollController();
 
+  Kelas get _kelas => context.read<KelasProvider>().kelas;
+
   Profile get profile =>
       Provider.of<ProfileProvider>(context, listen: false).profile;
 
   List<Map<String, dynamic>> get _listSantri =>
       Provider.of<KelasProvider>(context).listSantri;
-
-  Kelas get _kelas => context.read<KelasProvider>().kelas;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           color: PaletteColor.primarybg.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(50.0),
-                          boxShadow: ShadowCostume.shadowSoft1,
+                          boxShadow: ShadowCostume.shadowStroke1,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Text(
-                        " ${_kelas.nama}",
+                        _kelas.nama,
                         style: TypographyStyle.subtitle2.copyWith(
                           color: PaletteColor.primarybg,
                           fontWeight: FontWeight.w100,

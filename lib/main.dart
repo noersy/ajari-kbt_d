@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         home: const SplashScreenPage(),
         theme: ThemeData.light().copyWith(
           primaryColor: PaletteColor.primary,
-          splashColor: PaletteColor.primary,
         ),
       ),
     );

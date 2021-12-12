@@ -4,10 +4,17 @@ import 'package:ajari/theme/palette_color.dart';
 import 'package:flutter/cupertino.dart';
 
 class ShadowCostume{
-  static final List<BoxShadow> shadowSoft1 = [
+  static final List<BoxShadow> shadowStroke1 = [
     BoxShadow(
       spreadRadius: 5,
       color: PaletteColor.primarybg.withOpacity(0.1),
+    ),
+  ];
+  
+  static final List<BoxShadow> shadowStroke2 = [
+    BoxShadow(
+      spreadRadius: 3,
+      color: PaletteColor.primarybg.withOpacity(0.5),
     ),
   ];
 
