@@ -1,7 +1,6 @@
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/theme/palette_color.dart';
-import 'package:ajari/theme/shadow_box.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
@@ -29,7 +28,8 @@ class ViewUstaz extends StatefulWidget {
 class _ViewUstazState extends State<ViewUstaz> {
   bool isButtonList = true;
 
-  List<Map<String, dynamic>> get _listSantri => Provider.of<KelasProvider>(context, listen: false).listSantri;
+  List<Map<String, dynamic>> get _listSantri =>
+      Provider.of<KelasProvider>(context, listen: false).listSantri;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,15 @@ class _ViewUstazState extends State<ViewUstaz> {
             padding: const EdgeInsets.symmetric(
               horizontal: SpacingDimens.spacing12,
             ),
-            child: _homeButton(),
+            child: AnimatedSwitcher(
+              switchInCurve: Curves.ease,
+              switchOutCurve: Curves.ease,
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return SizeTransition(sizeFactor: animation, child: child);
+              },
+              child: _homeButton(),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -168,22 +176,25 @@ class _ViewUstazState extends State<ViewUstaz> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(item["name"] ?? "-"),
-                              const Text("20%", style: TypographyStyle.caption2),
+                              const Text(
+                                "20%",
+                                style: TypographyStyle.caption2,
+                              ),
                             ],
                           ),
                           const SizedBox(height: SpacingDimens.spacing4),
                           Stack(
                             children: [
                               Container(
-                                height: 3,
+                                height: 5,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    color: PaletteColor.grey40,
-                                    borderRadius: BorderRadius.circular(7.0),
+                                  color: PaletteColor.grey40,
+                                  borderRadius: BorderRadius.circular(7.0),
                                 ),
                               ),
                               Container(
-                                height: 3,
+                                height: 5,
                                 margin: const EdgeInsets.only(right: 200),
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -207,41 +218,47 @@ class _ViewUstazState extends State<ViewUstaz> {
 
   Widget _homeButton() {
     if (isButtonList) {
-      return Row(
-        children: const [
-          UstazHomePageButtonList(
-            icon: CostumeIcons.holyQuran,
-            titleArab: "قيم",
-            title: "Nilai",
-            target: StudentsPage(),
-          ),
-          UstazHomePageButtonList(
-            icon: Icons.collections_bookmark_sharp,
-            iconSize: 28.0,
-            titleArab: "قصة",
-            title: "Cerita",
-            target: StoryPage(),
-          ),
-        ],
+      return Container(
+        key: const ValueKey<int>(0),
+        child: Row(
+          children: const [
+            UstazHomePageButtonList(
+              icon: CostumeIcons.holyQuran,
+              titleArab: "قيم",
+              title: "Nilai",
+              target: StudentsPage(),
+            ),
+            UstazHomePageButtonList(
+              icon: Icons.collections_bookmark_sharp,
+              iconSize: 28.0,
+              titleArab: "قصة",
+              title: "Cerita",
+              target: StoryPage(),
+            ),
+          ],
+        ),
       );
     } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          UstazHomePageButtonExtend(
-            icon: CostumeIcons.holyQuran,
-            titleArab: "قيم",
-            title: "Nilai",
-            target: StudentsPage(),
-          ),
-          UstazHomePageButtonExtend(
-            icon: Icons.collections_bookmark_sharp,
-            iconSize: 28.0,
-            titleArab: "قصة",
-            title: "Cerita",
-            target: StoryPage(),
-          ),
-        ],
+      return Container(
+        key: const ValueKey<int>(1),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            UstazHomePageButtonExtend(
+              icon: CostumeIcons.holyQuran,
+              titleArab: "قيم",
+              title: "Nilai",
+              target: StudentsPage(),
+            ),
+            UstazHomePageButtonExtend(
+              icon: Icons.collections_bookmark_sharp,
+              iconSize: 28.0,
+              titleArab: "قصة",
+              title: "Cerita",
+              target: StoryPage(),
+            ),
+          ],
+        ),
       );
     }
   }

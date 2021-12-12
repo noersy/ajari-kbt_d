@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
             fit: StackFit.expand,
             children: [
               Positioned.fill(
-                top: -300,
+                top: -370,
                 child: Image.asset(
                   'assets/images/logo_login.png',
                   scale: 1.5,
@@ -76,11 +76,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Container(
                   padding: const EdgeInsets.all(SpacingDimens.spacing28),
                   alignment: Alignment.center,
-                  height: 300,
+                  height: 330,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text("Register", style: TypographyStyle.title),
+                      const Text("To continue", style: TypographyStyle.caption2),
+                      const SizedBox(height: SpacingDimens.spacing24),
                       TextFormField(
                         controller: _usernameController,
                         cursorColor: PaletteColor.primary,

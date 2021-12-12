@@ -5,12 +5,14 @@ import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
+import 'package:ajari/theme/typography_style.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/component/button_login_wgoogle.dart';
 import 'package:ajari/view/LoginPage/register_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,14 +57,26 @@ class _LoginPageState extends State<LoginPage> {
             fit: StackFit.expand,
             children: [
               Positioned.fill(
-                top: -300,
+                top: -330,
                 child: Image.asset(
                   'assets/images/logo_login.png',
                   scale: 1.5,
                 ),
               ),
               Positioned.fill(
-                bottom: -120,
+                bottom: 120,
+                left: 30,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("Sign In", style: TypographyStyle.title,),
+                    Text("To continue.", style: TypographyStyle.caption2,),
+                  ],
+                ),
+              ),
+              Positioned.fill(
+                bottom: -200,
                 child: Align(
                   alignment: Alignment.center,
                   child: MainForms(
