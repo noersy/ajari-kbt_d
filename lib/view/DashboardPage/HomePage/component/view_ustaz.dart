@@ -27,8 +27,15 @@ class ViewUstaz extends StatefulWidget {
 class _ViewUstazState extends State<ViewUstaz> {
   bool isButtonList = true;
 
-  List<Map<String, dynamic>> get _listSantri =>
-      Provider.of<KelasProvider>(context, listen: false).listSantri;
+  List<Map<String, dynamic>> _listSantri  = [];
+
+  @override
+  void initState() {
+    _listSantri = Provider.of<KelasProvider>(context, listen: false).listSantri;
+    if(_listSantri.isEmpty) isButtonList = false;
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -108,116 +115,118 @@ class _ViewUstazState extends State<ViewUstaz> {
               transitionBuilder: (Widget child, Animation<double> animation) {
                 return SizeTransition(sizeFactor: animation, child: child);
               },
-              child: _homeButton(),
+              child: _menuButton(),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              right: SpacingDimens.spacing28,
-              left: SpacingDimens.spacing28,
-              top: SpacingDimens.spacing12,
-              bottom: 2.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Santri",
-                  style: TypographyStyle.button2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: PaletteColor.grey.withOpacity(0.8),
+          if (_listSantri.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(
+                right: SpacingDimens.spacing28,
+                left: SpacingDimens.spacing28,
+                top: SpacingDimens.spacing12,
+                bottom: 2.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Santri",
+                    style: TypographyStyle.button2.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: PaletteColor.grey.withOpacity(0.8),
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                            primary: PaletteColor.primary,
-                            backgroundColor: PaletteColor.grey40,
-                            padding: const EdgeInsets.all(0)),
-                        onPressed: () => setState(() => isButtonList = true),
-                        child: const Icon(
-                          Icons.view_list_rounded,
-                          size: 18,
-                          color: PaletteColor.grey80,
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                              primary: PaletteColor.primary,
+                              backgroundColor: PaletteColor.grey40,
+                              padding: const EdgeInsets.all(0)),
+                          onPressed: () => setState(() => isButtonList = true),
+                          child: const Icon(
+                            Icons.view_list_rounded,
+                            size: 18,
+                            color: PaletteColor.grey80,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                for (Map<String, dynamic> item in _listSantri)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: SpacingDimens.spacing12),
+                    child: Card(
+                      elevation: 2,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(7.0))),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(45),
+                            child: CachedNetworkImage(
+                              imageUrl: item["photo"] ?? "-",
+                            ),
+                          ),
+                        ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(item["name"] ?? "-"),
+                                const Text(
+                                  "20%",
+                                  style: TypographyStyle.caption2,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: SpacingDimens.spacing4),
+                            Stack(
+                              children: [
+                                Container(
+                                  height: 5,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: PaletteColor.grey40,
+                                    borderRadius: BorderRadius.circular(7.0),
+                                  ),
+                                ),
+                                Container(
+                                  height: 5,
+                                  margin: const EdgeInsets.only(right: 200),
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: PaletteColor.primary,
+                                    borderRadius: BorderRadius.circular(7.0),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                )
+                  )
               ],
             ),
-          ),
-          Column(
-            children: [
-              for (Map<String, dynamic> item in _listSantri)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: SpacingDimens.spacing12),
-                  child: Card(
-                    elevation: 2,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(7.0))),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(45),
-                          child: CachedNetworkImage(
-                            imageUrl: item["photo"] ?? "-",
-                          ),
-                        ),
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(item["name"] ?? "-"),
-                              const Text(
-                                "20%",
-                                style: TypographyStyle.caption2,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: SpacingDimens.spacing4),
-                          Stack(
-                            children: [
-                              Container(
-                                height: 5,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: PaletteColor.grey40,
-                                  borderRadius: BorderRadius.circular(7.0),
-                                ),
-                              ),
-                              Container(
-                                height: 5,
-                                margin: const EdgeInsets.only(right: 200),
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: PaletteColor.primary,
-                                  borderRadius: BorderRadius.circular(7.0),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-            ],
-          )
+          ]
         ],
       ),
     );
   }
 
-  Widget _homeButton() {
+  Widget _menuButton() {
     if (isButtonList) {
       return Container(
         key: const ValueKey<int>(0),
