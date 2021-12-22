@@ -1,5 +1,7 @@
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/notification_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
+import 'package:ajari/services/ConnectionStatusSingleton.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/providers/auth_providers.dart';
 import 'package:ajari/view/SplashScreenPage/splash_screenpage.dart';
@@ -15,6 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+    connectionStatus.initialize();
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -25,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NotificationProvider(),
         ),
       ],
       child:  MaterialApp(

@@ -1,6 +1,5 @@
 import 'package:ajari/component/appbar/appbar_back.dart';
 import 'package:ajari/component/dialog/dialog_delete.dart';
-import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';

@@ -126,7 +126,7 @@ class UserBottomSheetDialog extends StatelessWidget {
     showAboutDialog(
       context: context,
       applicationName: "Ajari",
-      applicationVersion: "1.2.0",
+      applicationVersion: "1.2.1",
       applicationIcon: SizedBox(
         height: 80.0,
         child: Image.asset("assets/images/logo_login.png"),

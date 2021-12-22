@@ -1,5 +1,6 @@
 
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/notification_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/view/DashboardPage/KelasPage/kelas_page.dart';
@@ -22,6 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
+    Provider.of<NotificationProvider>(context, listen: false).instalizeMessaging();
     Provider.of<KelasProvider>(context, listen: false).instalizeKelasService();
     super.initState();
   }
@@ -53,7 +55,7 @@ class _DashboardPageState extends State<DashboardPage> {
         child: PageView(
           physics: const NeverScrollableScrollPhysics(),
           controller: _pageController,
-          children:   [
+          children:   const [
             HomePage(),
             ClassPage(),
           ],

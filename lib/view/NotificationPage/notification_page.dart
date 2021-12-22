@@ -1,9 +1,10 @@
 import 'package:ajari/component/appbar/silver_appbar_back.dart';
+import 'package:ajari/providers/notification_providers.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
 import 'package:ajari/theme/typography_style.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -13,17 +14,9 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<Map> _list = [
-    {
-      "data": {"title": "Absen", "body": "7:00 WIB - 8:40 WIB"},
-    },
-    {
-      "data": {"title": "Absen 2", "body": "8:00 WIB - 8:40 WIB"},
-    }
-  ];
 
   void dissmisAll() {
-    setState(() => _list.clear());
+    // setState(() => _list.clear());
   }
 
   @override
@@ -31,27 +24,44 @@ class _NotificationPageState extends State<NotificationPage> {
     return Scaffold(
       backgroundColor: PaletteColor.primarybg,
       body: SilverAppBarBack(
-        barTitle: 'Notification',
-        floating: true,
-        pinned: true,
-        body: ListView.builder(
-          itemCount: _list.length,
-          itemBuilder: (BuildContext context, int index) {
-            final item = _list[index];
+          barTitle: 'Notification',
+          floating: true,
+          pinned: true,
+          body: AnimatedBuilder(
+            animation: Provider.of<NotificationProvider>(context),
+            builder: (BuildContext context, Widget? child) {
+              return ListView.builder(
+                itemCount: Provider.of<NotificationProvider>(context).notification.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = Provider.of<NotificationProvider>(context).notification[index];
 
-            return Dismissible(
-              key: Key(item["data"]["title"]),
-              onDismissed: (DismissDirection direction) {
-                setState(() => _list.removeAt(index));
-              },
-              child: ListCard(
-                title: item["data"]["title"],
-                body: item["data"]["body"],
-              ),
-            );
-          },
-        ),
+                  return Dismissible(
+                    key: Key(item?.title ?? ""),
+                    onDismissed: (DismissDirection direction) {
+                      // setState(() => _list.removeAt(index));
+                      Provider.of<NotificationProvider>(context, listen: false).dismissAtIndex(index);
+                    },
+                    child: ListCard(
+                      title: item?.title ?? "",
+                      body: item?.body ?? "",
+                    ),
+                  );
+                },
+              );
+            },
+          ),
       ),
+
+
+
+
+
+
+
+
+
+
+
       floatingActionButton: Container(
         margin: const EdgeInsets.only(left: SpacingDimens.spacing36),
         alignment: Alignment.bottomCenter,

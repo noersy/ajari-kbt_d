@@ -4,7 +4,9 @@ import 'package:ajari/component/dialog/dialog_failed.dart';
 import 'package:ajari/component/indicator/indicator_load.dart';
 import 'package:ajari/providers/auth_providers.dart';
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/notification_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
+import 'package:ajari/services/ConnectionStatusSingleton.dart';
 import 'package:ajari/view/DashboardPage/dashboard_page.dart';
 import 'package:ajari/view/LoginPage/login_page.dart';
 import 'package:ajari/view/LoginPage/register_page.dart';
@@ -20,14 +22,31 @@ class SplashScreenPage extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreenPage>{
+  bool isOffline = false;
+  late StreamSubscription _connectionChangeStream;
+
+  void connectionChanged(dynamic hasConnection) {
+    setState(() {
+      isOffline = !hasConnection;
+    });
+  }
 
   startTime() async {
     var _duration = const Duration(seconds: 3);
     return Timer(_duration, _navigationPage);
   }
 
+
+  @override
+  void dispose() {
+    _connectionChangeStream.cancel();
+    super.dispose();
+  }
+
   @override
   void initState() {
+    ConnectionStatusSingleton connectionStatus =  ConnectionStatusSingleton.getInstance();
+    _connectionChangeStream = connectionStatus.connectionChange.listen(connectionChanged);
     startTime();
     super.initState();
   }
@@ -41,28 +60,30 @@ class _SplashScreenState extends State<SplashScreenPage>{
       await Provider.of<ProfileProvider>(context, listen: false).setDatabase();
       await Provider.of<KelasProvider>(context, listen: false).setDatabase();
 
-      final localProfile = await Provider.of<ProfileProvider>(context, listen: false).getLocalProfile();
+      if (isOffline) {
+        final localProfile = await Provider.of<ProfileProvider>(context, listen: false).getLocalProfile();
 
-      if(localProfile.role != "-"){
+        if(localProfile.role != "-"){
 
-        if(localProfile.codeKelas == "-"){
-          final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
-          await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+          if(localProfile.codeKelas == "-"){
+            final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
+            await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+          }
+
+          final kelas = await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
+
+          if(kelas.kelasId == "-"){
+            final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
+            await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
+          }
+
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const DashboardPage(),
+            ),
+          );
+          return;
         }
-
-        final kelas = await Provider.of<KelasProvider>(context, listen: false).getLocalKelas();
-
-        if(kelas.kelasId == "-"){
-          final kelas = await Provider.of<KelasProvider>(context, listen: false).getKelas(codeKelas: localProfile.codeKelas);
-          await Provider.of<KelasProvider>(context, listen: false).storeLocalKelas(kelas);
-        }
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const DashboardPage(),
-          ),
-        );
-        return;
       }
 
       User? user = await Provider.of<AuthProvider>(context, listen: false).signInWithGoogle(context: context);
@@ -119,7 +140,8 @@ class _SplashScreenState extends State<SplashScreenPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: Provider.of<AuthProvider>(context).initializeFirebase(),
+        future:
+          Provider.of<AuthProvider>(context).initializeFirebase(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return const Center(child: Text('Error initializing Firebase'));

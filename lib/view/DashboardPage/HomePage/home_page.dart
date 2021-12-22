@@ -2,6 +2,7 @@ import 'package:ajari/component/appbar/silver_mainapp_bar.dart';
 import 'package:ajari/model/kelas.dart';
 import 'package:ajari/model/profile.dart';
 import 'package:ajari/providers/kelas_providers.dart';
+import 'package:ajari/providers/notification_providers.dart';
 import 'package:ajari/providers/profile_providers.dart';
 import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/costume_icons.dart';
@@ -42,13 +43,41 @@ class _HomePageState extends State<HomePage> {
         pinned: true,
         floating: true,
         scrollController: _scrollController,
-        action: IconButton(
-          icon: const Icon(Icons.wysiwyg),
-          color: PaletteColor.primary,
-          iconSize: 20,
-          onPressed: () => Navigator.of(context).push(
-            routeTransition(const NotificationPage()),
-          ),
+        action: Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.wysiwyg),
+              color: PaletteColor.primary,
+              iconSize: 20,
+              onPressed: () => Navigator.of(context).push(
+                routeTransition(const NotificationPage()),
+              ),
+            ),
+            Positioned(
+              top: 18,
+              right: 12,
+              child: AnimatedBuilder(
+                animation: Provider.of<NotificationProvider>(context),
+                builder: (BuildContext context, Widget? child) {
+                  final item = Provider.of<NotificationProvider>(context).notification;
+                  return item.isNotEmpty ? Container(
+                    height: 13,
+                    width: 13,
+                    alignment: Alignment.center,
+                    child: Text('${item.length}', style: TypographyStyle.mini.copyWith(
+                      color: PaletteColor.primarybg,
+                      fontWeight: FontWeight.bold,
+                    )),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50.0),
+                      color: PaletteColor.red,
+                    ),
+                  ) : const SizedBox.shrink();
+                },
+              ),
+            ),
+          ],
         ),
         barTitle: [
           const Text("Assalamualaikum,", style: TypographyStyle.subtitle1),

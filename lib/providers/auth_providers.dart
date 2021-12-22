@@ -25,11 +25,6 @@ class AuthProvider extends ChangeNotifier{
           messagingSenderId: '167171896590',
         )
     );
-    FirebaseAppCheck appCheck = FirebaseAppCheck.instance;
-
-    await appCheck.activate(
-      webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-    );
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     return firebaseApp;

@@ -1,4 +1,3 @@
-import 'package:ajari/route/route_transisition.dart';
 import 'package:ajari/theme/costume_icons.dart';
 import 'package:ajari/theme/palette_color.dart';
 import 'package:ajari/theme/spacing_dimens.dart';
@@ -8,9 +7,7 @@ import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_musa_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/ChildStoryPage/nabi_nuh_page.dart';
 import 'package:ajari/view/DashboardPage/HomePage/StoryPage/story_page.dart';
-import 'package:ajari/view/NotificationPage/notification_page.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import 'component.dart';
 
