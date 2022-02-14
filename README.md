@@ -1,6 +1,6 @@
 # Ajari
 
-Kelompok : 
+KBT-D Kelompok : 
 - Nur Syahfei 2019-109
 - Najwa Sahidah Kautsar 2020-194
 - Frederick Huisand Sutirto 2020-156
